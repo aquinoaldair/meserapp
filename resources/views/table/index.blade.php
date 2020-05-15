@@ -19,12 +19,14 @@
             <a href="{{ route('table.create', $room) }}" class="btn btn-primary text-white" type="button">
                 <i class="fa fa-plus"></i>&nbsp;{{ __("Agregar Nuevo") }}
             </a>
+            <button type="button" class="ml-2 btn btn-sm btn-success">Activos</button>
+            <button type="button" class="ml-2 btn btn-sm btn-warning">Ocupados</button>
         </div>
         <div class="row mt-4">
             @foreach($data as $item)
                 <div class="col-12 col-sm-6 col-lg-3" id="{{$item->key}}">
                     <div class="card card-absolute">
-                        <div class="card-header bg-primary">
+                        <div class="card-header {{ $item->status == 'active' ? 'bg-success' : 'bg-warning' }}">
                             <h6>{{ $item->name}}</h6>
                         </div>
                         <div class="card-body">

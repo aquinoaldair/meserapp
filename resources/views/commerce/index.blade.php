@@ -6,9 +6,9 @@
     <link rel="stylesheet" type="text/css" href="{{asset('assets/css/datatables.css')}}">
 @endsection
 
-@section('breadcrumb-title',  __('Comercios'))
+@section('breadcrumb-title',  __(\App\Models\Commerce::NAME))
 @section('breadcrumb-item')
-    <li class="breadcrumb-item active">{{ __('Comercios') }}</li>
+    <li class="breadcrumb-item active">{{ __(\App\Models\Commerce::NAME) }}</li>
 @endsection
 
 @section('body')

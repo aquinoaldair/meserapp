@@ -18,7 +18,7 @@ class RoomRepository implements RoomRepositoryInterface
 
     public function all()
     {
-        $this->model->all();
+        return $this->model->all();
     }
 
     public function create(array $data)

@@ -29,7 +29,10 @@
                                 <thead>
                                 <tr>
                                     <th>{{ __('Nombre') }}</th>
+                                    <th>{{ __('Precio') }}</th>
                                     <th>{{ __('Imagen') }}</th>
+                                    <th>{{ __('Stock') }}</th>
+                                    <th>{{ __("Margen") }}</th>
                                     <th>{{ __('Category') }}</th>
                                     <th>{{ __('Acciones') }}</th>
                                 </tr>
@@ -38,11 +41,14 @@
                                 @foreach($data as $item)
                                     <tr data-id="{{ $item->id }}">
                                         <td>{{ $item->name }}</td>
+                                        <td>{{ $item->price }}</td>
                                         <td>
                                             @if ($item->image)
                                                 <img src="{{ asset('storage/'.$item->image) }}" alt="" style="width: 30px; height: 30px">
                                             @endif
                                         </td>
+                                        <td>{{ $item->stock }}</td>
+                                        <td>{{ $item->margin }}</td>
                                         <td>{{ $item->category->name }}</td>
                                         <td>
                                             <a href="{{ route('product.edit', $item) }}" class="btn btn-pill btn-info text-white"  data-toggle="tooltip" title="" data-original-title="{{ __("Editar") }}">

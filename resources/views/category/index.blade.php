@@ -6,6 +6,7 @@
     <link rel="stylesheet" type="text/css" href="{{asset('assets/css/datatables.css')}}">
 @endsection
 
+
 @section('breadcrumb-title',  __(\App\Models\Category::NAME))
 @section('breadcrumb-item')
     <li class="breadcrumb-item active">{{ __(\App\Models\Category::NAME)}}</li>

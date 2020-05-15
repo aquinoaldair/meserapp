@@ -16,26 +16,47 @@ use Illuminate\Support\Facades\Route;
 use App\User;
 use App\Http\Middleware\CheckRoom;
 
-Route::view('/', 'welcome');
-Auth::routes(['register' => false, 'reset' => false, 'confirm' => false]);
+$admin = User::ADMIN_ROLE;
+$customer = User::CUSTOMER_ROLE;
 
-Route::middleware('auth')->group(function (){
+Route::view('/', 'welcome');
+Auth::routes(['confirm' => false]);
+
+Route::middleware('auth')->group(function () use ($admin, $customer) {
 
     Route::get('dashboard', 'DashboardController@index')->name('dashboard');
 
-    Route::middleware('role:'.User::ADMIN_ROLE)->group(function (){
+    //only admin
+    Route::middleware("role:{$admin}")->group(function (){
         Route::resource('commerce', 'CommerceController');
+        Route::resource('image', 'ImageController');
     });
 
-    Route::middleware('role:'.User::CUSTOMER_ROLE)->group(function (){
+    //only customer
+    Route::middleware("role:{$customer}")->group(function (){
 
-        Route::resource('category', 'CategoryController');
+        Route::get('category/general', 'CategoryController@getGeneral');
+        Route::post('category/customer/create', 'CategoryController@createCategoryFromGeneral');
+        Route::get('images/search/{term}', 'ImageController@search');
+        Route::resource('supplier', 'SupplierController');
         Route::resource('product', 'ProductController');
         Route::resource('room', 'RoomController');
-
+        Route::resource('cost', 'CostController');
+        Route::resource('station', 'StationController');
+        Route::resource('printer', 'PrinterController')->only('index', 'store');
         Route::prefix('room/{room}')->middleware(CheckRoom::class)->group(function (){
             Route::resource('table', 'TableController');
         });
     });
+
+    //only admin & customer
+    Route::middleware("role:{$admin}|{$customer}")->group(function (){
+        Route::resource('category', 'CategoryController');
+    });
+
+
+
+
+
 
 });

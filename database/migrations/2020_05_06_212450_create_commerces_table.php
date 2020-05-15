@@ -19,6 +19,9 @@ class CreateCommercesTable extends Migration
             $table->string('name');
             $table->date('date')->nullable();
             $table->string('logo')->nullable();
+            $table->string('address')->nullable();
+            $table->decimal('latitude',8,6)->nullable();
+            $table->decimal('longitude',8,6)->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

@@ -20,14 +20,12 @@
     <!-- login page start-->
     <div class="auth-bg">
         <div class="authentication-box">
-            <div class="text-center"><img src="{{asset('assets/images/endless-logo.png')}}" alt=""></div>
+            <div class="text-center"><img src="{{asset('assets/images/meserapp_logo.png')}}" alt=""></div>
             <div class="card mt-4">
                 <div class="card-body">
                     <div class="text-center">
                         <h4>Inicio de sesion</h4>
                     </div>
-
-
                     <form class="theme-form" action="{{ route('login') }}" method="post">
                         @csrf
                         @error('email')
@@ -50,6 +48,23 @@
                         <div class="form-group form-row mt-3 mb-0">
                             <button class="btn btn-primary btn-block" type="submit">Ingresar</button>
                         </div>
+
+                        <div class="form-group form-row mt-3 mb-0">
+                          <div class="col-4 text-center">
+                              <a class="btn btn-link text-center" href="{{ route('register') }}">
+                                  {{ __('Registrarse') }}
+                              </a>
+                          </div>
+                            <div class="col-8 text-center">
+                                @if (Route::has('password.request'))
+                                    <a class="btn btn-link text-center" href="{{ route('password.request') }}">
+                                        {{ __('¿Olvidaste tu contraseña?') }}
+                                    </a>
+                                @endif
+                            </div>
+                        </div>
+
+
                     </form>
                 </div>
             </div>

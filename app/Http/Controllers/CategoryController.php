@@ -4,29 +4,32 @@ namespace App\Http\Controllers;
 
 use App\Helpers\FileHelper;
 use App\Http\Requests\CategoryRequest;
+use App\Interfaces\PermissionInterface;
 use App\Models\Category;
 use App\Repositories\Category\CategoryRepositoryInterface;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use function GuzzleHttp\Promise\all;
 
-class CategoryController extends Controller
+class CategoryController extends BaseController
 {
     private $category;
-    private $user;
-    private $message_403 = "No tienes los permisos para acceder a esta página";
 
     public function __construct(CategoryRepositoryInterface $category)
     {
-        $this->category = $category;
+        parent::__construct();
 
-        $this->middleware(function ($request, $next) {
-            $this->user = auth()->user();
-            return $next($request);
-        });
+        $this->category = $category;
     }
+
 
     public function index()
     {
-        $data = $this->category->getByCommerceId($this->user->commerce->id);
+
+        $data = $this->user->isAdmin()
+            ? $this->category->getByAdmin()
+            : $this->category->getByCommerceId($this->user->commerce->id);
+
         return view('category.index', compact('data'));
     }
 
@@ -39,11 +42,17 @@ class CategoryController extends Controller
 
     public function store(CategoryRequest $request)
     {
-        $this->category->create([
+
+        $data = [
             'name' => $request->name,
-            'commerce_id' => $this->user->commerce->id ,
             'image' => ($request->image) ? FileHelper::storage('categories', $request->image) : null
-        ]);
+        ];
+
+        $this->user->isAdmin()
+            ? $data["is_admin"] = true
+            : $data["commerce_id"] = $this->user->commerce->id;
+
+        $this->category->create($data);
 
         return redirect()->route('category.index')->with('success', __('El registro se ha guardado correctamente'));
     }
@@ -52,7 +61,7 @@ class CategoryController extends Controller
     {
         $category = $this->category->find($id);
 
-        abort_if($this->user->cannot('view', $category), 403, __($this->message_403));
+        $this->authorize('edit', $category);
 
         return view('category.edit', compact('category'));
     }
@@ -62,7 +71,7 @@ class CategoryController extends Controller
     {
         $category = $this->category->find($id);
 
-        abort_if($this->user->cannot('update', $category), 403, __($this->message_403));
+        $this->authorize('update', $category);
 
         $this->category->update([
             'name' => $request->name,
@@ -77,10 +86,38 @@ class CategoryController extends Controller
     {
         $category = $this->category->find($id);
 
-        abort_if($this->user->cannot('delete', $category), 403, __($this->message_403));
+        $this->authorize('delete', $category);
 
         $this->category->delete($category->id);
 
         return response()->json(__('Se eliminó correctamente'), 202);
     }
+
+    public function getGeneral(){
+        return $this->category->getByAdmin();
+    }
+
+    public function createCategoryFromGeneral(Request $request){
+
+        $category = $this->category->find($request->id);
+
+        $this->authorize('view', $category);
+
+        try {
+            $this->category->create([
+                'name' => $category->name,
+                'image' => $category->image,
+                'commerce_id' => $this->user->commerce->id,
+                'is_admin' => false
+            ]);
+            return response()->json("success", 200);
+        }catch (\Exception $e){
+            Log::info("Controller: CategoryController");
+            Log::info("Method: createCategoryFromGeneral");
+            Log::error($e->getMessage());
+        }
+
+    }
+
+
 }

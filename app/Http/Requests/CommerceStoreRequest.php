@@ -25,10 +25,14 @@ class CommerceStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required',
-            'email' => sprintf('required|email|unique:%s', User::class),
-            'password' => 'required',
-            'customer' => 'required'
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'prefix_phone' => ['required', 'integer', 'digits_between:1,5'],
+            'phone_number' => ['required', 'integer', 'digits_between:5,12'],
+            'address' => ['string', 'max:255'],
+            'latitude' => ['required_with:address'],
+            'longitude' => ['required_with:address']
         ];
     }
 }

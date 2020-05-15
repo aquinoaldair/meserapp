@@ -23,10 +23,10 @@
                     <form action="{{ route('table.store', $room) }}" enctype="multipart/form-data" method="post" class="theme-form" autocomplete="off">
                         @csrf
                         <div class="card-body">
-                            <h6 class="text-center text-muted pb-2">{{ __("Datos del Salon") }}</h6>
+                            <h6 class="text-center text-muted pb-2">{{ __("Datos de la mesa") }}</h6>
                             <div class="form-group">
-                                <label>{{ __('Nombre') }}</label>
-                                <input required type="text" name="name" class="form-control">
+                                <label>{{ __('Número') }}</label>
+                                <input required type="number" name="name" class="form-control">
                                 @error('name')
                                 <p class="text-danger text-sm"> {{ $errors->first('name') }}</p>
                                 @enderror

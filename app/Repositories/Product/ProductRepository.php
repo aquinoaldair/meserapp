@@ -42,6 +42,10 @@ class ProductRepository implements ProductRepositoryInterface
 
     public function getByCommerceId($id)
     {
-        return $this->model->where('commerce_id', $id)->get();
+        return $this->model
+            ->with('category')
+            ->whereHas('category')
+            ->where('commerce_id', $id)
+            ->get();
     }
 }

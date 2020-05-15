@@ -16,6 +16,10 @@ class Table extends Model
         'name', 'key', 'url', 'room_id'
     ];
 
+    public function room(){
+        return $this->belongsTo(Room::class);
+    }
+
     public function getRouteKeyName()
     {
         return 'key';

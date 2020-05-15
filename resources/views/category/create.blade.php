@@ -3,6 +3,7 @@
 @section('title',  __(\App\Models\Category::NAME))
 
 @section('style')
+
 @endsection
 
 @section('breadcrumb-title',  __(\App\Models\Category::NAME))
@@ -13,8 +14,9 @@
 @endsection
 
 @section('body')
+
     <!-- Container-fluid starts-->
-    <div class="container-fluid">
+    <div class="container-fluid" id="app">
         <div class="row">
             <div class="col-sm-12 col-xl-4">
                 <div class="card">
@@ -41,11 +43,17 @@
                     </form>
                 </div>
             </div>
+            @hasrole(\App\User::CUSTOMER_ROLE)
+                <div class="col-sm-12 col-xl-6">
+                    <search-category></search-category>
+                </div>
+            @endhasrole
+
         </div>
     </div>
     <!-- Container-fluid Ends-->
 @endsection
 
 @section('script')
-
+    <script src="{{ asset('js/app.js') }}"></script>
 @endsection

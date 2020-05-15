@@ -5,16 +5,19 @@ namespace App\Http\Controllers;
 use App\Helpers\FileHelper;
 use App\Http\Requests\CommerceStoreRequest;
 use App\Http\Requests\CommerceUpdateRequest;
+use App\Http\Traits\RegisterCommerce;
 use App\Models\Commerce;
 use App\Repositories\Commerce\CommerceRepositoryInterface;
 use App\Repositories\Customer\CustomerRepositoryInterface;
 use App\Repositories\User\UserRepositoryInterface;
 use App\User;
+use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class CommerceController extends Controller
 {
+    use RegisterCommerce;
 
     private $commerce;
     private $customer;
@@ -43,11 +46,7 @@ class CommerceController extends Controller
 
     public function store(CommerceStoreRequest $request)
     {
-        DB::transaction(function () use ($request){
-            $user = $this->storeUser($request);
-            $this->storeCustomer($request, $user->id);
-            $this->storeCommerce($request, $user->id);
-        });
+        $this->storeFullCustomer($this->user, $this->customer, $this->commerce, $request->all());
 
         return redirect()->route('commerce.index')->with('success', __('El registro se ha creado correctamente'));
     }
@@ -63,10 +62,12 @@ class CommerceController extends Controller
     {
         $commerce = $this->commerce->find($id);
 
-        DB::transaction(function () use ($request, $commerce){
-            $this->updateUser($request, $commerce->user->id);
-            $this->updateCustomer($request, $commerce->user->customer->id);
-            $this->updateCommerce($request, $commerce->id);
+        $data = $request->all();
+
+        DB::transaction(function () use ($data, $commerce){
+            $this->updateUser($data, $commerce->user->id);
+            $this->updateCustomer($data, $commerce->user->customer->id);
+            $this->updateCommerce($data, $commerce->id);
         });
 
         return redirect()->route('commerce.index')->with('success', __('El registro se ha actualizado correctamente'));
@@ -88,55 +89,37 @@ class CommerceController extends Controller
     }
 
 
-    private function storeUser($request){
-        return $this->user->createUserWithRole([
-            'name' => $request->customer,
-            'email' => $request->email,
-            'password' => $request->password
-        ], User::CUSTOMER_ROLE);
-    }
-
-    private function updateUser($request, $id){
-        $data = [
-            'name' => $request->customer,
-            'email' => $request->email,
+    private function updateUser($data, $id){
+        $field = [
+            'name' => $data["name"],
+            'email' => $data["email"],
         ];
-        if ($request->password) $data["password"] = $request->password;
+        if (isset($data["password"])) $field["password"] = $data["password"];
 
-        $this->user->update($data, $id);
+        $this->user->update($field, $id);
     }
 
 
-    private function storeCommerce($request, $user_id){
-        $this->commerce->create([
-            'user_id' => $user_id,
-            'name' => $request->name,
-            'date' => $request->date,
-            'logo' => ($request->logo) ? FileHelper::storage('commerce', $request->logo) : null
-        ]);
-    }
 
-    private function updateCommerce($request, $id){
-        $data = [
-            'name' => $request->name,
-            'date' => $request->date,
+    private function updateCommerce($data, $id){
+        $fields = [
+            'name' => $data["name"],
         ];
-        if ($request->logo) $data['logo'] = FileHelper::storage('commerce', $request->logo);
-        $this->commerce->update($data, $id);
+        if (isset($data['logo'])) $fields['logo'] = FileHelper::storage('commerce', $data['logo']);
+        if (isset($data['date'])) $fields['date'] = $data['date'];
+        if (isset($data['address'])) $fields['address'] = $data['address'];
+        if (isset($data['latitude'])) $fields['latitude'] = $data['latitude'];
+        if (isset($data['longitude'])) $fields['longitude'] = $data['longitude'];
+
+
+        $this->commerce->update($fields, $id);
     }
 
-    private function storeCustomer(Request $request, $user_id){
-        $this->customer->create([
-            'user_id' => $user_id,
-            'phone_number' => $request->phone_number,
-            'address' => $request->address
-        ]);
-    }
 
-    private function updateCustomer($request, $id){
+    private function updateCustomer($data, $id){
         $this->customer->update([
-            'phone_number' => $request->phone_number,
-            'address' => $request->address
+            'phone_number' => $data["phone_number"],
+            'prefix_phone' => $data["prefix_phone"]
         ], $id);
     }
 

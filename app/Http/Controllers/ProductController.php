@@ -4,55 +4,67 @@ namespace App\Http\Controllers;
 
 use App\Helpers\FileHelper;
 use App\Http\Requests\ProductRequest;
+use App\Http\Requests\ProductUpdateRequest;
 use App\Models\Product;
 use App\Repositories\Category\CategoryRepositoryInterface;
+use App\Repositories\Image\ImageRepositoryInterface;
 use App\Repositories\Product\ProductRepositoryInterface;
-use Illuminate\Http\Request;
+use App\Repositories\Station\StationRepositoryInterface;
 
-class ProductController extends Controller
+class ProductController extends BaseController
 {
     private $product;
     private $category;
-    private $user;
-    private $message_403 = "No tienes los permisos para acceder a esta página";
+    private $gallery;
+    private $station;
 
-    public function __construct(ProductRepositoryInterface $product, CategoryRepositoryInterface $category)
+    public function __construct(ProductRepositoryInterface $product, CategoryRepositoryInterface $category, ImageRepositoryInterface $image, StationRepositoryInterface $station)
     {
+        parent::__construct();
+
         $this->product = $product;
         $this->category = $category;
-
-        $this->middleware(function ($request, $next) {
-            $this->user = auth()->user();
-            return $next($request);
-        });
+        $this->gallery = $image;
+        $this->station = $station;
     }
 
     public function index()
     {
         $data = $this->product->getByCommerceId($this->user->commerce->id);
-        $data->load('category');
         return view('product.index', compact('data'));
     }
 
 
     public function create()
     {
-        $categories = $this->category->getByCommerceId($this->user->commerce->id);
-        return view('product.create', compact('categories'));
+        $categories = $this->getCategories();
+        $stations = $this->getStations();
+        return view('product.create', compact('categories', 'stations'));
     }
 
 
     public function store(ProductRequest $request)
     {
+
         $category = $this->category->find($request->category_id);
 
-        abort_if($this->user->cannot('view', $category), '403', 'La categoria que ingresaste no es valida');
+        $this->authorize('view', $category);
+
+        $station = $this->station->find($request->station_id);
+
+        $this->authorize('view', $station);
 
         $this->product->create([
             'name' => $request->name,
+            'use_stock' => $request->use_stock ?? 0,
+            'stock' => $request->stock,
+            'margin' => $request->margin ?? "",
+            'price' => $request->price,
+            'category_id' => $category->id,
+            'station_id' => $station->id,
             'commerce_id' => $this->user->commerce->id,
-            'image' => ($request->image) ? FileHelper::storage('products', $request->image) : null,
-            'category_id' => $category->id
+            'description' => $request->description ?? "",
+            'image' => $this->getImage($request)
         ]);
 
         return redirect()->route('product.index')->with('success', __('El registro se ha guardado correctamente'));
@@ -64,28 +76,36 @@ class ProductController extends Controller
     {
         $product = $this->product->find($id);
 
-        abort_if($this->user->cannot('view', $product), 403, __($this->message_403));
+        $this->authorize('view', $product);
 
-        $categories = $this->category->getByCommerceId($this->user->commerce->id);
+        $categories = $this->getCategories();
 
-        return view('product.edit', compact('product', 'categories'));
+        $stations = $this->getStations();
+
+        return view('product.edit', compact('product', 'categories', 'stations'));
     }
 
 
-    public function update(ProductRequest $request, $id)
+    public function update(ProductUpdateRequest $request, $id)
     {
         $product = $this->product->find($id);
 
-        abort_if($this->user->cannot('update', $product), 403, __($this->message_403));
+        $this->authorize('update', $product);
 
         $category = $this->category->find($request->category_id);
 
-        abort_if($this->user->cannot('view', $category), '403', 'La categoria que ingresaste no es valida');
+        $this->authorize('view', $category);
 
         $this->product->update([
             'name' => $request->name,
+            'use_stock' => $request->use_stock,
+            'stock' => $request->stock,
+            'margin' => $request->margin,
+            'price' => $request->price,
             'category_id' => $category->id,
-            'image' => ($request->image) ? FileHelper::storage('categories', $request->image) : $product->image
+            'station_id' => $request->station_id,
+            'description' => $request->description,
+            'image' => $this->getImage($request, $product->image),
         ], $product->id);
 
         return redirect()->route('product.index')->with('success', __('El registro se ha actualizado correctamente'));
@@ -96,10 +116,28 @@ class ProductController extends Controller
     {
         $product = $this->product->find($id);
 
-        abort_if($this->user->cannot('delete', $product), 403, __($this->message_403));
+        $this->authorize('delete', $product);
 
         $this->product->delete($product->id);
 
         return response()->json(__('Se eliminó correctamente'), 202);
+    }
+
+    public function getImage($request, $image = null){
+
+        $image = ($request->file_device) ? FileHelper::storage('products', $request->file_device) : $image;
+
+        $image = ($request->file_gallery) ? $request->file_gallery : $image;
+
+        return $image;
+    }
+
+
+    private function getStations(){
+        return $this->station->getByCommerceId($this->user->commerce->id);
+    }
+
+    private function getCategories(){
+        return  $this->category->getByCommerceId($this->user->commerce->id);
     }
 }

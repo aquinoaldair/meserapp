@@ -18,7 +18,7 @@ class CategoryRepository implements CategoryRepositoryInterface
 
     public function all()
     {
-        $this->model->all();
+        return $this->model->all();
     }
 
     public function create(array $data)
@@ -44,5 +44,15 @@ class CategoryRepository implements CategoryRepositoryInterface
     public function getByCommerceId($id)
     {
         return $this->model->where('commerce_id', $id)->get();
+    }
+
+    public function getByAdmin()
+    {
+        return $this->model->where('is_admin', true)->get();
+    }
+
+    public function getByAdminPaginate($paginate)
+    {
+        return $this->model->where('is_admin', true)->paginate($paginate);
     }
 }

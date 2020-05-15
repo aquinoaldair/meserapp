@@ -9,20 +9,14 @@ use App\Repositories\Room\RoomRepositoryInterface;
 use Illuminate\Auth\Access\Response;
 use Illuminate\Support\Facades\Auth;
 
-class RoomController extends Controller
+class RoomController extends BaseController
 {
     private $room;
-    private $user;
-    private $message_403 = "No tienes los permisos para acceder a esta página";
 
     public function __construct(RoomRepositoryInterface $room)
     {
+        parent::__construct();
         $this->room = $room;
-
-        $this->middleware(function ($request, $next) {
-            $this->user = auth()->user();
-            return $next($request);
-        });
     }
 
     public function index(){
@@ -46,20 +40,20 @@ class RoomController extends Controller
 
     public function edit($key){
         $room = $this->room->findByKey($key);
-        abort_if($this->user->cannot('update', $room), 403, __($this->message_403));
+        $this->authorize('update', $room);
         return view('room.edit', compact('room'));
     }
 
     public function update(RoomRequest $request, $key){
         $room = $this->room->findByKey($key);
-        abort_if($this->user->cannot('update', $room), 403, __($this->message_403));
+        $this->authorize('update', $room);
         $this->room->update(['name' => $request->name], $room->id);
         return redirect()->route('room.index')->with('success', __('El registro se ha actualizado correctamente'));
     }
 
     public function destroy($key){
         $room = $this->room->findByKey($key);
-        abort_if($this->user->cannot('update', $room), 403, __($this->message_403));
+        $this->authorize('delete', $room);
         $this->room->delete($room->id);
         return response()->json(__('Se eliminó correctamente'), 202);
     }

@@ -17,6 +17,7 @@ class CreateTablesTable extends Migration
             $table->id();
             $table->foreignId('room_id')->constrained();
             $table->string('name');
+            $table->enum('status', ['active', 'inactive', 'disable', 'pending'])->default('active');
             $table->string('url')->nullable();
             $table->string('key')->unique();
             $table->timestamps();

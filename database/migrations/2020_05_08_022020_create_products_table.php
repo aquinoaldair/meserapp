@@ -17,8 +17,15 @@ class CreateProductsTable extends Migration
             $table->id();
             $table->foreignId('commerce_id')->constrained();
             $table->foreignId('category_id')->constrained();
+            $table->foreignId('station_id')->constrained();
             $table->string('name');
+            $table->decimal('price', 10, 2)->default(0.0);
             $table->string('image')->nullable();
+            $table->boolean('active')->default(true);
+            $table->boolean('use_stock');
+            $table->integer('stock')->nullable();
+            $table->string('description')->nullable();
+            $table->string('margin')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

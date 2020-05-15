@@ -23,10 +23,16 @@ class ProductRequest extends FormRequest
      */
     public function rules()
     {
+        //dd(request()->all());
         return [
             'name' => 'required',
-            'image' => 'image',
-            'category_id' => 'required|numeric'
+            'category_id' => 'required|integer',
+            'station_id' => 'required|integer',
+            'stock' => 'required',
+            'margin' => 'required',
+            'description' => 'string',
+            'file_device' => 'image',
+            'file_gallery' => 'nullable|string|required_without:file_device'
         ];
     }
 }

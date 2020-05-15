@@ -17,7 +17,7 @@ class CreateCustomersTable extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained();
             $table->string('phone_number')->nullable();
-            $table->string('address')->nullable();
+            $table->string('prefix_phone')->nullable();
             $table->softDeletes();
         });
     }

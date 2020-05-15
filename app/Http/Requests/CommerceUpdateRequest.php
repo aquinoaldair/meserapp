@@ -26,10 +26,16 @@ class CommerceUpdateRequest extends FormRequest
      */
     public function rules()
     {
+
         return [
-            'name' => 'required',
-            'email' => ['required', 'email', new CommerceRule($this->commerce)],
-            'customer' => 'required'
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', new CommerceRule($this->commerce)],
+            'password' => ['nullable', 'string','min:8'],
+            'prefix_phone' => ['required', 'integer', 'digits_between:1,5'],
+            'phone_number' => ['required', 'integer', 'digits_between:5,12'],
+            'address' => ['string', 'max:255'],
+            'latitude' => ['required_with:address'],
+            'longitude' => ['required_with:address']
         ];
     }
 }
