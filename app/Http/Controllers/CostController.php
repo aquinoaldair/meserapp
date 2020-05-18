@@ -6,6 +6,7 @@ use App\Http\Requests\CostStoreRequest;
 use App\Models\Cost;
 use App\Repositories\Cost\CostRepositoryInterface;
 use App\Repositories\Supplier\SupplierRepositoryInterface;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class CostController extends BaseController
@@ -20,10 +21,27 @@ class CostController extends BaseController
         $this->supplier = $supplier;
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $data = $this->cost->getByCommerceIdWithSupplier($this->user->commerce->id);
-        return view('cost.index', compact('data'));
+        $params = $this->getDate($request);
+        $data = $this->cost->getInRangeDateByCommerceIdWithSupplier($this->user->commerce->id, $params["start"], $params["end"], $params["supplier_id"]);
+        $suppliers = $this->supplier->getByCommerceId($this->user->commerce->id);
+        return view('cost.index', compact('data', 'suppliers'));
+    }
+
+    private function getDate(Request $request){
+
+        $date = [ "start" => Carbon::now(), "end" => Carbon::now(), "supplier_id" => null ];
+
+        if ($request->daterange){
+            list($date["start"], $date["end"]) =  explode(' - ', $request->daterange);
+        }
+
+        if ($request->supplier_id){
+             $date["supplier_id"] = $request->supplier_id;
+        }
+
+        return $date;
     }
 
 
@@ -36,9 +54,7 @@ class CostController extends BaseController
 
     public function store(CostStoreRequest $request)
     {
-        $supplier = $this->supplier->find($request->supplier_id);
-
-        $this->authorize('view', $supplier);
+        $this->validateSupplier($request->supplier_id);
 
         $this->cost->create([
             'commerce_id' => $this->user->commerce->id,
@@ -50,7 +66,7 @@ class CostController extends BaseController
             'comment' => $request->comment
         ]);
 
-        return redirect()->route('cost.index');
+        return redirect()->route('cost.index')->with('success', __('El registro se ha guardado correctamente'));
     }
 
 
@@ -70,9 +86,7 @@ class CostController extends BaseController
 
     public function update(CostStoreRequest $request, $id)
     {
-        $supplier = $this->supplier->find($request->supplier_id);
-
-        $this->authorize('view', $supplier);
+        $this->validateSupplier($request->supplier_id);
 
         $cost = $this->cost->find($id);
 
@@ -87,7 +101,7 @@ class CostController extends BaseController
             'comment' => $request->comment
         ], $cost->id);
 
-        return redirect()->route('cost.index');
+        return redirect()->route('cost.index')->with('success', __('El registro se ha guardado correctamente'));
     }
 
     public function destroy($id)
@@ -99,5 +113,13 @@ class CostController extends BaseController
         $this->cost->delete($cost->id);
 
         return response()->json(__('Se eliminó correctamente'), 202);
+    }
+
+
+    private function validateSupplier($supplier_id){
+        if ($supplier_id){
+            $supplier = $this->supplier->find($supplier_id);
+            $this->authorize('view', $supplier);
+        }
     }
 }

@@ -16,7 +16,7 @@
 <!-- page-wrapper Start-->
 <div class="page-wrapper">
 @include('layouts.header')
-
+    @include('sweetalert::alert')
 <!-- Page Body Start-->
     <div class="page-body-wrapper">
         @include('layouts.sidebar')

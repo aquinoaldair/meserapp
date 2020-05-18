@@ -8,6 +8,26 @@ var DataTablesCustom = function () {
         }
     };
 
+    var datatableElButtons = $('#datatableButtons');
+
+    var initDataTablesButtons = function () {
+        console.log("iniciar datatables buttons");
+        if(datatableElButtons.length) {
+            datatableElButtons.DataTable({
+                dom: 'Bfrtip',
+                buttons: [
+                    {
+                        extend: 'excelHtml5',
+                        exportOptions: {
+                            columns: [0,1,2,3,4,5]
+                        },
+                        className: 'btn-success'
+                    },
+                ]
+            } );
+        }
+    };
+
     var initDataTablesDeleteItems = function () {
         datatableEl.on("click", ".destroy", function(e){
             e.preventDefault();
@@ -52,6 +72,9 @@ var DataTablesCustom = function () {
         init: function() {
             initDataTables();
             initDataTablesDeleteItems();
+            initDataTablesButtons();
+
+
         }
     };
 

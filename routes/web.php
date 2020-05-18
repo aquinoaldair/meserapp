@@ -55,8 +55,4 @@ Route::middleware('auth')->group(function () use ($admin, $customer) {
     });
 
 
-
-
-
-
 });

@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\CustomModel;
 use App\Repositories\Category\CategoryRepository;
 use App\Repositories\Category\CategoryRepositoryInterface;
 use App\Repositories\Commerce\CommerceRepository;
@@ -28,6 +29,7 @@ use App\Repositories\Table\TableRepository;
 use App\Repositories\Table\TableRepositoryInterface;
 use App\Repositories\User\UserRepository;
 use App\Repositories\User\UserRepositoryInterface;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider

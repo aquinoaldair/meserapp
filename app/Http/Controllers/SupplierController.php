@@ -39,10 +39,10 @@ class SupplierController extends BaseController
                 'phone_number' => $request->phone_number,
                 'commerce_id' => $this->user->commerce->id
             ]);
-            $this->supplier->attachProducts($supplier->id, $request->products);
+            $this->addProductsToSupplier($supplier->id,$request->products);
         });
 
-        return redirect()->route('supplier.index');
+        return redirect()->route('supplier.index')->with('success', __('El registro se ha guardado correctamente'));
     }
 
     public function edit($id){
@@ -70,11 +70,11 @@ class SupplierController extends BaseController
                 'phone_number' => $request->phone_number
             ], $supplier->id);
 
-            $this->supplier->syncProducts($supplier->id, $request->products);
+            $this->addProductsToSupplier($supplier->id,$request->products);
         });
 
 
-        return redirect()->route('supplier.index');
+        return redirect()->route('supplier.index')->with('success', __('El registro se ha guardado correctamente'));
     }
 
 
@@ -88,5 +88,12 @@ class SupplierController extends BaseController
         $this->supplier->delete($supplier->id);
 
         return response()->json(__('Se eliminó correctamente'), 202);
+    }
+
+
+    public function addProductsToSupplier($supplier_id, $products){
+        if (!is_array($products)) $products = [];
+
+        $this->supplier->syncProducts($supplier_id, $products);
     }
 }

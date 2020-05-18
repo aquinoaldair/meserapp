@@ -3,7 +3,9 @@
 @section('title',  __('Salones'))
 
 @section('style')
-
+    <style>svg{
+            width: 100% !important;
+        }</style>
 @endsection
 
 @section('breadcrumb-title',  __($room->name)." / ".\App\Models\Table::NAME)
@@ -31,17 +33,23 @@
                         </div>
                         <div class="card-body">
                             <div class="row justify-content-center mt-2">
-                                <div class="col-6">
-                                    <a href="{{ route('table.edit', ['room' => $room, 'table' => $item]) }}" class="btn btn-pill btn-sm btn-outline-primary" type="button" data-original-title="Editar" title="">
-                                        <i data-feather="edit-3"></i>
-                                    </a>
+                                <div class="col-8 text-center">
+                                   <div class="container  d-flex h-100">
+                                      <div class="row text-center justify-content-center align-self-center">
+                                          <a href="{{ route('table.edit', ['room' => $room, 'table' => $item]) }}"
+                                             class="btn btn-pill btn-sm btn-outline-primary"
+                                             type="button" data-original-title="Editar" title="">
+                                              <i data-feather="edit-3"></i>
+                                          </a>
+                                          <button class="btn btn-pill btn-sm btn-outline-danger room-delete ml-2" data-key="{{$item->key}}" type="button" data-original-title="Eliminar" title="">
+                                              <i data-feather="trash-2"></i>
+                                          </button>
+                                      </div>
+                                   </div>
                                 </div>
-                                <div class="col-6">
-                                    <button class="btn btn-pill btn-sm btn-outline-danger room-delete" data-key="{{$item->key}}" type="button" data-original-title="Eliminar" title="">
-                                        <i data-feather="trash-2"></i>
-                                    </button>
+                                <div class="col-4 justify-content-center">
+                                    {!! \SimpleSoftwareIO\QrCode\Facades\QrCode::margin(0)->size('100')->generate(route('table.qr', ['qr' => $item->key])) !!}
                                 </div>
-
                             </div>
                         </div>
                     </div>

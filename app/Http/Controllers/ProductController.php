@@ -10,6 +10,9 @@ use App\Repositories\Category\CategoryRepositoryInterface;
 use App\Repositories\Image\ImageRepositoryInterface;
 use App\Repositories\Product\ProductRepositoryInterface;
 use App\Repositories\Station\StationRepositoryInterface;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+use Intervention\Image\Facades\Image;
 
 class ProductController extends BaseController
 {
@@ -45,7 +48,6 @@ class ProductController extends BaseController
 
     public function store(ProductRequest $request)
     {
-
         $category = $this->category->find($request->category_id);
 
         $this->authorize('view', $category);
@@ -125,13 +127,25 @@ class ProductController extends BaseController
 
     public function getImage($request, $image = null){
 
-        $image = ($request->file_device) ? FileHelper::storage('products', $request->file_device) : $image;
+        if ($request->file_device){
+            $image = $this->storeImageFromBase64($request->file_device);
+        }
 
         $image = ($request->file_gallery) ? $request->file_gallery : $image;
 
         return $image;
     }
 
+
+    private function storeImageFromBase64($file){
+        try {
+            $image = Image::make(base64_decode(preg_replace('#^data:image/\w+;base64,#i', '',$file)))->stream();
+            $name = 'products/'.Str::random('40').".png";
+            Storage::disk('public')->put($name, $image);
+            return $name;
+        }catch (\Exception $e){}
+
+    }
 
     private function getStations(){
         return $this->station->getByCommerceId($this->user->commerce->id);

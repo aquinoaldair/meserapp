@@ -9,6 +9,7 @@ use App\Models\Category;
 use App\Repositories\Category\CategoryRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use RealRashid\SweetAlert\Facades\Alert;
 use function GuzzleHttp\Promise\all;
 
 class CategoryController extends BaseController

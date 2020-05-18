@@ -27,6 +27,7 @@ class SupplierStoreRequest extends FormRequest
             'name' => 'required|string|max:255',
             'phone_number' => 'required|max:10',
             'address' => 'required|string|max:255',
+            'products' => 'array'
         ];
     }
 }

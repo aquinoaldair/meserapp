@@ -19,7 +19,6 @@
             <div class="col-sm-12">
                 <div class="card">
                     <div class="card-header">
-                        @include('components.alert')
                         <a href="{{ route('station.create') }}" class="btn btn-primary text-white" type="button">
                             <i class="fa fa-plus"></i>&nbsp;{{ __("Agregar Nuevo") }}
                         </a>

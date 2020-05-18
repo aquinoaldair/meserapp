@@ -34,7 +34,9 @@
 
                             <div class="form-group">
                                 <label>{{ __('Proveedor') }}</label>
-                                <select required name="supplier_id" class="form-control">
+                                <select name="supplier_id" class="form-control">
+                                    <option value="" selected disabled hidden>{{ __("Selecciona") }}</option>
+                                    <option value="">{{ __("Ninguno") }}</option>
                                     @foreach($suppliers as $supplier)
                                         <option {{ old('supplier_id')  == $supplier->id ? "selected" : ($supplier->id == $cost->supplier_id) ? "selected" : "" }} value="{{ $supplier->id }}">{{ $supplier->name }}</option>
                                     @endforeach

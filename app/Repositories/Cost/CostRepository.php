@@ -5,6 +5,7 @@ namespace App\Repositories\Cost;
 
 
 use App\Models\Cost;
+use Illuminate\Support\Facades\DB;
 
 class CostRepository implements CostRepositoryInterface
 {
@@ -47,6 +48,17 @@ class CostRepository implements CostRepositoryInterface
 
     public function getByCommerceIdWithSupplier($id)
     {
-        return $this->model->whereHas('supplier')->with('supplier')->where('commerce_id', $id)->get();
+        return $this->model->with('supplier')->where('commerce_id', $id)->get();
+    }
+
+    public function getInRangeDateByCommerceIdWithSupplier($id, $start_date, $end_date, $supplier_id)
+    {
+        return $this->model->with('supplier')
+            ->with('supplier')
+            ->where('commerce_id', $id)
+            ->whereDate('created_at', ">=", $start_date)
+            ->whereDate('created_at', "<=", $end_date)
+            ->where('supplier_id', $supplier_id)
+            ->get();
     }
 }

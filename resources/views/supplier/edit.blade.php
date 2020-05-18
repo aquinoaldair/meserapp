@@ -53,7 +53,7 @@
                             </div>
                             <div class="form-group">
                                 <label>{{ __('Productos') }} <small>({{ __("Selecciona uno o mas productos") }})</small></label>
-                                <select required name="products[]" id="products" class="form-control form-control-primary btn-square" multiple="multiple">
+                                <select name="products[]" id="products" class="form-control form-control-primary btn-square" multiple="multiple">
                                     @foreach($products as $item)
                                         <option {{ ($supplier->products->contains('id', $item->id)) ? "selected" : "" }} class="text-muted" value="{{ $item->id }}">{{ $item->name }}</option>
                                     @endforeach

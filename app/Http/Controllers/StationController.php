@@ -40,7 +40,7 @@ class StationController extends BaseController
            'name' => $request->name
         ]);
 
-        return redirect()->route('station.index');
+        return redirect()->route('station.index')->with('success', __('El registro se ha guardado correctamente'));
     }
 
     public function edit($id)
@@ -63,7 +63,7 @@ class StationController extends BaseController
             'name' => $request->name
         ], $station->id);
 
-        return redirect()->route('station.index');
+        return redirect()->route('station.index')->with('success', __('El registro se ha guardado correctamente'));
     }
 
     public function destroy($id)

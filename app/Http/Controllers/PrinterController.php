@@ -30,7 +30,7 @@ class PrinterController extends BaseController
             'commerce_id' => $this->user->commerce->id
         ],$request->all());
 
-        return redirect()->route('printer.index')->with('success', "Se ha guardado correctamente");
+        return redirect()->route('printer.index')->with('success', __('El registro se ha guardado correctamente'));
     }
 
 }

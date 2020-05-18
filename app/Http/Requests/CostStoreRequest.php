@@ -25,7 +25,7 @@ class CostStoreRequest extends FormRequest
     {
         return [
             'name'          =>    ['required', 'string', 'max:255'],
-            'supplier_id'   =>    ['required', 'integer'],
+            'supplier_id'   =>    ['nullable', 'integer'],
             'cost'          =>    ['required', 'regex:/^\d+(\.\d{1,2})?$/'],
             'description'   =>    ['nullable', 'max:255'],
             'comment'       =>    ['nullable', 'max:500'],

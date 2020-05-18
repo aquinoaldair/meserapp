@@ -16,7 +16,7 @@ class Cost extends Pivot
     ];
 
     public function supplier(){
-        return $this->belongsTo(Supplier::class);
+        return $this->belongsTo(Supplier::class)->withDefault();
     }
 
 }

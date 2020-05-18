@@ -31,7 +31,7 @@ class ProductRequest extends FormRequest
             'stock' => 'required',
             'margin' => 'required',
             'description' => 'string',
-            'file_device' => 'image',
+            'file_device' => 'nullable',
             'file_gallery' => 'nullable|string|required_without:file_device'
         ];
     }
