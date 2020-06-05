@@ -56,4 +56,11 @@ class TableRepository implements TableRepositoryInterface
     {
         return $this->model->where('key', $key)->firstOrFail();
     }
+
+    public function getParentCommerce($key){
+        return $this->model
+            ->with('room.commerce.categories.products')
+            ->where('key', $key)
+            ->first();
+    }
 }

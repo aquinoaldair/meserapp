@@ -132,7 +132,7 @@
                                                 <input type="hidden" id="file_device" name="file_device">
                                                 <input type="hidden" id="file_gallery" name="file_gallery" value="">
                                                 <br />
-                                                <div id="uploaded_image"></div>
+                                                <img src="" alt="" id="result">
                                             </div>
                                             <div class="tab-pane fade" id="profile-icon" role="tabpanel" aria-labelledby="profile-icon-tab">
                                                 <search-product></search-product>
@@ -224,6 +224,7 @@
                 }).then(function(response){
                     $('#uploadimageModal').modal('hide');
                     $('#file_device').val(response.toDataURL());
+                    $("#result").attr("src", response.toDataURL());
                 })
             });
 

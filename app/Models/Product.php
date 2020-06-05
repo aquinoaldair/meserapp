@@ -17,8 +17,17 @@ class Product extends Model
     ];
 
     protected $hidden = [
-        'created_at', 'updated_at', 'deleted_at'
+        'created_at', 'updated_at', 'deleted_at', 'category_id', 'commerce_id', 'station_id', 'use_stock', 'margin'
     ];
+
+    protected $appends = [
+        'full_image'
+    ];
+
+    public function getFullImageAttribute()
+    {
+        return sprintf('%s/%s',url('storage'), $this->image); // url('storage')."/".$this->image
+    }
 
     public function category(){
         return $this->belongsTo(Category::class);

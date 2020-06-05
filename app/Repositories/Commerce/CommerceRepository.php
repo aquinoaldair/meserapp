@@ -39,4 +39,12 @@ class CommerceRepository implements CommerceRepositoryInterface
         return $this->model->findOrFail($id);
     }
 
+
+    public function getAllInformationById($id){
+        return $this->model->where('id', $id)
+            ->with('rooms.tables')
+            ->with('categories.products')
+            ->first();
+    }
+
 }

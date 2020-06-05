@@ -3,9 +3,17 @@
 @section('title',  __('Salones'))
 
 @section('style')
-    <style>svg{
+    <style>
+        .qr{
             width: 100% !important;
-        }</style>
+        }
+        .qr img{
+            width: 100% !important;
+        }
+        .card .card-body {
+            padding: 10px !important;
+        }
+    </style>
 @endsection
 
 @section('breadcrumb-title',  __($room->name)." / ".\App\Models\Table::NAME)
@@ -47,8 +55,10 @@
                                       </div>
                                    </div>
                                 </div>
-                                <div class="col-4 justify-content-center">
-                                    {!! \SimpleSoftwareIO\QrCode\Facades\QrCode::margin(0)->size('100')->generate(route('table.qr', ['qr' => $item->key])) !!}
+                                <div  class="col-4 justify-content-center qr">
+                                    <a target="_blank" href="{{ route('show.qr', ['room' => $room, 'qr' => $item->key]) }}">
+                                        <img src="data:image/png;base64, {!! base64_encode(\SimpleSoftwareIO\QrCode\Facades\QrCode::format('png')->margin(5)->size(100)->generate(route('table.qr', ['qr' => $item->key]))) !!} ">
+                                    </a>
                                 </div>
                             </div>
                         </div>

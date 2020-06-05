@@ -18,8 +18,18 @@ class Category extends Model
     ];
 
     protected $hidden = [
-        'created_at', 'updated_at', 'deleted_at'
+        'created_at', 'updated_at', 'deleted_at', 'commerce_id', 'is_admin', 'active'
     ];
+
+
+    protected $appends = [
+        'full_image'
+    ];
+
+    public function getFullImageAttribute()
+    {
+        return sprintf('%s/%s',url('storage'), $this->image); // url('storage')."/".$this->image
+    }
 
 
     public function createdByAdmin(){

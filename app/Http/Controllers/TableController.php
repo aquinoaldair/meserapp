@@ -4,12 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Helpers\RoomHelper;
 use App\Http\Requests\TableRequest;
-use App\Models\Room;
-use App\Models\Table;
-use App\Repositories\Room\RoomRepositoryInterface;
 use App\Repositories\Table\TableRepositoryInterface;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 
 class TableController extends Controller
@@ -76,5 +73,12 @@ class TableController extends Controller
         $table =  $this->table->findOrFailByKey($key);
         $this->table->delete($table->id);
         return response()->json(__('Se eliminó correctamente'), 202);
+    }
+
+    public function showQr($qr){
+        $image = QrCode::format('png')
+            ->size(600)
+            ->generate(route('table.qr', ['qr' => $qr]));
+        return response($image)->header('Content-type','image/png');
     }
 }

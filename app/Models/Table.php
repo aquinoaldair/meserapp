@@ -16,6 +16,10 @@ class Table extends Model
         'name', 'key', 'url', 'room_id'
     ];
 
+    protected $hidden = [
+        'created_at', 'updated_at', 'deleted_at', 'url', 'room_id'
+    ];
+
     public function room(){
         return $this->belongsTo(Room::class);
     }

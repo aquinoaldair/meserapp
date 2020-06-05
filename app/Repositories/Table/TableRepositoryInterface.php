@@ -11,4 +11,5 @@ interface TableRepositoryInterface extends BaseRepositoryInterface
     public function getByRoom($id);
     public function findByKey($key);
     public function findOrFailByKey($key);
+    public function getParentCommerce($key);
 }
