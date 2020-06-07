@@ -13,7 +13,7 @@ class Commerce extends Model
     const NAME = "Comercios";
 
     protected $fillable = [
-        'user_id', 'name', 'date', 'logo', 'address', 'latitude', 'longitude'
+        'user_id', 'name', 'date', 'logo', 'address', 'latitude', 'longitude', 'first_image', 'second_image'
     ];
 
     protected  $hidden = [
@@ -34,5 +34,9 @@ class Commerce extends Model
 
     public function categories(){
         return $this->hasMany(Category::class);
+    }
+
+    public function schedules(){
+        return $this->hasMany(Schedule::class);
     }
 }

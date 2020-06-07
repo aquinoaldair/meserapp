@@ -81,6 +81,8 @@ trait RegisterCommerce
             'name' => $data["name"],
             'date' => isset($data["date"]) ? $data["date"] : Carbon::now(),
             'logo' => (isset($data["logo"])) ? FileHelper::storage('commerce', $data["logo"]) : null,
+            'first_image' => (isset($data["first_image"])) ? FileHelper::storage('commerce', $data["first_image"]) : null,
+            'second_image' => (isset($data["second_image"])) ? FileHelper::storage('commerce', $data["second_image"]) : null,
             'address' => isset($data['address']) ? $data['address'] : null,
             'latitude' => isset($data['latitude']) ? $data['latitude'] : null,
             'longitude' => isset($data['longitude']) ?  $data['longitude'] : null

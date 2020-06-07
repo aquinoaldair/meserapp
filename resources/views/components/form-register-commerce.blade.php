@@ -1,6 +1,6 @@
 <div class="card mt-4 p-4">
     <h4 class="text-center">{{ $title }}</h4>
-    <form class="theme-form" method="POST" action="{{ $route }}" >
+    <form class="theme-form" method="POST" action="{{ $route }}" enctype="multipart/form-data" >
         @csrf
         <div class="row">
             <div class="col-12 col-md-6">
@@ -59,8 +59,20 @@
                         </div>
                     </div>
                 </div>
+                <div class="form-group">
+                    <label class="col-form-label">{{ __("Logotipo") }}</label>
+                    <input class="form-control" type="file" name="logo" required>
+                </div>
             </div>
             <div class="col-12 col-md-6">
+                <div class="form-group">
+                    <label class="col-form-label">{{ __("Imagen Principal") }}</label>
+                    <input class="form-control" type="file" name="first_image" required>
+                </div>
+                <div class="form-group">
+                    <label class="col-form-label">{{ __("Imagen Secundaria") }}</label>
+                    <input class="form-control" type="file" name="second_image" required>
+                </div>
                 <div class="form-group">
                     <label class="col-form-label">{{ __("Dirección") }}</label>
                     <input class="form-control" type="text" name="address" id="autocomplete" placeholder="{{ __("Ingresa tu dirección") }}" autocomplete="new_address" required>

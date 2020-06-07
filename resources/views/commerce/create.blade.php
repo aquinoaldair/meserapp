@@ -17,7 +17,7 @@
     <!-- Container-fluid starts-->
     <div class="container-fluid">
         <div class="row">
-            <div class="col-sm-12 col-xl-6">
+            <div class="col-sm-12 col-xl-10">
                 <x-form-register-commerce title="Crear" route="{{ route('commerce.store') }}" :register="false"></x-form-register-commerce>
             </div>
         </div>

@@ -30,6 +30,7 @@
                                 <tr>
                                     <th>Nombre</th>
                                     <th>{{ __('Propietario') }}</th>
+                                    <th>{{ __("Logotipo") }}</th>
                                     <th>{{ __('Email') }}</th>
                                     <th>{{ __('Teléfono') }}</th>
                                     <th>{{ __('Creado') }}</th>
@@ -41,6 +42,13 @@
                                     <tr data-id="{{ $item->id }}">
                                         <td>{{ $item->name }}</td>
                                         <td>{{ $item->user->name }}</td>
+                                        <td>
+                                           @if ($item->logo)
+                                                <a target="_blank" href="{{ asset('storage/'.$item->logo) }}">
+                                                    <img style="width: 50px" src="{{ asset('storage/'.$item->logo) }}" alt="">
+                                                </a>
+                                           @endif
+                                        </td>
                                         <td>{{ $item->user->email }}</td>
                                         <td>{{ $item->user->customer->phone_number }}</td>
                                         <td>{{ $item->date }}</td>

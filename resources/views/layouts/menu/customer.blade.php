@@ -21,6 +21,7 @@
             <li><a class="sidebar-header" href="{{ route('station.index') }}"><i data-feather="monitor"></i><span>{{ \App\Models\Station::NAME }}</span></a></li>
             <li><a class="sidebar-header" href="#"><i data-feather="shopping-cart"></i><span>Ventas</span></a></li>
             <li><a class="sidebar-header" href="#"><i data-feather="lock"></i><span>Usuarios y Roles</span></a></li>
+            <li><a class="sidebar-header" href="{{ route('schedule.index') }}"><i data-feather="clock"></i><span>{{ \App\Models\Schedule::NAME }}</span></a></li>
             {{--<li><a class="sidebar-header" href="{{ route('room.index') }}"><i data-feather="dollar-sign"></i><span>Ventas</span></a></li>
             <li><a class="sidebar-header" href="{{ route('room.index') }}"><i data-feather="clipboard"></i><span>Compras y Gastos</span></a></li>
             <li><a class="sidebar-header" href="{{ route('room.index') }}"><i data-feather="settings"></i><span>Configuración</span></a></li>--}}

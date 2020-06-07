@@ -17,7 +17,7 @@
     <!-- Container-fluid starts-->
     <div class="container-fluid">
         <div class="row">
-            <div class="col-sm-12 col-xl-8">
+            <div class="col-sm-12 col-xl-10">
                 <x-form-update-commerce title="Actualizar" route="{{ route('commerce.update', $commerce) }}"  :commerce="$commerce"></x-form-update-commerce>
             </div>
         </div>

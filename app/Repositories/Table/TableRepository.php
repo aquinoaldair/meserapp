@@ -59,7 +59,9 @@ class TableRepository implements TableRepositoryInterface
 
     public function getParentCommerce($key){
         return $this->model
-            ->with('room.commerce.categories.products')
+            ->with(['room.commerce' => function($q){
+                $q->with('categories.products')->with('schedules');
+            }])
             ->where('key', $key)
             ->first();
     }

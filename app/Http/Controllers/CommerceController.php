@@ -106,11 +106,12 @@ class CommerceController extends Controller
             'name' => $data["name"],
         ];
         if (isset($data['logo'])) $fields['logo'] = FileHelper::storage('commerce', $data['logo']);
+        if (isset($data['first_image'])) $fields['first_image'] = FileHelper::storage('commerce', $data['first_image']);
+        if (isset($data['second_image'])) $fields['second_image'] = FileHelper::storage('commerce', $data['second_image']);
         if (isset($data['date'])) $fields['date'] = $data['date'];
         if (isset($data['address'])) $fields['address'] = $data['address'];
         if (isset($data['latitude'])) $fields['latitude'] = $data['latitude'];
         if (isset($data['longitude'])) $fields['longitude'] = $data['longitude'];
-
 
         $this->commerce->update($fields, $id);
     }

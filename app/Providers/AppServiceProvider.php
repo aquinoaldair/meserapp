@@ -19,6 +19,8 @@ use App\Repositories\Product\ProductRepository;
 use App\Repositories\Product\ProductRepositoryInterface;
 use App\Repositories\Room\RoomRepository;
 use App\Repositories\Room\RoomRepositoryInterface;
+use App\Repositories\Schedule\ScheduleRepository;
+use App\Repositories\Schedule\ScheduleRepositoryInterface;
 use App\Repositories\Station\StationRepository;
 use App\Repositories\Station\StationRepositoryInterface;
 use App\Repositories\Stock\StockRepository;
@@ -50,6 +52,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(CostRepositoryInterface::class, CostRepository::class);
         $this->app->bind(PrinterRepositoryInterface::class, PrinterRepository::class);
         $this->app->bind(StationRepositoryInterface::class, StationRepository::class);
+        $this->app->bind(ScheduleRepositoryInterface::class, ScheduleRepository::class);
     }
 
 

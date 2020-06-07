@@ -60,8 +60,23 @@
                             </div>
                         </div>
                     </div>
+                    <div class="form-group">
+                        <label class="col-form-label">{{ __("Logotipo") }}</label>
+                        <input class="form-control" type="file" name="logo">
+                        <small>{{ __("El logotipo no sera modificada al menos que se ingrese una nueva") }}</small>
+                    </div>
                 </div>
                 <div class="col-12 col-md-6">
+                    <div class="form-group">
+                        <label class="col-form-label">{{ __("Imagen Principal") }}</label>
+                        <input class="form-control" type="file" name="first_image">
+                        <small>{{ __("La imagen no sera modificada al menos que se ingrese una nueva") }}</small>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-form-label">{{ __("Imagen Secundaria") }}</label>
+                        <input class="form-control" type="file" name="second_image">
+                        <small>{{ __("La imagen no sera modificada al menos que se ingrese una nueva") }}</small>
+                    </div>
                     <div class="form-group">
                         <label class="col-form-label">{{ __("Dirección") }}</label>
                         <input class="form-control" type="text" name="address" value="{{ $commerce->address }}" id="autocomplete" placeholder="{{ __("Ingresa tu dirección") }}" autocomplete="new_address" required>

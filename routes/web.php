@@ -44,6 +44,7 @@ Route::middleware('auth')->group(function () use ($admin, $customer) {
         Route::resource('cost', 'CostController');
         Route::resource('station', 'StationController');
         Route::resource('printer', 'PrinterController')->only('index', 'store');
+        Route::resource('schedule', 'ScheduleController');
         Route::prefix('room/{room}')->middleware(CheckRoom::class)->group(function (){
             Route::get('table/qr/{qr}', 'TableController@showQr')->name('show.qr');
             Route::resource('table', 'TableController');
