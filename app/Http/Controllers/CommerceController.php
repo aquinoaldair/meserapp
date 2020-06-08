@@ -112,6 +112,8 @@ class CommerceController extends Controller
         if (isset($data['address'])) $fields['address'] = $data['address'];
         if (isset($data['latitude'])) $fields['latitude'] = $data['latitude'];
         if (isset($data['longitude'])) $fields['longitude'] = $data['longitude'];
+        if (isset($data['type'])) $fields['type'] = $data['type'];
+        if (isset($data['description'])) $fields['description'] = $data['description'];
 
         $this->commerce->update($fields, $id);
     }

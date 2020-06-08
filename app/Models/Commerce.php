@@ -13,11 +13,16 @@ class Commerce extends Model
     const NAME = "Comercios";
 
     protected $fillable = [
-        'user_id', 'name', 'date', 'logo', 'address', 'latitude', 'longitude', 'first_image', 'second_image'
+        'user_id', 'name', 'date', 'logo', 'address', 'latitude', 'longitude', 'first_image', 'second_image', 'type', 'description'
     ];
 
     protected  $hidden = [
         'created_at', 'updated_at', 'deleted_at', 'user_id'
+    ];
+
+
+    protected $appends = [
+        'rating'
     ];
 
     public function user(){
@@ -38,5 +43,14 @@ class Commerce extends Model
 
     public function schedules(){
         return $this->hasMany(Schedule::class);
+    }
+
+    public function ratings(){
+        return $this->hasMany(Rating::class);
+    }
+
+
+    public function getRatingAttribute(){
+        return $this->ratings()->avg('value') ? : 0;
     }
 }

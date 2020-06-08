@@ -61,12 +61,26 @@
                         </div>
                     </div>
                     <div class="form-group">
+                        <label class="col-form-label">{{ __("Tipo de negocio") }}</label>
+                        <input class="form-control" type="text" name="type" value="{{ old('type') ?? $commerce->type }}" required>
+                        @error('type')
+                        <small class="text-danger">{{ $message }}</small>
+                        @enderror
+                    </div>
+                    <div class="form-group">
+                        <label class="col-form-label">{{ __("Descripción") }}</label>
+                        <textarea class="form-control" name="description">{{ old('description') ?? $commerce->description }}</textarea>
+                        @error('description')
+                        <small class="text-danger">{{ $message }}</small>
+                        @enderror
+                    </div>
+                </div>
+                <div class="col-12 col-md-6">
+                    <div class="form-group">
                         <label class="col-form-label">{{ __("Logotipo") }}</label>
                         <input class="form-control" type="file" name="logo">
                         <small>{{ __("El logotipo no sera modificada al menos que se ingrese una nueva") }}</small>
                     </div>
-                </div>
-                <div class="col-12 col-md-6">
                     <div class="form-group">
                         <label class="col-form-label">{{ __("Imagen Principal") }}</label>
                         <input class="form-control" type="file" name="first_image">

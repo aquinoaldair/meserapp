@@ -85,7 +85,9 @@ trait RegisterCommerce
             'second_image' => (isset($data["second_image"])) ? FileHelper::storage('commerce', $data["second_image"]) : null,
             'address' => isset($data['address']) ? $data['address'] : null,
             'latitude' => isset($data['latitude']) ? $data['latitude'] : null,
-            'longitude' => isset($data['longitude']) ?  $data['longitude'] : null
+            'longitude' => isset($data['longitude']) ?  $data['longitude'] : null,
+            'type' => isset($data['type']) ? $data['type'] : null,
+            'description' => isset($data['description']) ?  $data['description'] : null
         ]);
     }
 }

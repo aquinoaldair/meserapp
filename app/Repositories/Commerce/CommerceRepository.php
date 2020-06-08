@@ -47,4 +47,8 @@ class CommerceRepository implements CommerceRepositoryInterface
             ->first();
     }
 
+    public function getWithSchedules()
+    {
+        return $this->model->with('schedules')->get();
+    }
 }

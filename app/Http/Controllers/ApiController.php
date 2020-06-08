@@ -22,6 +22,6 @@ class ApiController extends Controller
     }
 
     public function getCommerces(){
-        return $this->commerce->all();
+        return $this->commerce->getWithSchedules();
     }
 }

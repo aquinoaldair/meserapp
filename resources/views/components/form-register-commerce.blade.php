@@ -60,11 +60,26 @@
                     </div>
                 </div>
                 <div class="form-group">
+                    <label class="col-form-label">{{ __("Tipo de negocio") }}</label>
+                    <input class="form-control" type="text" name="type" required>
+                    @error('type')
+                    <small class="text-danger">{{ $message }}</small>
+                    @enderror
+                </div>
+                <div class="form-group">
+                    <label class="col-form-label">{{ __("Descripción") }}</label>
+                    <textarea class="form-control" name="description"></textarea>
+                    @error('description')
+                    <small class="text-danger">{{ $message }}</small>
+                    @enderror
+                </div>
+            </div>
+
+            <div class="col-12 col-md-6">
+                <div class="form-group">
                     <label class="col-form-label">{{ __("Logotipo") }}</label>
                     <input class="form-control" type="file" name="logo" required>
                 </div>
-            </div>
-            <div class="col-12 col-md-6">
                 <div class="form-group">
                     <label class="col-form-label">{{ __("Imagen Principal") }}</label>
                     <input class="form-control" type="file" name="first_image" required>
