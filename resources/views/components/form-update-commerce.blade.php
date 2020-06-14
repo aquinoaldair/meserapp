@@ -21,7 +21,7 @@
                                         <option {{
                                                     old('prefix_phone')
                                                             ? ( old('prefix_phone') == $item->phone_code ? "selected": "" )
-                                                            : ($commerce->user->customer->prefix_phone == $item->phone_code ) ? "selected" : '' }}
+                                                            : ($commerce->prefix_phone == $item->phone_code ) ? "selected" : '' }}
 
                                                 value="{{ $item->phone_code }}">{{ $item->name }} (+{{ $item->phone_code }})</option>
                                     @endforeach
@@ -34,7 +34,7 @@
                         <div class="col-8 col-md-7">
                             <div class="form-group">
                                 <label class="col-form-label">{{ __("Telefono") }}</label>
-                                <input class="form-control" type="text"  value="{{ old('phone_number') ?? $commerce->user->customer->phone_number }}" name="phone_number" required>
+                                <input class="form-control" type="text"  value="{{ old('phone_number') ?? $commerce->phone_number }}" name="phone_number" required>
                                 @error('phone_number')
                                 <small class="text-danger">{{ $message }}</small>
                                 @enderror

@@ -49,6 +49,6 @@ class CommerceRepository implements CommerceRepositoryInterface
 
     public function getWithSchedules()
     {
-        return $this->model->with('schedules')->get();
+        return $this->model->withHighestPrice()->withLowestPrice()->with('schedules')->get();
     }
 }

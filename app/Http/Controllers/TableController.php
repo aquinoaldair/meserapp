@@ -75,7 +75,7 @@ class TableController extends Controller
         return response()->json(__('Se eliminó correctamente'), 202);
     }
 
-    public function showQr($qr){
+    public function showQr($room, $qr){
         $image = QrCode::format('png')
             ->size(600)
             ->generate(route('table.qr', ['qr' => $qr]));

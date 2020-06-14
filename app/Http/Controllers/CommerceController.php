@@ -114,17 +114,43 @@ class CommerceController extends Controller
         if (isset($data['longitude'])) $fields['longitude'] = $data['longitude'];
         if (isset($data['type'])) $fields['type'] = $data['type'];
         if (isset($data['description'])) $fields['description'] = $data['description'];
+        if (isset($data['phone_number'])) $fields['phone_number'] = $data['phone_number'];
+        if (isset($data['prefix_phone'])) $fields['prefix_phone'] = $data['prefix_phone'];
 
         $this->commerce->update($fields, $id);
     }
 
 
     private function updateCustomer($data, $id){
-        $this->customer->update([
+        /*$this->customer->update([
             'phone_number' => $data["phone_number"],
             'prefix_phone' => $data["prefix_phone"]
-        ], $id);
+        ], $id);*/
     }
 
+
+    public function profile(){
+
+        $commerce = $this->commerce->find(auth()->user()->commerce->id);
+
+        return view('commerce.profile', compact('commerce'));
+    }
+
+
+
+    public function updateProfile(Request $request){
+
+        $commerce = $this->commerce->find(auth()->user()->commerce->id);
+
+        $data = $request->all();
+
+        DB::transaction(function () use ($data, $commerce){
+            $this->updateUser($data, $commerce->user->id);
+            $this->updateCustomer($data, $commerce->user->customer->id);
+            $this->updateCommerce($data, $commerce->id);
+        });
+
+        return redirect()->back()->with('success', __('El registro se ha actualizado correctamente'));
+    }
 
 }

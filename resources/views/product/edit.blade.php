@@ -70,7 +70,7 @@
                                         <div class="col-6">
                                             <div class="form-group">
                                                 <label>{{ __('Precio') }}</label>
-                                                <input required type="number" name="price" class="form-control" step='0.01' value="{{ old('price') ?? $product->price}}" placeholder='0.00'>
+                                                <input required type="number" name="price" class="form-control" step='0.001' value="{{ old('price') ?? $product->price}}" placeholder='0.000'>
                                                 @error('price')
                                                 <p class="text-danger text-sm"> {{ $errors->first('price') }}</p>
                                                 @enderror

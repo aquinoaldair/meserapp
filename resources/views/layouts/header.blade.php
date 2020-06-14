@@ -20,7 +20,9 @@
             <div class="dotted-animation"><span class="animate-circle"></span><span class="main-circle"></span></div>
           </div>
           <ul class="profile-dropdown onhover-show-div p-20">
-            <li><a href="#"><i data-feather="user"></i>{{ __("Editar Perfil") }}</a></li>
+            <li>
+                <a href="{{ route('profile') }}"><i data-feather="user"></i>{{ __("Editar Perfil") }}</a>
+            </li>
             <li>
                 <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                     <i data-feather="log-out"></i>{{ __("Salir") }}

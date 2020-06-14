@@ -19,7 +19,7 @@ class CreateProductsTable extends Migration
             $table->foreignId('category_id')->constrained();
             $table->foreignId('station_id')->constrained();
             $table->string('name');
-            $table->decimal('price', 10, 2)->default(0.0);
+            $table->decimal('price', 10, 3)->default(0.0);
             $table->string('image')->nullable();
             $table->boolean('active')->default(true);
             $table->boolean('use_stock');

@@ -68,11 +68,11 @@ trait RegisterCommerce
     }
 
     private function storeCustomer(array $data, $user_id){
-        return $this->customer->create([
+        /*return $this->customer->create([
             'user_id' => $user_id,
             'phone_number' => $data["phone_number"],
             'prefix_phone' => $data["prefix_phone"]
-        ]);
+        ]);*/
     }
 
     private function storeCommerce(array $data, $user_id){
@@ -87,7 +87,9 @@ trait RegisterCommerce
             'latitude' => isset($data['latitude']) ? $data['latitude'] : null,
             'longitude' => isset($data['longitude']) ?  $data['longitude'] : null,
             'type' => isset($data['type']) ? $data['type'] : null,
-            'description' => isset($data['description']) ?  $data['description'] : null
+            'description' => isset($data['description']) ?  $data['description'] : null,
+            'phone_number' => isset($data['phone_number']) ?  $data['phone_number'] : null,
+            'prefix_phone' => isset($data['prefix_phone']) ?  $data['prefix_phone'] : null
         ]);
     }
 }

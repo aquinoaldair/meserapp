@@ -24,6 +24,10 @@ class Product extends Model
         'full_image'
     ];
 
+    protected $casts = [
+        'price' => 'float(8,3)',
+    ];
+
     public function getFullImageAttribute()
     {
         return sprintf('%s/%s',url('storage'), $this->image); // url('storage')."/".$this->image

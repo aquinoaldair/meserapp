@@ -50,7 +50,7 @@
                                            @endif
                                         </td>
                                         <td>{{ $item->user->email }}</td>
-                                        <td>{{ $item->user->customer->phone_number }}</td>
+                                        <td>{{ $item->phone_number }}</td>
                                         <td>{{ $item->date }}</td>
                                         <td>
                                             <a href="{{ route('commerce.edit', $item) }}" class="btn btn-pill btn-info text-white"  data-toggle="tooltip" title="" data-original-title="{{ __("Editar") }}">

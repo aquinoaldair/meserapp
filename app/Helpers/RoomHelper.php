@@ -12,7 +12,7 @@ class RoomHelper
 {
     static function getKey(){
         $room = app(RoomRepositoryInterface::class);
-        $key = Str::random('15');
+        $key = Str::random('6');
         $item = $room->findByKey($key);
         if ($item){
             return self::getKey();
@@ -22,7 +22,7 @@ class RoomHelper
 
     static function getKeyTable(){
         $room = app(TableRepositoryInterface::class);
-        $key = Str::random('15');
+        $key = Str::random('6');
         $item = $room->findByKey($key);
         if ($item){
             return self::getKeyTable();

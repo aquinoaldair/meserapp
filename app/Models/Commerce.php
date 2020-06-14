@@ -13,10 +13,12 @@ class Commerce extends Model
     const NAME = "Comercios";
 
     protected $fillable = [
-        'user_id', 'name', 'date', 'logo', 'address', 'latitude', 'longitude', 'first_image', 'second_image', 'type', 'description'
+        'user_id', 'name', 'date', 'logo', 'address', 'latitude',
+        'longitude', 'first_image', 'second_image', 'type', 'description',
+        'phone_number', 'prefix_phone'
     ];
 
-    protected  $hidden = [
+    protected $hidden = [
         'created_at', 'updated_at', 'deleted_at', 'user_id'
     ];
 
@@ -25,32 +27,66 @@ class Commerce extends Model
         'rating'
     ];
 
-    public function user(){
+
+    public function user()
+    {
         return $this->belongsTo(User::class);
     }
 
-    public function printer(){
+    public function printer()
+    {
         return $this->hasOne(Printer::class)->withDefault();
     }
 
-    public function rooms(){
+    public function rooms()
+    {
         return $this->hasMany(Room::class);
     }
 
-    public function categories(){
+    public function categories()
+    {
         return $this->hasMany(Category::class);
     }
 
-    public function schedules(){
+    public function schedules()
+    {
         return $this->hasMany(Schedule::class);
     }
 
-    public function ratings(){
+    public function products()
+    {
+        return $this->hasMany(Product::class);
+    }
+
+    public function ratings()
+    {
         return $this->hasMany(Rating::class);
     }
 
 
-    public function getRatingAttribute(){
-        return $this->ratings()->avg('value') ? : 0;
+    public function getRatingAttribute()
+    {
+        return $this->ratings()->avg('value') ?: 0;
     }
+
+
+    public function scopeWithHighestPrice($query)
+    {
+        $query->addSelect(['highest_price' => Product::select('price')
+            ->whereColumn('commerce_id', 'commerces.id')
+            ->orderBy('price', 'desc')
+            ->take(1)
+        ]);
+    }
+
+    public function scopeWithLowestPrice($query)
+    {
+        $query->addSelect(['lowest_price' => Product::select('price')
+            ->whereColumn('commerce_id', 'commerces.id')
+            ->orderBy('price', 'asc')
+            ->take(1)
+        ]);
+    }
+
+
 }

@@ -35,6 +35,9 @@ Route::middleware('auth')->group(function () use ($admin, $customer) {
     //only customer
     Route::middleware("role:{$customer}")->group(function (){
 
+        Route::get('profile', 'CommerceController@profile')->name('profile');
+        Route::put('profile/update', 'CommerceController@updateProfile')->name('profile.update');
+
         Route::get('category/general', 'CategoryController@getGeneral');
         Route::post('category/customer/create', 'CategoryController@createCategoryFromGeneral');
         Route::get('images/search/{term}', 'ImageController@search');
