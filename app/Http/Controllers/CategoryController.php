@@ -7,6 +7,8 @@ use App\Http\Requests\CategoryRequest;
 use App\Interfaces\PermissionInterface;
 use App\Models\Category;
 use App\Repositories\Category\CategoryRepositoryInterface;
+use App\Strategy\Image\ImageFromBase64;
+use App\Strategy\Image\ImageProcess;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use RealRashid\SweetAlert\Facades\Alert;
@@ -44,9 +46,11 @@ class CategoryController extends BaseController
     public function store(CategoryRequest $request)
     {
 
+        // FileHelper::storage('categories', $request->image)
+
         $data = [
             'name' => $request->name,
-            'image' => ($request->image) ? FileHelper::storage('categories', $request->image) : null
+            'image' => ($request->file_device) ? (new ImageProcess(new ImageFromBase64()))->store($request->file_device, 'categories')  : null
         ];
 
         $this->user->isAdmin()
@@ -76,7 +80,9 @@ class CategoryController extends BaseController
 
         $this->category->update([
             'name' => $request->name,
-            'image' => ($request->image) ? FileHelper::storage('categories', $request->image) : $category->image
+            'image' => ($request->file_device)
+                ? (new ImageProcess(new ImageFromBase64))->store($request->file_device, 'categories')
+                : $category->image
         ], $category->id);
 
         return redirect()->route('category.index')->with('success', __('El registro se ha guardado correctamente'));

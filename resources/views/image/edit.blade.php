@@ -3,6 +3,7 @@
 @section('title',  __(\App\Models\Image::NAME))
 
 @section('style')
+    <link rel="stylesheet" href="{{ asset('assets/js/croppie/croppie.min.css') }}">
     <link rel="stylesheet" type="text/css" href="{{asset('assets/css/date-picker.css')}}">
 @endsection
 
@@ -25,9 +26,11 @@
                         <div class="card-body">
                             <div class="form-group">
                                 <label>{{ __('Imagen') }}</label>
-                                <input type="file" name="file" class="form-control">
-                                <small>No es necesario</small>
+                                <input type="file"  id="upload_image"  class="form-control">
+                                <small>Si selecciona una foto, se remplezará la anterior</small>
                             </div>
+                            <input type="hidden" id="file_device" name="image">
+                            <img src="" alt="" id="result">
                             @error('file')
                             <p class="text-danger text-sm"> {{ $errors->first('file') }}</p>
                             @enderror
@@ -49,8 +52,10 @@
         </div>
     </div>
     <!-- Container-fluid Ends-->
+    @include('modals.image_modal')
 @endsection
 
 @section('script')
-
+    <script src="{{ asset('assets/js/croppie/croppie.min.js') }}"></script>
+    <script src="{{ mix('js/image.js') }}"></script>
 @endsection

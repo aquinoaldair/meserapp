@@ -4,6 +4,63 @@
     @include('layouts.head')
     <title>@yield('title')</title>
     @include('layouts.style')
+    <style>
+        .page-wrapper .page-body-wrapper .page-body {
+            background-color: #FC5759;
+        }
+        .breadcrumb-item.active {
+            color: #F9F9F9;
+        }
+        .page-wrapper .page-body-wrapper .page-header .row h3 {
+            color: #F9F9F9;
+        }
+
+        body.dark-header-sidebar-mix .page-wrapper .page-main-header .main-header-right {
+            background-color: #FC5759;
+        }
+
+        /*SIDEBAR*/
+
+        .page-wrapper .page-body-wrapper .page-sidebar {
+            background: #f9f9f9;
+        }
+
+
+
+        .page-wrapper .page-body-wrapper .page-sidebar .sidebar-menu .sidebar-header {
+            color: #808080;
+        }
+
+        /* links color active */
+        .page-wrapper .page-body-wrapper .page-sidebar .sidebar-menu>li>a.active {
+            color: #383737;
+        }
+
+        /*Esto nombre abajo del logo */
+        .page-wrapper .page-body-wrapper .page-sidebar .sidebar-user h6 {
+            color: #808080;
+        }
+
+        /*Esto es icono numero 3 */
+        .page-wrapper .page-body-wrapper .page-sidebar[sidebar-layout="iconcolor-sidebar"] .sidebar-menu li:nth-child(7n+3) svg {
+            color: #4466F2;
+        }
+
+        /*Esto es del logo */
+        .page-wrapper .page-body-wrapper .page-sidebar .sidebar-user {
+            padding: 5px 0px;
+            position: relative;
+        }
+
+        /* */
+
+        .page-wrapper .page-body-wrapper .page-sidebar[sidebar-layout="iconcolor-sidebar"] .sidebar-menu li:nth-child(7n+9) svg {
+            color: #F09FAF;
+        }
+        .page-wrapper .page-body-wrapper .page-sidebar[sidebar-layout="iconcolor-sidebar"] .sidebar-menu li:nth-child(7n+7) svg {
+            color:  #F7C48C;
+        }
+    </style>
 </head>
 <body class="dark-header-sidebar-mix">
 <!-- Loader starts-->

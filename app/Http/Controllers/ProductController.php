@@ -2,17 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Helpers\FileHelper;
 use App\Http\Requests\ProductRequest;
 use App\Http\Requests\ProductUpdateRequest;
-use App\Models\Product;
+use App\Models\Image;
 use App\Repositories\Category\CategoryRepositoryInterface;
 use App\Repositories\Image\ImageRepositoryInterface;
 use App\Repositories\Product\ProductRepositoryInterface;
 use App\Repositories\Station\StationRepositoryInterface;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
-use Intervention\Image\Facades\Image;
+use App\Strategy\Image\ImageFromBase64;
+use App\Strategy\Image\ImageFromUrl;
+use App\Strategy\Image\ImageProcess;
 
 class ProductController extends BaseController
 {
@@ -21,10 +20,13 @@ class ProductController extends BaseController
     private $gallery;
     private $station;
 
-    public function __construct(ProductRepositoryInterface $product, CategoryRepositoryInterface $category, ImageRepositoryInterface $image, StationRepositoryInterface $station)
+    public function __construct(
+        ProductRepositoryInterface $product,
+        CategoryRepositoryInterface $category,
+        ImageRepositoryInterface $image,
+        StationRepositoryInterface $station)
     {
         parent::__construct();
-
         $this->product = $product;
         $this->category = $category;
         $this->gallery = $image;
@@ -128,24 +130,17 @@ class ProductController extends BaseController
     public function getImage($request, $image = null){
 
         if ($request->file_device){
-            $image = $this->storeImageFromBase64($request->file_device);
+            $image = (new ImageProcess(new ImageFromBase64))->store($request->file_device, 'products');
         }
 
-        $image = ($request->file_gallery) ? $request->file_gallery : $image;
+        if ($request->file_gallery){
+            $image =  (new ImageProcess(new ImageFromUrl))->store($request->file_device);
+        }
 
-        return $image;
+       return $image;
     }
 
 
-    private function storeImageFromBase64($file){
-        try {
-            $image = Image::make(base64_decode(preg_replace('#^data:image/\w+;base64,#i', '',$file)))->stream();
-            $name = 'products/'.Str::random('40').".png";
-            Storage::disk('public')->put($name, $image);
-            return $name;
-        }catch (\Exception $e){}
-
-    }
 
     private function getStations(){
         return $this->station->getByCommerceId($this->user->commerce->id);

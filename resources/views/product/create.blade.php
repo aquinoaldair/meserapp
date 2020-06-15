@@ -151,30 +151,7 @@
             </div>
         </div>
     </div>
-    <!-- Container-fluid Ends-->
-    <div id="uploadimageModal" class="modal" tabindex="-1" role="dialog">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Cambiar tamaño de imagen</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-md-8 text-center">
-                            <div id="image_demo" style="width:350px; margin-top:30px"></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary crop_image">{{ __("Aceptar") }}</button>
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ __("Cerrar") }}</button>
-                </div>
-            </div>
-        </div>
-    </div>
+    @include('modals.image_modal')
 @endsection
 
 @section('script')
@@ -186,48 +163,5 @@
     <script src="{{asset('assets/js/masonry-gallery.js')}}"></script>
     <script src="{{ asset('assets/js/croppie/croppie.min.js') }}"></script>
     <script src="{{ asset('js/app.js') }}"></script>
-
-    <script>
-        $(document).ready(function(){
-
-            $image_crop = $('#image_demo').croppie({
-                enableExif: true,
-                viewport: {
-                    width:200,
-                    height:200,
-                    type:'square' //circle
-                },
-                boundary:{
-                    width:300,
-                    height:300
-                },
-                enableOrientation : true
-            });
-
-            $('#upload_image').on('change', function(){
-                var reader = new FileReader();
-                reader.onload = function (event) {
-                    $image_crop.croppie('bind', {
-                        url: event.target.result
-                    }).then(function(){
-                        console.log('jQuery bind complete');
-                    });
-                }
-                reader.readAsDataURL(this.files[0]);
-                $('#uploadimageModal').modal('show');
-            });
-
-            $('.crop_image').click(function(event){
-                $image_crop.croppie('result', {
-                    type: 'rawcanvas',
-                    size: 'viewport'
-                }).then(function(response){
-                    $('#uploadimageModal').modal('hide');
-                    $('#file_device').val(response.toDataURL());
-                    $("#result").attr("src", response.toDataURL());
-                })
-            });
-
-        });
-    </script>
+    <script src="{{ mix('js/image.js') }}"></script>
 @endsection

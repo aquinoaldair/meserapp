@@ -7,6 +7,8 @@ use App\Http\Requests\ImageStoreRequest;
 use App\Http\Requests\ImageUpdateRequest;
 use App\Models\Image;
 use App\Repositories\Image\ImageRepositoryInterface;
+use App\Strategy\Image\ImageFromBase64;
+use App\Strategy\Image\ImageProcess;
 use Illuminate\Http\Request;
 
 class ImageController extends Controller
@@ -35,7 +37,7 @@ class ImageController extends Controller
     public function store(ImageStoreRequest $request)
     {
         $this->image->create([
-           "image" => FileHelper::storage('products', $request->image),
+            "image" => (new ImageProcess(new ImageFromBase64))->store($request->image, 'products') ,
             'keywords' => $request->keywords
         ]);
 
@@ -54,7 +56,9 @@ class ImageController extends Controller
         $image = $this->image->find($id);
 
         $this->image->update([
-            "image" => ($request->file) ? FileHelper::storage('products', $request->file) : $image->image,
+            "image" => ($request->image)
+                ? (new ImageProcess(new ImageFromBase64))->store($request->image, 'products')
+                : $image->image,
             'keywords' => $request->keywords
         ], $image->id);
 

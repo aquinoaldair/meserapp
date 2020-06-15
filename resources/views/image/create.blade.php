@@ -2,8 +2,10 @@
 
 @section('title',  __(\App\Models\Image::NAME))
 
-@section('style')
 
+
+@section('style')
+    <link rel="stylesheet" href="{{ asset('assets/js/croppie/croppie.min.css') }}">
 @endsection
 
 @section('breadcrumb-title',  __(\App\Models\Image::NAME))
@@ -24,9 +26,12 @@
                         <div class="card-body">
                             <div class="form-group">
                                 <label>{{ __('Imagen') }}</label>
-                                <input type="file" name="image" required class="form-control">
-                                <small>No es necesario</small>
+                                <input type="file"  id="upload_image"  class="form-control">
+
+                                <input type="hidden" id="file_device" name="image">
+                                <img src="" alt="" id="result">
                             </div>
+
                             <div class="form-group">
                                 <label>{{ __('Palabras Claves') }}</label>
                                 <input required type="text" name="keywords" class="form-control">
@@ -46,8 +51,10 @@
         </div>
     </div>
     <!-- Container-fluid Ends-->
+    @include('modals.image_modal')
 @endsection
 
 @section('script')
-
+    <script src="{{ asset('assets/js/croppie/croppie.min.js') }}"></script>
+    <script src="{{ mix('js/image.js') }}"></script>
 @endsection

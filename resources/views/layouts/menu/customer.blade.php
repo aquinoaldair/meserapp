@@ -1,4 +1,4 @@
-<div class="page-sidebar sidebar-img2" sidebar-layout="iconcolor-sidebar">
+<div class="page-sidebar" sidebar-layout="iconcolor-sidebar">
     <div class="main-header-left d-none d-lg-block">
         <div class="logo-wrapper"><a href=" "><img src="{{asset('assets/images/meserapp_logo.png')}}" alt=""></a></div>
     </div>
@@ -7,8 +7,7 @@
             <div>
                 <img class="img-60 rounded-circle" src="{{asset('assets/images/user/profile.png')}}" alt="#">
             </div>
-            <h6 class="mt-3 f-14">{{ auth()->user()->name }}</h6>
-            <p>{{ auth()->user()->commerce->name }}</p>
+            <h6 class="mt-3 f-14">{{ auth()->user()->commerce->name }}</h6>
         </div>
         <ul class="sidebar-menu">
             <li><a class="sidebar-header" href="{{ route('dashboard') }}"><i data-feather="home"></i><span>Dashboard</span></a></li>
@@ -20,8 +19,9 @@
             <li><a class="sidebar-header" href="{{ route('printer.index') }}"><i data-feather="printer"></i><span>{{ \App\Models\Printer::NAME }}</span></a></li>
             <li><a class="sidebar-header" href="{{ route('station.index') }}"><i data-feather="monitor"></i><span>{{ \App\Models\Station::NAME }}</span></a></li>
             <li><a class="sidebar-header" href="#"><i data-feather="shopping-cart"></i><span>Ventas</span></a></li>
-            <li><a class="sidebar-header" href="#"><i data-feather="lock"></i><span>Usuarios y Roles</span></a></li>
+            {{--<li><a class="sidebar-header" href="#"><i data-feather="lock"></i><span>Usuarios y Roles</span></a></li>--}}
             <li><a class="sidebar-header" href="{{ route('schedule.index') }}"><i data-feather="clock"></i><span>{{ \App\Models\Schedule::NAME }}</span></a></li>
+            <li><a class="sidebar-header" href="{{ route('reservation.index') }}"><i data-feather="calendar"></i><span>{{ \App\Models\Reservation::NAME }}</span></a></li>
             {{--<li><a class="sidebar-header" href="{{ route('room.index') }}"><i data-feather="dollar-sign"></i><span>Ventas</span></a></li>
             <li><a class="sidebar-header" href="{{ route('room.index') }}"><i data-feather="clipboard"></i><span>Compras y Gastos</span></a></li>
             <li><a class="sidebar-header" href="{{ route('room.index') }}"><i data-feather="settings"></i><span>Configuración</span></a></li>--}}

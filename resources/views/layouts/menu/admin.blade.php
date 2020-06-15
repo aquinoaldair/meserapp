@@ -1,4 +1,4 @@
-<div class="page-sidebar sidebar-img2" sidebar-layout="iconcolor-sidebar">
+<div class="page-sidebar" sidebar-layout="iconcolor-sidebar">
     <div class="main-header-left d-none d-lg-block">
         <div class="logo-wrapper"><a href=" "><img src="{{asset('assets/images/meserapp_logo.png')}}" alt=""></a></div>
     </div>
@@ -21,13 +21,13 @@
                 </a>
             </li>
             <li>
-                <a class="sidebar-header" href="{{ route('category.index') }}">
+                <a class="sidebar-header {{ request()->routeIs('category.*') ? 'active' : ''}}"  href="{{ route('category.index') }}">
                     <i data-feather="grid"></i><span>{{ __(\App\Models\Category::NAME) }}</span>
                 </a>
             </li>
 
             <li>
-                <a class="sidebar-header" href="{{ route('image.index') }}">
+                <a class="sidebar-header  {{ request()->routeIs('image.*') ? 'active' : ''}}" href="{{ route('image.index') }}">
                     <i data-feather="image"></i><span>{{ __(\App\Models\Image::NAME) }}</span>
                 </a>
             </li>

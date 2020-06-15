@@ -21,3 +21,5 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::get('commerce/table/{qr}/all', 'ApiController@getCommerceInformationFromQr')->name('table.qr');
 Route::get('commerce', 'ApiController@getCommerces');
+
+Route::post('reservation', 'ApiController@storeReservation');
