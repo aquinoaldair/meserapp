@@ -13,6 +13,8 @@ Vue.use(Notifications);
 Vue.component('search-category', require('./components/SearchCategory.vue').default);
 Vue.component('search-product', require('./components/SearchProduct.vue').default);
 
+Vue.component('table-component', require('./components/Table').default);
+
 const app = new Vue({
     el: '#app',
 });

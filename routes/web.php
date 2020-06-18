@@ -43,6 +43,7 @@ Route::middleware('auth')->group(function () use ($admin, $customer) {
         Route::get('images/search/{term}', 'ImageController@search');
         Route::resource('supplier', 'SupplierController');
         Route::resource('product', 'ProductController');
+        Route::get('rooms', 'RoomController@getRooms');
         Route::resource('room', 'RoomController');
         Route::resource('cost', 'CostController');
         Route::resource('station', 'StationController');

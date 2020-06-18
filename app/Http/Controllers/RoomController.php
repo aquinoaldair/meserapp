@@ -20,8 +20,11 @@ class RoomController extends BaseController
     }
 
     public function index(){
-        $data = $this->room->getByCommerceId($this->user->commerce->id);
-        return view('room.index', compact('data'));
+        return view('room.index');
+    }
+
+    public function getRooms(){
+        return $this->room->getByCommerceIdWithTables($this->user->commerce->id);
     }
 
     public function create(){

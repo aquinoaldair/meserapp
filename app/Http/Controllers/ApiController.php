@@ -32,9 +32,14 @@ class ApiController extends Controller
         try {
             $this->reservation->create($request->all());
 
-            return response()->json(['message' => "La reservación se ha realizado correctamente", "success" => true], 202);
+            return response()->json(['message' => "La reservación se ha realizado correctamente", "success" => true], 200);
         }catch (\Exception $e){
-            return response()->json(['message' => "No se realizó la reservación,intentelo mas tarde", "success" => false], 404);
+            return response()->json(['message' => "No se realizó la reservación,intentelo mas tarde", "success" => false], 400);
         }
+    }
+
+
+    public function getDataFromCommerceId($id){
+        return $this->commerce->getAllInformationById($id);
     }
 }

@@ -10,7 +10,7 @@
             <h6 class="mt-3 f-14">{{ auth()->user()->commerce->name }}</h6>
         </div>
         <ul class="sidebar-menu">
-            <li><a class="sidebar-header" href="{{ route('dashboard') }}"><i data-feather="home"></i><span>Dashboard</span></a></li>
+            <li><a class="sidebar-header" href="{{ route('dashboard') }}"><i data-feather="home"></i><span>Inicio</span></a></li>
             <li><a class="sidebar-header" href="{{ route('room.index') }}"><i data-feather="grid"></i><span>{{ __(\App\Models\Room::NAME) }}</span></a></li>
             <li><a class="sidebar-header" href="{{ route('product.index') }}"><i data-feather="shopping-cart"></i><span>{{ \App\Models\Product::NAME }}</span></a></li>
             <li><a class="sidebar-header" href="{{ route('category.index') }}"><i data-feather="bookmark"></i><span>{{ \App\Models\Category::NAME }}</span></a></li>

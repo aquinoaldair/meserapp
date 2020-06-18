@@ -12,7 +12,7 @@
         <ul class="sidebar-menu">
             <li>
                 <a class="sidebar-header {{ request()->routeIs('dashboard') ? 'active' : ''}}" href="{{ route('dashboard') }}">
-                    <i data-feather="home"></i><span>Dashboard</span>
+                    <i data-feather="home"></i><span>Inicio</span>
                 </a>
             </li>
             <li>

@@ -44,6 +44,7 @@ class CommerceRepository implements CommerceRepositoryInterface
         return $this->model->where('id', $id)
             ->with('rooms.tables')
             ->with('categories.products')
+            ->with('schedules')
             ->first();
     }
 

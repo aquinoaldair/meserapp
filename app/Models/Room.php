@@ -9,7 +9,7 @@ class Room extends Model
 {
     use SoftDeletes;
 
-    CONST NAME = "Salones";
+    CONST NAME = "Mesas";
 
     protected $fillable = [ 'commerce_id', 'name', 'image', 'key'];
 
