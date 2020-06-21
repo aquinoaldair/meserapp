@@ -38,20 +38,22 @@ class TableController extends Controller
 
     public function store(TableRequest $request)
     {
-        $this->table->create([
+        return $this->table->create([
             'name' => $request->name,
             'key' => RoomHelper::getKeyTable(),
             'room_id' => $this->room->id
         ]);
-        return redirect()->route('table.index', $this->room)
-            ->with('success', __('El registro se ha guardado correctamente'));
     }
 
 
     public function edit(Request $request)
     {
         $key = $request->route('table');
+
         $table =  $this->table->findOrFailByKey($key);
+
+        $this->authorize('update', $table);
+
         return view('table.edit', ['table' => $table, 'room' => $this->room]);
     }
 
@@ -59,19 +61,26 @@ class TableController extends Controller
     public function update(TableRequest $request)
     {
         $key = $request->route('table');
+
         $table =  $this->table->findOrFailByKey($key);
-        $this->table->update(
+
+        $this->authorize('update', $table);
+
+        return $this->table->update(
             ['name' => $request->name], $table->id
         );
-        return redirect()->route('table.index', $this->room)
-            ->with('success', __('El registro se ha actualizado correctamente'));
     }
 
     public function destroy(Request $request)
     {
         $key = $request->route('table');
+
         $table =  $this->table->findOrFailByKey($key);
+
+        $this->authorize('delete', $table);
+
         $this->table->delete($table->id);
+
         return response()->json(__('Se eliminó correctamente'), 202);
     }
 

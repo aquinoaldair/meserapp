@@ -2125,14 +2125,87 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "Table",
+  props: ['roomStore', 'roomDelete', 'roomUpdate', 'tableStore', 'tableDelete', 'tableUpdate'],
   data: function data() {
     return {
       rooms: [],
       isNewRoom: false,
-      isNewTable: false
+      isNewTable: false,
+      isEditingRoom: false,
+      isEditingTable: false,
+      room: {},
+      table: {},
+      roomIndex: 0,
+      tableIndex: 0
     };
+  },
+  computed: {
+    actualRoom: function actualRoom() {
+      return this.rooms[this.roomIndex];
+    },
+    showFormTable: function showFormTable() {
+      return !this.isNewRoom && !this.isEditingRoom && (this.isNewTable || this.isEditingTable || this.rooms.length);
+    },
+    showFormRoom: function showFormRoom() {
+      return this.isNewRoom || this.isEditingRoom;
+    },
+    showTextTable: function showTextTable() {
+      return this.rooms.length > 0;
+    }
   },
   mounted: function mounted() {
     var vm = this;
@@ -2143,6 +2216,104 @@ __webpack_require__.r(__webpack_exports__);
     });
   },
   methods: {
+    deleteTable: function deleteTable() {
+      var table = this.table;
+      var route = this.tableDelete.replace(":table", table.key);
+      route = route.replace(":room", this.rooms[this.roomIndex].key);
+      var vm = this;
+      vm.$swal({
+        title: 'Estas Seguro?',
+        text: "No podras revertir esta acción",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Si, eliminar!'
+      }).then(function (result) {
+        if (result.value) {
+          axios["delete"](route).then(function (response) {
+            console.log(response);
+            vm.$swal('Eliminado', 'Se ha eliminado correctamente', 'success'); //vm.rooms.splice(vm.roomIndex, 1);
+
+            vm.rooms[vm.roomIndex].tables.splice(vm.tableIndex, 1);
+            vm.setDefaultAllValues();
+          })["catch"](function (error) {
+            console.log(error);
+            vm.$swal({
+              icon: 'error',
+              title: 'No se pudo guardar',
+              showConfirmButton: false,
+              timer: 1500
+            });
+          });
+        }
+      });
+    },
+    setTableIndex: function setTableIndex(table, index) {
+      this.setDefaultAllValues();
+      this.isEditingTable = true;
+      this.tableIndex = index;
+      this.table = JSON.parse(JSON.stringify(table));
+    },
+    updateTable: function updateTable() {
+      var table = this.table;
+      var route = this.tableUpdate.replace(":table", table.key);
+      route = route.replace(":room", this.rooms[this.roomIndex].key);
+      var vm = this;
+      axios.put(route, {
+        'name': table.name
+      }).then(function (response) {
+        vm.$swal({
+          icon: 'success',
+          title: 'Guardado correctamente',
+          showConfirmButton: false,
+          timer: 1500
+        });
+        vm.rooms[vm.roomIndex].tables[vm.tableIndex].name = table.name;
+        vm.setDefaultAllValues();
+      })["catch"](function (error) {
+        console.log(error);
+        vm.$swal({
+          icon: 'error',
+          title: 'No se pudo guardar',
+          showConfirmButton: false,
+          timer: 1500
+        });
+      });
+    },
+    storeTable: function storeTable(e) {
+      e.preventDefault();
+      var vm = this;
+
+      if (this.isEditingTable) {
+        this.updateTable();
+      } else {
+        var room = this.rooms[this.roomIndex];
+        var route = this.tableStore.replace(":room", room.key);
+        axios.post(route, this.table).then(function (response) {
+          vm.rooms[vm.roomIndex].tables.push(response.data);
+          vm.table = {};
+          vm.$swal({
+            icon: 'success',
+            title: 'Guardado correctamente',
+            showConfirmButton: false,
+            timer: 1500
+          });
+          vm.setDefaultAllValues();
+        })["catch"](function (error) {
+          console.log(error);
+          vm.$swal({
+            icon: 'error',
+            title: 'No se pudo guardar',
+            showConfirmButton: false,
+            timer: 1500
+          });
+        });
+      }
+    },
+    setRoomIndex: function setRoomIndex(index) {
+      this.roomIndex = index;
+    },
     newRoom: function newRoom() {
       this.isNewRoom = true;
       this.isNewTable = false;
@@ -2150,6 +2321,99 @@ __webpack_require__.r(__webpack_exports__);
     newTable: function newTable() {
       this.isNewTable = true;
       this.isNewRoom = false;
+    },
+    editRoom: function editRoom() {
+      this.isEditingRoom = true;
+      this.room = JSON.parse(JSON.stringify(this.actualRoom));
+    },
+    updateRoom: function updateRoom() {
+      var route = this.roomDelete.replace(":key", this.actualRoom.key);
+      var vm = this;
+      axios.put(route, this.room).then(function (response) {
+        vm.$swal({
+          icon: 'success',
+          title: 'Guardado correctamente',
+          showConfirmButton: false,
+          timer: 1500
+        });
+        vm.rooms = response.data;
+        vm.setDefaultAllValues();
+      })["catch"](function (error) {
+        vm.$swal({
+          icon: 'error',
+          title: 'No se pudo guardar',
+          showConfirmButton: false,
+          timer: 1500
+        });
+      });
+    },
+    storeRoom: function storeRoom(e) {
+      e.preventDefault();
+      var vm = this;
+
+      if (this.isEditingRoom) {
+        this.updateRoom();
+      } else {
+        axios.post(this.roomStore, this.room).then(function (response) {
+          vm.$swal({
+            icon: 'success',
+            title: 'Guardado correctamente',
+            showConfirmButton: false,
+            timer: 1500
+          });
+          vm.rooms = response.data;
+          vm.setDefaultAllValues();
+        })["catch"](function (error) {
+          vm.$swal({
+            icon: 'error',
+            title: 'No se pudo guardar',
+            showConfirmButton: false,
+            timer: 1500
+          });
+        });
+      }
+    },
+    removeRoom: function removeRoom() {
+      var route = this.roomDelete.replace(":key", this.actualRoom.key);
+      var vm = this;
+      vm.$swal({
+        title: 'Estas Seguro?',
+        text: "No podras revertir esta acción",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Si, eliminar!'
+      }).then(function (result) {
+        if (result.value) {
+          axios["delete"](route).then(function (response) {
+            vm.$swal('Eliminado', 'Se ha eliminado correctamente', 'success');
+            vm.rooms.splice(vm.roomIndex, 1);
+            vm.roomIndex = 0;
+          })["catch"](function (error) {
+            vm.$swal({
+              icon: 'error',
+              title: 'No se pudo guardar',
+              showConfirmButton: false,
+              timer: 1500
+            });
+          });
+        }
+      });
+    },
+    setDefaultValuesRoom: function setDefaultValuesRoom() {
+      this.isNewRoom = false;
+      this.isEditingRoom = false;
+      this.room = {};
+    },
+    setDefaultValuesTable: function setDefaultValuesTable() {
+      this.isNewTable = false;
+      this.isEditingTable = false;
+      this.table = {};
+    },
+    setDefaultAllValues: function setDefaultAllValues() {
+      this.setDefaultValuesRoom();
+      this.setDefaultValuesTable();
     }
   }
 });
@@ -2206,7 +2470,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.nav-link[data-v-5bd01d73]{\n    margin-right: 10px;\n    background-color: #555555;\n    color: white;\n    font-size: 1.1em;\n}\n.btn-lg[data-v-5bd01d73]{\n    min-height: 50px;\n}\n.card[data-v-5bd01d73]{\n    min-height: 400px;\n}\n.card .card-header[data-v-5bd01d73]{\n    padding: 5px;\n}\n#rooms[data-v-5bd01d73]{\n    background-color: #FAFAFA;\n}\n#card_details[data-v-5bd01d73]{\n    background-color: #F6F6F6;\n}\n", ""]);
+exports.push([module.i, "\n.nav-link[data-v-5bd01d73]{\n    margin-right: 10px;\n    background-color: #555555;\n    color: white;\n    font-size: 1.1em;\n    margin-bottom: 5px;\n}\n.btn-lg[data-v-5bd01d73]{\n}\n.card[data-v-5bd01d73]{\n    min-height: 400px;\n}\n.card .card-header[data-v-5bd01d73]{\n    padding: 5px;\n}\n#rooms[data-v-5bd01d73]{\n    background-color: #FAFAFA;\n}\n#card_details[data-v-5bd01d73]{\n    background-color: #F6F6F6;\n}\n#card_details .card-header h4[data-v-5bd01d73]{\n    color:  #555555;\n}\n.btnIconDelete[data-v-5bd01d73], .btnIconEdit[data-v-5bd01d73]{\n    padding: 5px 10px;\n    background-color: #EA5356;\n    color: white;\n    border: 0px;\n    border-radius: 5px;\n    cursor: pointer;\n}\n.btnIconEdit[data-v-5bd01d73]{\n    background-color: #4466F2;\n}\n.btn-padding[data-v-5bd01d73]{\n    padding: 10px !important;\n}\n", ""]);
 
 // exports
 
@@ -23881,7 +24145,7 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", [
     _c("div", { staticClass: "row" }, [
-      _c("div", { staticClass: "col-9" }, [
+      _c("div", { staticClass: "col-md-8" }, [
         _c("div", { staticClass: "card", attrs: { id: "rooms" } }, [
           _c("div", { staticClass: "card-header" }, [
             _c(
@@ -23901,12 +24165,17 @@ var render = function() {
                     "a",
                     {
                       staticClass: "nav-link",
-                      class: { "active show": index === 0 },
+                      class: { "active show": _vm.roomIndex === index },
                       attrs: {
                         id: "home-tab",
                         "data-toggle": "tab",
                         href: "#" + item.key,
                         role: "tab"
+                      },
+                      on: {
+                        click: function($event) {
+                          return _vm.setRoomIndex(index)
+                        }
                       }
                     },
                     [
@@ -23925,63 +24194,261 @@ var render = function() {
             _c(
               "div",
               { staticClass: "tab-content" },
-              _vm._l(_vm.rooms, function(item, index) {
-                return _c(
-                  "div",
-                  {
-                    key: index,
-                    staticClass: "tab-pane fade",
-                    class: { "active show": index === 0 },
-                    attrs: { id: item.key, role: "tabpanel" }
-                  },
-                  [
-                    _c("div", { staticClass: "container p-4" }, [
-                      _c(
-                        "div",
-                        { staticClass: "row" },
-                        _vm._l(item.tables, function(child, index) {
-                          return _c("div", { staticClass: "col-2" }, [
-                            _c(
-                              "button",
-                              { staticClass: "btn btn-lg btn-success" },
+              [
+                _vm.showTextTable
+                  ? _c("h5", { staticClass: "text-center text-muted mt-3" }, [
+                      _vm._v("Seleccione una mesa para editar")
+                    ])
+                  : _vm._e(),
+                _vm._v(" "),
+                _vm._l(_vm.rooms, function(item, index) {
+                  return _c(
+                    "div",
+                    {
+                      key: index,
+                      staticClass: "tab-pane fade",
+                      class: { "active show": _vm.roomIndex === index },
+                      attrs: { id: item.key, role: "tabpanel" }
+                    },
+                    [
+                      _c("div", { staticClass: "container p-4" }, [
+                        _c(
+                          "div",
+                          { staticClass: "row" },
+                          _vm._l(item.tables, function(child, index) {
+                            return _c(
+                              "div",
+                              { staticClass: "col-3 col-md-2 mb-2" },
                               [
-                                _vm._v(
-                                  "\n                                          " +
-                                    _vm._s(child.name) +
-                                    "\n                                      "
+                                _c(
+                                  "button",
+                                  {
+                                    staticClass: "btn btn-lg btn-success",
+                                    on: {
+                                      click: function($event) {
+                                        return _vm.setTableIndex(child, index)
+                                      }
+                                    }
+                                  },
+                                  [
+                                    _vm._v(
+                                      "\n                                          " +
+                                        _vm._s(child.name) +
+                                        "\n                                      "
+                                    )
+                                  ]
                                 )
                               ]
                             )
-                          ])
-                        }),
-                        0
-                      )
-                    ])
-                  ]
-                )
-              }),
-              0
+                          }),
+                          0
+                        )
+                      ])
+                    ]
+                  )
+                })
+              ],
+              2
             )
           ])
         ])
       ]),
       _vm._v(" "),
-      _c("div", { staticClass: "col-3" }, [
+      _c("div", { staticClass: "col-md-4" }, [
         _c("div", { staticClass: "card", attrs: { id: "card_details" } }, [
           _c("div", { staticClass: "card-header" }, [
-            _c("div", { staticClass: "card-header" }, [
-              _c(
-                "button",
-                {
-                  staticClass: "btn btn-secondary",
-                  on: { click: _vm.newTable }
-                },
-                [_c("i", { staticClass: "fa fa-plus" }), _vm._v(" Nueva Mesa")]
-              )
-            ])
+            _vm.actualRoom && !_vm.isNewRoom
+              ? _c("div", { staticClass: "row align-content-center" }, [
+                  _c("div", { staticClass: "col-8" }, [
+                    _c("h4", { staticClass: "pl-2" }, [
+                      _vm._v(_vm._s(_vm.actualRoom.name))
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "col-4" }, [
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btnIconEdit",
+                        attrs: { type: "button" },
+                        on: { click: _vm.editRoom }
+                      },
+                      [_c("i", { staticClass: "fa fa-edit" })]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btnIconDelete",
+                        attrs: { type: "button" },
+                        on: { click: _vm.removeRoom }
+                      },
+                      [_c("i", { staticClass: "fa fa-trash" })]
+                    )
+                  ])
+                ])
+              : _vm._e()
           ]),
           _vm._v(" "),
-          _c("div", { staticClass: "card-body" })
+          _c("div", { staticClass: "card-body" }, [
+            _vm.showFormRoom
+              ? _c("form", { on: { submit: _vm.storeRoom } }, [
+                  _c("h5", { staticClass: "text-center" }, [
+                    _vm._v(_vm._s(_vm.isNewRoom ? "Nueva Sala" : "Editar Sala"))
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "form-group" }, [
+                    _c("label", [_vm._v("Nombre")]),
+                    _vm._v(" "),
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.room.name,
+                          expression: "room.name"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      attrs: { required: "", type: "text", name: "name" },
+                      domProps: { value: _vm.room.name },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(_vm.room, "name", $event.target.value)
+                        }
+                      }
+                    })
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "row" }, [
+                    _c("div", { staticClass: "col-10 col-md-6" }, [
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-sm btn-success",
+                          attrs: { type: "submit" }
+                        },
+                        [
+                          _c("i", { staticClass: "fa fa-check" }),
+                          _vm._v(
+                            " " +
+                              _vm._s(_vm.isNewRoom ? "Guardar" : "Guardar") +
+                              "\n                               "
+                          )
+                        ]
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "col-6 col-md-6" }, [
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-sm btn-warning",
+                          attrs: { type: "button" },
+                          on: { click: _vm.setDefaultAllValues }
+                        },
+                        [
+                          _c("i", { staticClass: "fa fa-mail-reply" }),
+                          _vm._v(" Cancelar\n                               ")
+                        ]
+                      )
+                    ])
+                  ])
+                ])
+              : _vm._e(),
+            _vm._v(" "),
+            _vm.showFormTable
+              ? _c("form", { on: { submit: _vm.storeTable } }, [
+                  _c("h5", { staticClass: "text-center" }, [
+                    _vm._v(
+                      _vm._s(_vm.isEditingTable ? "Editar" : "Nueva") + " Mesa"
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "form-group" }, [
+                    _c("label", [_vm._v("Numero")]),
+                    _vm._v(" "),
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.table.name,
+                          expression: "table.name"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      attrs: { required: "", type: "number", name: "name" },
+                      domProps: { value: _vm.table.name },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(_vm.table, "name", $event.target.value)
+                        }
+                      }
+                    })
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "row" }, [
+                    _c("div", { staticClass: "col-10" }, [
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-sm btn-success btn-padding",
+                          attrs: { type: "submit" }
+                        },
+                        [
+                          _c("i", { staticClass: "fa fa-check" }),
+                          _vm._v(
+                            " " +
+                              _vm._s(
+                                _vm.isEditingTable ? "Guardar" : "Guardar"
+                              ) +
+                              "\n                               "
+                          )
+                        ]
+                      ),
+                      _vm._v(" "),
+                      _vm.isEditingTable
+                        ? _c(
+                            "button",
+                            {
+                              staticClass: "btn btn-sm btn-warning btn-padding",
+                              attrs: { type: "button" },
+                              on: { click: _vm.setDefaultAllValues }
+                            },
+                            [
+                              _c("i", { staticClass: "fa fa-mail-reply" }),
+                              _vm._v(
+                                " Cancelar\n                               "
+                              )
+                            ]
+                          )
+                        : _vm._e()
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "col-2" }, [
+                      _vm.isEditingTable
+                        ? _c(
+                            "button",
+                            {
+                              staticClass: "btn btn-sm btn-danger btn-padding",
+                              attrs: { type: "button" },
+                              on: { click: _vm.deleteTable }
+                            },
+                            [_c("i", { staticClass: "fa fa-trash" })]
+                          )
+                        : _vm._e()
+                    ])
+                  ])
+                ])
+              : _vm._e()
+          ])
         ])
       ])
     ])

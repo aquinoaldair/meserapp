@@ -1,4 +1,4 @@
-<div class="page-sidebar" sidebar-layout="iconcolor-sidebar">
+<div class="page-sidebar" sidebar-layout="border-sidebar">
     <div class="main-header-left d-none d-lg-block">
         <div class="logo-wrapper"><a href=" "><img src="{{asset('assets/images/meserapp_logo.png')}}" alt=""></a></div>
     </div>

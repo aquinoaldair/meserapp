@@ -41,25 +41,36 @@
             color: #808080;
         }
 
-        /*Esto es icono numero 3 */
-        .page-wrapper .page-body-wrapper .page-sidebar[sidebar-layout="iconcolor-sidebar"] .sidebar-menu li:nth-child(7n+3) svg {
-            color: #4466F2;
-        }
-
         /*Esto es del logo */
         .page-wrapper .page-body-wrapper .page-sidebar .sidebar-user {
             padding: 5px 0px;
             position: relative;
         }
 
-        /* */
+        li.active a.sidebar-header{
+            color: black !important;
+        }
 
-        .page-wrapper .page-body-wrapper .page-sidebar[sidebar-layout="iconcolor-sidebar"] .sidebar-menu li:nth-child(7n+9) svg {
-            color: #F09FAF;
+        li:hover a.sidebar-header{
+            color: black !important;
         }
-        .page-wrapper .page-body-wrapper .page-sidebar[sidebar-layout="iconcolor-sidebar"] .sidebar-menu li:nth-child(7n+7) svg {
-            color:  #F7C48C;
+
+
+        li > a > span {
+            font-size: 1.2em;
         }
+
+        .img-logo{
+            max-height: 40px;
+            margin-right: 5px;
+        }
+
+
+        body > div.page-wrapper > div.page-main-header.open > div > div.nav-right.col.p-0 > ul > li.onhover-dropdown > div > div{
+            font-size: 1.2em;
+            margin-left: 5px;
+        }
+
     </style>
 </head>
 <body class="dark-header-sidebar-mix">

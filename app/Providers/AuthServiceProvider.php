@@ -8,12 +8,14 @@ use App\Models\Product;
 use App\Models\Room;
 use App\Models\Station;
 use App\Models\Supplier;
+use App\Models\Table;
 use App\Policies\CategoryPolicy;
 use App\Policies\CostPolicy;
 use App\Policies\ProductPolicy;
 use App\Policies\RoomPolicy;
 use App\Policies\StationPolicy;
 use App\Policies\SupplierPolicy;
+use App\Policies\TablePolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
 
@@ -30,7 +32,8 @@ class AuthServiceProvider extends ServiceProvider
         Product::class => ProductPolicy::class,
         Supplier::class => SupplierPolicy::class,
         Cost::class => CostPolicy::class,
-        Station::class => StationPolicy::class
+        Station::class => StationPolicy::class,
+        Table::class => TablePolicy::class,
     ];
 
     /**

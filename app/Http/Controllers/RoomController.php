@@ -32,32 +32,44 @@ class RoomController extends BaseController
     }
 
     public function store(RoomRequest $request){
+
         $this->room->create([
             'name' => $request->name,
             'commerce_id' => $this->user->commerce->id,
             'key' => RoomHelper::getKey()
         ]);
-        return redirect()->route('room.index')->with('success', __('El registro se ha guardado correctamente'));
+
+        return $this->getRooms();
     }
 
 
     public function edit($key){
         $room = $this->room->findByKey($key);
+
         $this->authorize('update', $room);
+
         return view('room.edit', compact('room'));
     }
 
     public function update(RoomRequest $request, $key){
+
         $room = $this->room->findByKey($key);
+
         $this->authorize('update', $room);
+
         $this->room->update(['name' => $request->name], $room->id);
-        return redirect()->route('room.index')->with('success', __('El registro se ha actualizado correctamente'));
+
+        return $this->getRooms();
     }
 
     public function destroy($key){
+
         $room = $this->room->findByKey($key);
+
         $this->authorize('delete', $room);
+
         $this->room->delete($room->id);
+
         return response()->json(__('Se eliminó correctamente'), 202);
     }
 }

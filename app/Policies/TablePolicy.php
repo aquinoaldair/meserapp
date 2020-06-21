@@ -10,8 +10,6 @@ class TablePolicy
 {
     use HandlesAuthorization;
 
-
-
     public function view(User $user,  Table $table)
     {
         return $user->commerce->id == $table->room->commerce_id;

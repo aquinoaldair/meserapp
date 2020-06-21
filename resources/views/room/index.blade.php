@@ -14,7 +14,15 @@
 @section('body')
     <!-- Container-fluid starts-->
     <div class="container-fluid" id="app">
-        <table-component></table-component>
+        <table-component
+            room-delete="{{ route('room.destroy', ':key') }}"
+            room-store="{{ route('room.store') }}"
+            room-update="{{ route('room.update', ':key') }}"
+
+            table-delete="{{ route('table.destroy', ['room' => ':room', 'table' => ':table']) }}"
+            table-store="{{ route('table.store', ['room' => ':room']) }}"
+            table-update="{{ route('table.update', ['room' => ':room', 'table' => ':table']) }}"
+        ></table-component>
     </div>
     <!-- Container-fluid Ends-->
 @endsection
