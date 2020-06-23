@@ -85,10 +85,13 @@
                                    </button>
                                </div>
                                <div class="col-2">
-                                   <button @click="deleteTable"  v-if="isEditingTable" class="btn btn-sm btn-danger btn-padding" type="button">
+                                   <button @click="deleteTable" v-if="isEditingTable" class="btn btn-sm btn-danger btn-padding" type="button">
                                        <i class="fa fa-trash"/>
                                    </button>
                                </div>
+                           </div>
+                           <div  v-if="isEditingTable" class="form-group" style="text-align: center; margin-top: 10px">
+                               <qrcode :value="qr" :options="{ width: 200 }"/>
                            </div>
                        </form>
                    </div>
@@ -101,7 +104,7 @@
 <script>
     export default {
         name: "Table",
-        props: ['roomStore', 'roomDelete', 'roomUpdate', 'tableStore', 'tableDelete', 'tableUpdate'],
+        props: ['roomStore', 'roomDelete', 'roomUpdate', 'tableStore', 'tableDelete', 'tableUpdate', 'tableQr'],
         data(){
             return {
                 rooms : [],
@@ -127,6 +130,9 @@
             },
             showTextTable : function () {
                 return this.rooms.length > 0;
+            },
+            qr : function () {
+                return this.tableQr.replace(':qr', this.table.key);
             }
         },
         mounted() {

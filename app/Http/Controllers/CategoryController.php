@@ -59,7 +59,7 @@ class CategoryController extends BaseController
 
         $this->category->create($data);
 
-        return redirect()->route('category.index')->with('success', __('El registro se ha guardado correctamente'));
+        return redirect()->route('product.index')->with('success', __('El registro se ha guardado correctamente'));
     }
 
     public function edit($id)
@@ -85,7 +85,7 @@ class CategoryController extends BaseController
                 : $category->image
         ], $category->id);
 
-        return redirect()->route('category.index')->with('success', __('El registro se ha guardado correctamente'));
+        return redirect()->route('product.index')->with('success', __('El registro se ha guardado correctamente'));
     }
 
 

@@ -35,7 +35,7 @@ class ProductController extends BaseController
 
     public function index()
     {
-        $data = $this->product->getByCommerceId($this->user->commerce->id);
+        $data = $this->category->getWithProductsByCommerceId($this->user->commerce->id);
         return view('product.index', compact('data'));
     }
 

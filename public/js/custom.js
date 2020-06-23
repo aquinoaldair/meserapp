@@ -212,9 +212,44 @@ var RoomDelete = function () {
   };
 }();
 
+var DataTablesCustomByClass = function () {
+  var datatableEl = $('.datatable');
+
+  var initDataTables = function initDataTables() {
+    if (datatableEl.length) {
+      datatableEl.DataTable();
+    }
+  };
+
+  var datatableElButtons = $('.datatableButtons');
+
+  var initDataTablesButtons = function initDataTablesButtons() {
+    if (datatableElButtons.length) {
+      datatableElButtons.DataTable({
+        dom: 'Bfrtip',
+        buttons: [{
+          extend: 'excelHtml5',
+          exportOptions: {
+            columns: [0, 1, 2, 3, 4, 5]
+          },
+          className: 'btn-success'
+        }]
+      });
+    }
+  };
+
+  return {
+    init: function init() {
+      initDataTables();
+      initDataTablesButtons();
+    }
+  };
+}();
+
 $(document).ready(function () {
   DataTablesCustom.init();
   RoomDelete.init();
+  DataTablesCustomByClass.init();
 });
 
 /***/ }),

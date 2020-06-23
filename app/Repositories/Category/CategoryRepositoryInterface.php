@@ -13,4 +13,6 @@ interface CategoryRepositoryInterface extends BaseRepositoryInterface
     public function getByAdmin();
 
     public function getByAdminPaginate($paginate);
+
+    public function getWithProductsByCommerceId($id);
 }

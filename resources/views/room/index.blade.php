@@ -22,6 +22,9 @@
             table-delete="{{ route('table.destroy', ['room' => ':room', 'table' => ':table']) }}"
             table-store="{{ route('table.store', ['room' => ':room']) }}"
             table-update="{{ route('table.update', ['room' => ':room', 'table' => ':table']) }}"
+
+            table-qr="{{ route('table.qr', ['qr' => ":qr"]) }}"
+
         ></table-component>
     </div>
     <!-- Container-fluid Ends-->

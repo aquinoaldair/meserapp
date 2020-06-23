@@ -55,4 +55,9 @@ class CategoryRepository implements CategoryRepositoryInterface
     {
         return $this->model->where('is_admin', true)->paginate($paginate);
     }
+
+    public function getWithProductsByCommerceId($id)
+    {
+        return $this->model->where('commerce_id', $id)->with('products')->get();
+    }
 }
