@@ -30,14 +30,14 @@
                                 <p class="text-danger text-sm"> {{ $errors->first('name') }}</p>
                                 @enderror
                             </div>
-                            <div class="form-group">
+                            {{--<div class="form-group">
                                 <label>{{ __('Imagen') }}</label>
                                 <input type="file"  id="upload_image"  class="form-control">
                             </div>
 
                             <input type="hidden" id="file_device" name="file_device">
                             <img src="" alt="" id="result">
-
+--}}
                         </div>
                         <div class="card-footer">
                             <button class="btn btn-primary" type="submit"><i class="fa fa-check"></i>&nbsp; {{ __("Guardar") }}</button>
@@ -46,11 +46,11 @@
                     </form>
                 </div>
             </div>
-            @hasrole(\App\User::CUSTOMER_ROLE)
+            {{--@hasrole(\App\User::CUSTOMER_ROLE)
                 <div class="col-sm-12 col-xl-6">
                     <search-category></search-category>
                 </div>
-            @endhasrole
+            @endhasrole--}}
 
         </div>
     </div>

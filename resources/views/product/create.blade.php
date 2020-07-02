@@ -60,7 +60,7 @@
                                         <div class="col-6">
                                             <div class="form-group">
                                                 <label>{{ __('Margen') }}</label>
-                                                <input required type="text" name="margin" class="form-control" value="{{ old('margin') }}">
+                                                <input type="text" name="margin" class="form-control" value="{{ old('margin') }}">
                                                 @error('margin')
                                                 <p class="text-danger text-sm"> {{ $errors->first('margin') }}</p>
                                                 @enderror
@@ -69,7 +69,7 @@
                                         <div class="col-6">
                                             <div class="form-group">
                                                 <label>{{ __('Precio') }}</label>
-                                                <input required type="number" name="price" class="form-control" step='0.001' value='0.000' placeholder='0.000'>
+                                                <input required type="number" name="price" class="form-control">
                                                 @error('price')
                                                 <p class="text-danger text-sm"> {{ $errors->first('price') }}</p>
                                                 @enderror
@@ -128,11 +128,9 @@
                                         </ul>
                                         <div class="tab-content p-3" id="icon-tabContent">
                                             <div class="tab-pane fade active show" id="icon-home" role="tabpanel" aria-labelledby="icon-home-tab">
-                                                <input type="file"  id="upload_image"  class="form-control">
+                                               <image-crop></image-crop>
                                                 <input type="hidden" id="file_device" name="file_device">
                                                 <input type="hidden" id="file_gallery" name="file_gallery" value="">
-                                                <br />
-                                                <img src="" alt="" id="result">
                                             </div>
                                             <div class="tab-pane fade" id="profile-icon" role="tabpanel" aria-labelledby="profile-icon-tab">
                                                 <search-product></search-product>
@@ -162,6 +160,6 @@
     <script src="{{asset('assets/js/chat-menu.js')}}"></script>
     <script src="{{asset('assets/js/masonry-gallery.js')}}"></script>
     <script src="{{ asset('assets/js/croppie/croppie.min.js') }}"></script>
-    <script src="{{ asset('js/app.js') }}"></script>
+    <script src="{{ mix('js/app.js') }}"></script>
     <script src="{{ mix('js/image.js') }}"></script>
 @endsection

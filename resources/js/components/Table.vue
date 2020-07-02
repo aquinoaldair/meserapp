@@ -92,6 +92,7 @@
                            </div>
                            <div  v-if="isEditingTable" class="form-group" style="text-align: center; margin-top: 10px">
                                <qrcode :value="qr" :options="{ width: 200 }"/>
+                               <h4 class="text-center">{{ table.key }}</h4>
                            </div>
                        </form>
                    </div>

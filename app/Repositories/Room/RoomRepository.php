@@ -54,4 +54,11 @@ class RoomRepository implements RoomRepositoryInterface
     {
         return $this->model->where('commerce_id', $id)->with('tables')->get();
     }
+
+    public function getByCommerceIdWithTablesAndService($id)
+    {
+        return $this->model->where('commerce_id', $id)->with(['tables' => function($q){
+            $q->withLastService();
+        }])->get();
+    }
 }

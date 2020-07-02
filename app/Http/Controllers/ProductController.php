@@ -10,6 +10,7 @@ use App\Repositories\Image\ImageRepositoryInterface;
 use App\Repositories\Product\ProductRepositoryInterface;
 use App\Repositories\Station\StationRepositoryInterface;
 use App\Strategy\Image\ImageFromBase64;
+use App\Strategy\Image\ImageFromFormData;
 use App\Strategy\Image\ImageFromUrl;
 use App\Strategy\Image\ImageProcess;
 
@@ -104,7 +105,7 @@ class ProductController extends BaseController
             'name' => $request->name,
             'use_stock' => $request->use_stock,
             'stock' => $request->stock,
-            'margin' => $request->margin,
+            'margin' => $request->margin ?? '',
             'price' => $request->price,
             'category_id' => $category->id,
             'station_id' => $request->station_id,
@@ -134,7 +135,7 @@ class ProductController extends BaseController
         }
 
         if ($request->file_gallery){
-            $image =  (new ImageProcess(new ImageFromUrl))->store($request->file_device);
+            $image =  (new ImageProcess(new ImageFromUrl))->store($request->file_gallery);
         }
 
        return $image;

@@ -12,5 +12,7 @@ interface RoomRepositoryInterface extends  BaseRepositoryInterface
 
     public function getByCommerceIdWithTables($id);
 
+    public function getByCommerceIdWithTablesAndService($id);
+
     public function findByKey($key);
 }

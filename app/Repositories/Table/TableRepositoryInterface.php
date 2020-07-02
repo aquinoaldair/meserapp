@@ -12,4 +12,6 @@ interface TableRepositoryInterface extends BaseRepositoryInterface
     public function findByKey($key);
     public function findOrFailByKey($key);
     public function getParentCommerce($key);
+    public function updateStatusById($id, $status);
+    public function updateStatusBykEY($key, $status);
 }

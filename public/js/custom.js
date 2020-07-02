@@ -213,35 +213,88 @@ var RoomDelete = function () {
 }();
 
 var DataTablesCustomByClass = function () {
-  var datatableEl = $('.datatable');
+  var datatable = $('.datatable');
 
-  var initDataTables = function initDataTables() {
-    if (datatableEl.length) {
-      datatableEl.DataTable();
-    }
-  };
+  var initDataTablesByClass = function initDataTablesByClass() {
+    if (datatable.length) {
+      datatable.DataTable();
+      datatable.on("click", ".destroy", function (e) {
+        e.preventDefault();
+        var row = $(this).parents('tr');
+        var id = row.data('id');
+        var form = $('#form-destroy');
+        var url = form.attr('action').replace(':data-id', id);
+        var data = form.serialize(); //inicio del swal
 
-  var datatableElButtons = $('.datatableButtons');
+        swal({
+          title: "Esta seguro de eliminarlo?",
+          text: "Una vez eliminado no podras revertir esta acción",
+          icon: "warning",
+          buttons: true,
+          dangerMode: true
+        }).then(function (willDelete) {
+          if (willDelete) {
+            $.ajax({
+              method: "DELETE",
+              url: url,
+              data: data
+            }).done(function (data) {
+              console.log(data);
+              row.fadeOut();
+              swal("El registro ha sido eliminado.", {
+                icon: "success"
+              });
+            }).fail(function (data) {
+              console.log(data);
+              swal("Ocurrio un error al eliminar el registro, intentelo de nuevo o contacte con su administrador", {
+                icon: "error"
+              });
+            });
+          }
+        }); // fin del swal
+      });
+      datatable.on("click", ".destroy-reload", function (e) {
+        e.preventDefault();
+        var row = $(this).parents('tr');
+        var id = row.data('id');
+        var form = $('#form-reload');
+        var url = form.attr('action').replace(':data-id', id);
+        var data = form.serialize(); //inicio del swal
 
-  var initDataTablesButtons = function initDataTablesButtons() {
-    if (datatableElButtons.length) {
-      datatableElButtons.DataTable({
-        dom: 'Bfrtip',
-        buttons: [{
-          extend: 'excelHtml5',
-          exportOptions: {
-            columns: [0, 1, 2, 3, 4, 5]
-          },
-          className: 'btn-success'
-        }]
+        swal({
+          title: "Esta seguro de eliminarlo?",
+          text: "Una vez eliminado no podras revertir esta acción",
+          icon: "warning",
+          buttons: true,
+          dangerMode: true
+        }).then(function (willDelete) {
+          if (willDelete) {
+            $.ajax({
+              method: "DELETE",
+              url: url,
+              data: data
+            }).done(function (data) {
+              console.log(data);
+              row.fadeOut();
+              swal("El registro ha sido eliminado.", {
+                icon: "success"
+              });
+              location.reload();
+            }).fail(function (data) {
+              console.log(data);
+              swal("Ocurrio un error al eliminar el registro, intentelo de nuevo o contacte con su administrador", {
+                icon: "error"
+              });
+            });
+          }
+        }); // fin del swal
       });
     }
   };
 
   return {
     init: function init() {
-      initDataTables();
-      initDataTablesButtons();
+      initDataTablesByClass();
     }
   };
 }();
@@ -254,26 +307,14 @@ $(document).ready(function () {
 
 /***/ }),
 
-/***/ "./resources/sass/app.scss":
-/*!*********************************!*\
-  !*** ./resources/sass/app.scss ***!
-  \*********************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-
-/***/ }),
-
 /***/ 0:
-/*!****************************************************************!*\
-  !*** multi ./resources/js/custom.js ./resources/sass/app.scss ***!
-  \****************************************************************/
+/*!**************************************!*\
+  !*** multi ./resources/js/custom.js ***!
+  \**************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /Users/aldairantonioaquino/Developer/Laravel/Personal/meserapp/resources/js/custom.js */"./resources/js/custom.js");
-module.exports = __webpack_require__(/*! /Users/aldairantonioaquino/Developer/Laravel/Personal/meserapp/resources/sass/app.scss */"./resources/sass/app.scss");
+module.exports = __webpack_require__(/*! /Users/aldairantonioaquino/Developer/Laravel/Personal/meserapp/resources/js/custom.js */"./resources/js/custom.js");
 
 
 /***/ })

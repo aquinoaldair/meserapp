@@ -103,10 +103,11 @@ $(document).ready(function () {
 
     },
     boundary: {
-      width: 300,
-      height: 300
+      width: 200,
+      height: 200
     },
-    enableOrientation: true
+    enableOrientation: true,
+    enableResize: true
   });
   $('#upload_image').on('change', function () {
     var reader = new FileReader();

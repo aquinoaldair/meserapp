@@ -1,6 +1,6 @@
 <!-- Container-fluid Ends-->
 <div id="uploadimageModal" class="modal" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Cambiar tamaño de imagen</h5>

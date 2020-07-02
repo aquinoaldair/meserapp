@@ -65,4 +65,18 @@ class TableRepository implements TableRepositoryInterface
             ->where('key', $key)
             ->first();
     }
+
+    public function updateStatusById($id, $status)
+    {
+        $this->model->where('id', $id)->update([
+            'status' => $status
+        ]);
+    }
+
+    public function updateStatusBykEY($key, $status)
+    {
+        $this->model->where('key', $key)->update([
+            'status' => $status
+        ]);
+    }
 }

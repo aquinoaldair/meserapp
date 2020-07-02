@@ -28,7 +28,7 @@ class ProductUpdateRequest extends FormRequest
             'category_id' => 'required|integer',
             'station_id' => 'required|integer',
             'stock' => 'required',
-            'margin' => 'required',
+            'margin' => 'max:255',
             'description' => 'string',
             'file_device' => 'nullable',
             'file_gallery' => 'nullable|string'

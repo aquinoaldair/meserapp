@@ -61,7 +61,7 @@
                                         <div class="col-6">
                                             <div class="form-group">
                                                 <label>{{ __('Margen') }}</label>
-                                                <input required type="text" name="margin" class="form-control" value="{{ old('margin') ?? $product->margin }}">
+                                                <input type="text" name="margin" class="form-control" value="{{ old('margin') ?? $product->margin }}">
                                                 @error('margin')
                                                 <p class="text-danger text-sm"> {{ $errors->first('margin') }}</p>
                                                 @enderror
@@ -70,7 +70,7 @@
                                         <div class="col-6">
                                             <div class="form-group">
                                                 <label>{{ __('Precio') }}</label>
-                                                <input required type="number" name="price" class="form-control" step='0.001' value="{{ old('price') ?? $product->price}}" placeholder='0.000'>
+                                                <input required type="number" name="price" class="form-control" value="{{ old('price') ?? $product->price}}">
                                                 @error('price')
                                                 <p class="text-danger text-sm"> {{ $errors->first('price') }}</p>
                                                 @enderror
@@ -84,9 +84,7 @@
                                                <select name="category_id" class="form-control">
                                                    @foreach($categories as $category)
                                                        <option
-                                                           {{ ( old('category_id') || $product->category_id) == $category->id ? "selected" : '' }}
-
-
+                                                           {{ ($product->category_id) == $category->id ? "selected" : '' }}
                                                            value="{{ $category->id }}">{{ $category->name }}</option>
                                                    @endforeach
                                                </select>
@@ -135,10 +133,9 @@
                                         </ul>
                                         <div class="tab-content p-3" id="icon-tabContent">
                                             <div class="tab-pane fade active show" id="icon-home" role="tabpanel" aria-labelledby="icon-home-tab">
-                                                <input type="file"  id="upload_image"  class="form-control">
+                                                <image-crop></image-crop>
                                                 <input type="hidden" id="file_device" name="file_device">
                                                 <input type="hidden" id="file_gallery" name="file_gallery" value="">
-                                                <img src="" alt="" id="result">
                                             </div>
                                             <div class="tab-pane fade" id="profile-icon" role="tabpanel" aria-labelledby="profile-icon-tab">
                                                 <search-product></search-product>
@@ -190,49 +187,5 @@
     <script src="{{asset('assets/js/photoswipe/photoswipe.js')}}"></script>
     <script src="{{asset('assets/js/chat-menu.js')}}"></script>
     <script src="{{asset('assets/js/masonry-gallery.js')}}"></script>
-    <script src="{{ asset('assets/js/croppie/croppie.min.js') }}"></script>
-    <script src="{{ asset('js/app.js') }}"></script>
-    <script>
-        $(document).ready(function(){
-
-            $image_crop = $('#image_demo').croppie({
-                enableExif: true,
-                viewport: {
-                    width:200,
-                    height:200,
-                    type:'square' //circle
-                },
-                boundary:{
-                    width:300,
-                    height:300
-                },
-                enableOrientation : true
-            });
-
-            $('#upload_image').on('change', function(){
-                var reader = new FileReader();
-                reader.onload = function (event) {
-                    $image_crop.croppie('bind', {
-                        url: event.target.result
-                    }).then(function(){
-                        console.log('jQuery bind complete');
-                    });
-                }
-                reader.readAsDataURL(this.files[0]);
-                $('#uploadimageModal').modal('show');
-            });
-
-            $('.crop_image').click(function(event){
-                $image_crop.croppie('result', {
-                    type: 'rawcanvas',
-                    size: 'viewport'
-                }).then(function(response){
-                    $('#uploadimageModal').modal('hide');
-                    $('#file_device').val(response.toDataURL());
-                    $("#result").attr("src", response.toDataURL());
-                })
-            });
-
-        });
-    </script>
+    <script src="{{ mix('js/app.js') }}"></script>
 @endsection

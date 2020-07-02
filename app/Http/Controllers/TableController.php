@@ -90,4 +90,15 @@ class TableController extends Controller
             ->generate(route('table.qr', ['qr' => $qr]));
         return response($image)->header('Content-type','image/png');
     }
+
+    public function setStatusToTable(Request $request){
+
+        $table = $this->table->find($request->id);
+
+        $this->authorize('update', $table);
+
+        return $this->table->updateStatusById($table->id, $request->status);
+
+    }
+
 }

@@ -45,6 +45,8 @@ class CommerceRepository implements CommerceRepositoryInterface
             ->with('rooms.tables')
             ->with('categories.products')
             ->with('schedules')
+            ->withHighestPrice()
+            ->withLowestPrice()
             ->first();
     }
 

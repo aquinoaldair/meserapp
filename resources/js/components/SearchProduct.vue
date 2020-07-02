@@ -8,13 +8,15 @@
             <p>Buscando ...</p>
         </div>
         <div v-if="!searching">
-            <div class="card-body photoswipe-pb-responsive">
-                <div class="my-gallery row grid gallery" id="aniimated-thumbnials" itemscope="">
-                    <figure  v-for="item in items" class="col-md-3 col-sm-6 grid-item" itemprop="associatedMedia" itemscope="">
-                        <a  itemprop="contentUrl" data-size="1600x950" @click="setImage(item.image)">
-                            <img class="img-thumbnail" v-bind:class="{ 'figure-selected': (item.image === imageSelected)  }" v-bind:src="'/storage/' + item.image"  itemprop="thumbnail" alt="Image description"></a>
-                    </figure>
-
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-6 mb-2"  v-for="item in items">
+                        <img :src="'/storage/' + item.image"
+                             @click="setImage(item.image)"
+                             style="max-width: 100%" alt=""
+                             :class="{ 'figure-selected': (item.image === imageSelected)  }"
+                        >
+                    </div>
                 </div>
             </div>
         </div>
@@ -87,6 +89,6 @@
     }
 
     .figure-selected{
-        border: 1px solid darkseagreen !important;
+        border: 3px solid darkseagreen !important;
     }
 </style>

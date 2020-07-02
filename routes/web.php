@@ -44,11 +44,17 @@ Route::middleware('auth')->group(function () use ($admin, $customer) {
         Route::resource('supplier', 'SupplierController');
         Route::resource('product', 'ProductController');
         Route::get('rooms', 'RoomController@getRooms');
+        Route::get('rooms/tables', 'RoomController@getRoomsWithTables');
+        Route::post('table/status', 'TableController@setStatusToTable');
+        Route::get('order/print/{id}', 'OrderController@printSingle');
         Route::resource('room', 'RoomController');
+        Route::resource('sale', 'SaleController');
         Route::resource('cost', 'CostController');
         Route::resource('station', 'StationController');
         Route::resource('printer', 'PrinterController')->only('index', 'store');
         Route::resource('schedule', 'ScheduleController');
+        Route::resource('waiter', 'WaiterController');
+        Route::post('service/move/table', 'ApiController@moveServiceToAnotherTable');
         Route::get('reservation', 'ReservationController@index')->name('reservation.index');
         Route::prefix('room/{room}')->middleware(CheckRoom::class)->group(function (){
             Route::get('table/qr/{qr}', 'TableController@showQr')->name('show.qr');

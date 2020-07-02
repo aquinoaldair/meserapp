@@ -8,14 +8,17 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
     CONST ADMIN_ROLE = 'admin';
     CONST CUSTOMER_ROLE = 'customer';
+    CONST WAITER_ROLE = 'waiter';
+    CONST CLIENT_ROLE = 'client';
 
-    use Notifiable, HasRoles, SoftDeletes;
+    use Notifiable, HasRoles, SoftDeletes, HasApiTokens;
 
     protected $fillable = [
         'name', 'email', 'password',
@@ -44,5 +47,9 @@ class User extends Authenticatable
 
     public function isAdmin(){
         return $this->hasRole(self::ADMIN_ROLE);
+    }
+
+    public function isCustomer(){
+        return $this->hasRole(self::CUSTOMER_ROLE);
     }
 }

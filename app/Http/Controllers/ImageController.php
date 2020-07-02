@@ -37,11 +37,11 @@ class ImageController extends Controller
     public function store(ImageStoreRequest $request)
     {
         $this->image->create([
-            "image" => (new ImageProcess(new ImageFromBase64))->store($request->image, 'products') ,
+            "image" => (new ImageProcess(new ImageFromBase64))->store($request->file_device, 'products') ,
             'keywords' => $request->keywords
         ]);
 
-        return redirect()->route('image.index');
+        return redirect()->route('image.index')->with('success', __('El registro se ha actualizado correctamente'));
     }
 
     public function edit($id)
@@ -56,13 +56,13 @@ class ImageController extends Controller
         $image = $this->image->find($id);
 
         $this->image->update([
-            "image" => ($request->image)
-                ? (new ImageProcess(new ImageFromBase64))->store($request->image, 'products')
+            "image" => ($request->file_device)
+                ? (new ImageProcess(new ImageFromBase64))->store($request->file_device, 'products')
                 : $image->image,
             'keywords' => $request->keywords
         ], $image->id);
 
-        return redirect()->route('image.index');
+        return redirect()->route('image.index')->with('success', __('El registro se ha actualizado correctamente'));
     }
 
     public function destroy($id)

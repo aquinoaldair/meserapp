@@ -16,7 +16,7 @@
 
 @section('body')
     <!-- Container-fluid starts-->
-    <div class="container-fluid">
+    <div class="container-fluid" id="app">
         <div class="row">
             <div class="col-sm-12 col-xl-4">
                 <div class="card">
@@ -26,10 +26,10 @@
                         <div class="card-body">
                             <div class="form-group">
                                 <label>{{ __('Imagen') }}</label>
-                                <input type="file"  id="upload_image"  class="form-control">
+                                <image-crop></image-crop>
                                 <small>Si selecciona una foto, se remplezará la anterior</small>
                             </div>
-                            <input type="hidden" id="file_device" name="image">
+                            <input type="hidden" id="file_device" name="file_device">
                             <img src="" alt="" id="result">
                             @error('file')
                             <p class="text-danger text-sm"> {{ $errors->first('file') }}</p>
@@ -56,6 +56,5 @@
 @endsection
 
 @section('script')
-    <script src="{{ asset('assets/js/croppie/croppie.min.js') }}"></script>
-    <script src="{{ mix('js/image.js') }}"></script>
+    <script src="{{ mix('js/app.js') }}"></script>
 @endsection

@@ -72,4 +72,9 @@ class RoomController extends BaseController
 
         return response()->json(__('Se eliminó correctamente'), 202);
     }
+
+
+    public function getRoomsWithTables(){
+        return $this->room->getByCommerceIdWithTablesAndService($this->user->commerce->id);
+    }
 }

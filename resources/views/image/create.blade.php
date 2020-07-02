@@ -17,7 +17,7 @@
 
 @section('body')
     <!-- Container-fluid starts-->
-    <div class="container-fluid">
+    <div class="container-fluid" id="app">
         <div class="row">
             <div class="col-sm-12 col-xl-4">
                 <div class="card">
@@ -25,11 +25,8 @@
                         @csrf
                         <div class="card-body">
                             <div class="form-group">
-                                <label>{{ __('Imagen') }}</label>
-                                <input type="file"  id="upload_image"  class="form-control">
-
-                                <input type="hidden" id="file_device" name="image">
-                                <img src="" alt="" id="result">
+                                <input type="hidden" id="file_device" name="file_device">
+                                <image-crop></image-crop>
                             </div>
 
                             <div class="form-group">
@@ -50,11 +47,8 @@
             </div>
         </div>
     </div>
-    <!-- Container-fluid Ends-->
-    @include('modals.image_modal')
 @endsection
 
 @section('script')
-    <script src="{{ asset('assets/js/croppie/croppie.min.js') }}"></script>
-    <script src="{{ mix('js/image.js') }}"></script>
+    <script src="{{ mix('js/app.js') }}"></script>
 @endsection

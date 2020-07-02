@@ -6,17 +6,17 @@
     @include('layouts.style')
     <style>
         .page-wrapper .page-body-wrapper .page-body {
-            background-color: #FC5759;
+            background-color: #fff;
         }
         .breadcrumb-item.active {
             color: #F9F9F9;
         }
         .page-wrapper .page-body-wrapper .page-header .row h3 {
-            color: #F9F9F9;
+            color: black;
         }
 
         body.dark-header-sidebar-mix .page-wrapper .page-main-header .main-header-right {
-            background-color: #FC5759;
+            background-color: white;
         }
 
         /*SIDEBAR*/
@@ -71,6 +71,18 @@
             margin-left: 5px;
         }
 
+        .card {
+            -webkit-box-shadow: 1px 5px 24px 0 rgba(34,34,34,0.1) !important;
+            box-shadow: 1px 5px 24px 0 rgba(34,34,34, 0.1) !important;
+        }
+
+        #hDate{
+            color: #5F4DFC !important;
+        }
+
+        #hTime{
+            color: #5F4DFC !important;
+        }
     </style>
 </head>
 <body class="dark-header-sidebar-mix">

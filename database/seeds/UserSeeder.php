@@ -11,20 +11,20 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        $role_admin = \Spatie\Permission\Models\Role::create(
+        /*$role_admin = \Spatie\Permission\Models\Role::create(
             ['name' => 'admin']
         );
 
         \Spatie\Permission\Models\Role::create(
             ['name' => 'customer']
-        );
+        );*/
 
         $admin = factory(\App\User::class)->create([
             "name" => "Admin",
             "email" => "admin@mail.com",
         ]);
 
-        $admin->assignRole($role_admin);
+        $admin->assignRole(\App\User::ADMIN_ROLE);
 
     }
 }

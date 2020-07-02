@@ -7,4 +7,8 @@
     @include('layouts.menu.admin')
 @endhasrole
 
+
+@hasrole(\App\User::WAITER_ROLE)
+@include('layouts.menu.waiter')
+@endhasrole
 <!-- Page Sidebar Ends-->

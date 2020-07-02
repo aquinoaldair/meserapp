@@ -24,3 +24,14 @@ Route::get('commerces', 'ApiController@getCommerces');
 
 Route::post('reservation', 'ApiController@storeReservation');
 Route::get('commerce/{id}', 'ApiController@getDataFromCommerceId');
+
+Route::post('service', 'ApiController@storeService');
+Route::get('service/{id}', 'ApiController@getService');
+Route::post('order', 'ApiController@storeOrder');
+Route::post('payment', 'ApiController@storePayment');
+Route::post('rating', 'ApiController@storeRating');
+
+
+Route::post("login", "Api\AuthController@login");
+Route::post("register", "Api\AuthController@register");
+

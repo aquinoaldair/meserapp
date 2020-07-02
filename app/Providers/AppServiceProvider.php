@@ -13,16 +13,24 @@ use App\Repositories\Customer\CustomerRepository;
 use App\Repositories\Customer\CustomerRepositoryInterface;
 use App\Repositories\Image\ImageRepository;
 use App\Repositories\Image\ImageRepositoryInterface;
+use App\Repositories\Order\OrderRepository;
+use App\Repositories\Order\OrderRepositoryInterface;
+use App\Repositories\Payment\PaymentRepository;
+use App\Repositories\Payment\PaymentRepositoryInterface;
 use App\Repositories\Printer\PrinterRepository;
 use App\Repositories\Printer\PrinterRepositoryInterface;
 use App\Repositories\Product\ProductRepository;
 use App\Repositories\Product\ProductRepositoryInterface;
+use App\Repositories\Rating\RatingRepository;
+use App\Repositories\Rating\RatingRepositoryInterface;
 use App\Repositories\Reservation\ReservationRepository;
 use App\Repositories\Reservation\ReservationRepositoryInterface;
 use App\Repositories\Room\RoomRepository;
 use App\Repositories\Room\RoomRepositoryInterface;
 use App\Repositories\Schedule\ScheduleRepository;
 use App\Repositories\Schedule\ScheduleRepositoryInterface;
+use App\Repositories\Service\ServiceRepository;
+use App\Repositories\Service\ServiceRepositoryInterface;
 use App\Repositories\Station\StationRepository;
 use App\Repositories\Station\StationRepositoryInterface;
 use App\Repositories\Stock\StockRepository;
@@ -33,6 +41,8 @@ use App\Repositories\Table\TableRepository;
 use App\Repositories\Table\TableRepositoryInterface;
 use App\Repositories\User\UserRepository;
 use App\Repositories\User\UserRepositoryInterface;
+use App\Repositories\Waiter\WaiterRepository;
+use App\Repositories\Waiter\WaiterRepositoryInterface;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\ServiceProvider;
 
@@ -56,6 +66,11 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(StationRepositoryInterface::class, StationRepository::class);
         $this->app->bind(ScheduleRepositoryInterface::class, ScheduleRepository::class);
         $this->app->bind(ReservationRepositoryInterface::class, ReservationRepository::class);
+        $this->app->bind(WaiterRepositoryInterface::class, WaiterRepository::class);
+        $this->app->bind(ServiceRepositoryInterface::class, ServiceRepository::class);
+        $this->app->bind(PaymentRepositoryInterface::class, PaymentRepository::class);
+        $this->app->bind(RatingRepositoryInterface::class, RatingRepository::class);
+        $this->app->bind(OrderRepositoryInterface::class, OrderRepository::class);
     }
 
 

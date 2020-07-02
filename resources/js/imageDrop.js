@@ -8,10 +8,11 @@ $(document).ready(function(){
             type:'square' //circle
         },
         boundary:{
-            width:300,
-            height:300
+            width:200,
+            height:200
         },
-        enableOrientation : true
+        enableOrientation : true,
+        enableResize : true
     });
 
     $('#upload_image').on('change', function(){
