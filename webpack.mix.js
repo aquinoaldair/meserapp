@@ -15,4 +15,6 @@ mix.js('resources/js/custom.js', 'public/js').version();
 
 mix.js('resources/js/app.js', 'public/js/app.js').version();
 
+mix.js('resources/js/header.js', 'public/js/header.js').version();
+
 mix.js('resources/js/imageDrop.js', 'public/js/image.js');

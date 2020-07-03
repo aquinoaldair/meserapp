@@ -79,4 +79,11 @@ class TableRepository implements TableRepositoryInterface
             'status' => $status
         ]);
     }
+
+    public function getByStatusByCommerceId($id, $status)
+    {
+       return  $this->model->whereHas('room', function ($q) use ($id){
+            $q->where('commerce_id', $id);
+        })->where('status', $status)->get();
+    }
 }

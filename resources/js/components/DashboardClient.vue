@@ -16,7 +16,7 @@
                             <div class="container p-4">
                                 <div class="row">
                                     <div class="col-12 col-md-3 col-sm-3 mb-2" v-for="(table, index) in item.tables">
-                                        <div @click="selectTable(index)" class="card card-absolute card-table" :class="getClassTable(table)">
+                                        <div @click="selectTable(index)" class="card card-absolute card-table" :class="table.class">
                                             <div class="card-body">
                                                 <div class="row justify-content-end">
                                                     <h5 class="text-right"><strong>Mesa {{ table.name }}</strong></h5>
@@ -42,8 +42,6 @@
                                                         <h6 class="text-right"><strong>&nbsp;</strong></h6>
                                                     </div>
                                                 </div>
-
-
                                             </div>
                                         </div>
                                     </div>
@@ -151,11 +149,24 @@
         created() {
             this.getRoomsWithFullData();
         },
+        mounted() {
+            setInterval(this.blinkTable, 3000);
+        },
         methods:{
+            blinkTable(){
+                this.rooms.forEach(function (room) {
+                    room.tables.forEach(function (table) {
+                        if (table.status == "ordered"){
+                            if (table.class == "ordered"){
+                                table.class = "ordered animated flash"
+                            }else{
+                                table.class = "ordered"
+                            }
+                        }
+                    });
+                });
+            },
             getClassTable(item){
-                if (item.status === 'ordered'){
-                    return  'table-'+item.status+' animated flash';
-                }
                 return 'table-'+item.status;
             },
             setRoomIndex(index){
@@ -198,6 +209,7 @@
                     this.table = this.rooms[this.roomIndex].tables[this.tableIndex];
                     if (this.table.status == "ordered"){
                         this.table.status  = "occupied";
+                        this.rooms[this.roomIndex].tables[index].class = "occupied";
                         this.table.status_trans = "Ocupada";
                         axios.post("/table/status", {'status' : "occupied", 'id' : this.table.id});
                     }
@@ -269,28 +281,27 @@
         background-color: rgba(0,0,0,0);
     }
 
-    .table-enabled{
+    .enabled{
         border: 1px solid gray !important;
     }
-    .table-disabled{
+    .disabled{
         border: 2px solid #DFDFDF !important;
         background-color: #d3d3d3;
     }
-    .table-occupied{
+    .occupied{
         border: 3px solid #64dd17 !important;
         /*background-color: rgba(201, 76, 76, 0.3) !important;*/
     }
-    .table-ordered{
+    .ordered{
         border: 3px solid #d500f9 !important;
     }
-    .table-reserved{
+    .reserved{
         border: 3px solid #f57f17 !important;
     }
 
     .table-paying{
         border: 3px solid #5F4DFC !important;
     }
-
 
     .animated {
         -webkit-animation-duration: 3s;

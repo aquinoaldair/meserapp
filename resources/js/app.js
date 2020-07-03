@@ -1,6 +1,6 @@
 require('./bootstrap');
 
-window.Vue = require('vue');
+import Vue from 'vue/dist/vue.min.js';
 import Notifications from 'vue-notification';
 import VueSweetalert2 from 'vue-sweetalert2';
 import VuejsClipper from 'vuejs-clipper'

@@ -22,8 +22,9 @@ class Table extends Model
     ];
 
     protected $appends = [
-        'status_trans'
+        'status_trans', 'class'
     ];
+
 
     public function room(){
         return $this->belongsTo(Room::class);
@@ -35,19 +36,23 @@ class Table extends Model
     }
 
     public function lastService(){
-        return $this->hasOne(Service::class);
+        return $this->hasOne(Service::class)->latest()->take(1);
     }
 
     public function scopeWithLastService($query)
     {
         $query->addSelect(['last_service_id' => Service::select('id')
             ->whereColumn('table_id', 'tables.id')
-            ->latest()
+            ->orderBy('id', 'desc')
             ->take(1)
         ])->with('lastService.orders.details.product')->with('lastService.payment');
     }
 
     public function getStatusTransAttribute(){
         return StatusTable::getTranslation($this->status);
+    }
+
+    public function getClassAttribute(){
+        return ($this->status === StatusTable::STATUS_ORDERED ) ? "ordered animated flash" : $this->status;
     }
 }

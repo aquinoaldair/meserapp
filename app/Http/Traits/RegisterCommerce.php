@@ -30,7 +30,6 @@ trait RegisterCommerce
         $this->commerce = $commerce;
 
 
-
         $result = DB::transaction(function () use($data) {
             $user = $this->storeUser($data);
             $this->storeCustomer($data, $user->id);

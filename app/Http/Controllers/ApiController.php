@@ -58,7 +58,7 @@ class ApiController extends Controller
 
             return response()->json(['message' => "La reservación se ha realizado correctamente", "success" => true], 200);
         }catch (\Exception $e){
-            return response()->json(['message' => "No se realizó la reservación,intentelo mas tarde", "success" => false], 400);
+            return response()->json(['message' => "No se realizó la reservación, intentelo mas tarde", "success" => false], 400);
         }
     }
 
@@ -148,26 +148,5 @@ class ApiController extends Controller
         return $this->rating->create($request->all());
     }
 
-    public function moveServiceToAnotherTable(Request $request){
-
-        $table_to_move = $this->table->find($request->table_to_move);
-
-        abort_if($table_to_move->status != StatusTable::STATUS_ENABLED, 400);
-
-        $current_table = $this->table->find($request->table_id);
-
-        $service = $this->service->getServiceById($request->service_id);
-
-        DB::transaction(function () use($service, $current_table, $table_to_move) {
-            //actualizar servicio
-            $this->service->updateTableInService($service->id, $table_to_move->id);
-            //actualizar el estado de la mesa nueva con el estado de ocupada
-            $this->table->updateStatusById($table_to_move->id, StatusTable::STATUS_OCCUPIED);
-            //actualizar el estado de la mesa anterior
-            $this->table->updateStatusById($current_table->id, StatusTable::STATUS_ENABLED);
-      });
-
-        return response()->json('', 202);
-    }
 
 }

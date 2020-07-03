@@ -4,8 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Helpers\RoomHelper;
 use App\Http\Requests\TableRequest;
+use App\Models\StatusTable;
+use App\Repositories\Service\ServiceRepositoryInterface;
 use App\Repositories\Table\TableRepositoryInterface;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 
@@ -13,14 +16,16 @@ class TableController extends Controller
 {
     private $table;
     private $room;
+    private $service;
 
-    public function __construct(TableRepositoryInterface $table)
+    public function __construct(TableRepositoryInterface $table, ServiceRepositoryInterface $service)
     {
         $this->middleware(function ($request, $next) {
           $this->room = $request->get('room'); //this come from CheckRoom Middleware
           return $next($request);
         });
         $this->table = $table;
+        $this->service = $service;
     }
 
     public function index()
@@ -99,6 +104,41 @@ class TableController extends Controller
 
         return $this->table->updateStatusById($table->id, $request->status);
 
+    }
+
+
+    public function moveServiceToAnotherTable(Request $request){
+
+        $table_to_move = $this->table->find($request->table_to_move);
+
+        abort_if($table_to_move->status != StatusTable::STATUS_ENABLED, 400);
+
+        $current_table = $this->table->find($request->table_id);
+
+        $service = $this->service->getServiceById($request->service_id);
+
+
+        DB::transaction(function () use($service, $current_table, $table_to_move) {
+            //actualizar servicio en dado caso de que ya exista
+            if($service) $this->service->updateTableInService($service->id, $table_to_move->id);
+            //actualizar el estado de la mesa nueva con el estado de ocupada
+            $this->table->updateStatusById($table_to_move->id, StatusTable::STATUS_OCCUPIED);
+            //actualizar el estado de la mesa anterior
+            $this->table->updateStatusById($current_table->id, StatusTable::STATUS_ENABLED);
+        });
+
+        return response()->json('', 202);
+    }
+
+    public function getByStatusOrdered(){
+
+        $user = $this->getUser();
+
+        return $this->table->getByStatusByCommerceId($user->commerce->id, StatusTable::STATUS_ORDERED);
+    }
+
+    public function getUser(){
+        return auth()->user();
     }
 
 }

@@ -19,6 +19,12 @@ use App\Http\Middleware\CheckRoom;
 $admin = User::ADMIN_ROLE;
 $customer = User::CUSTOMER_ROLE;
 
+
+Route::get('test', function (){
+    $data =  $table = \App\Models\Table::withLastService()->where('id', 22)->first();
+    return view('test.index', compact('data'));
+});
+
 Route::view('/', 'welcome');
 Auth::routes(['confirm' => false]);
 
@@ -54,7 +60,8 @@ Route::middleware('auth')->group(function () use ($admin, $customer) {
         Route::resource('printer', 'PrinterController')->only('index', 'store');
         Route::resource('schedule', 'ScheduleController');
         Route::resource('waiter', 'WaiterController');
-        Route::post('service/move/table', 'ApiController@moveServiceToAnotherTable');
+        Route::post('service/move/table', 'TableController@moveServiceToAnotherTable');
+        Route::get('service/table/status/ordered', 'TableController@getByStatusOrdered');
         Route::get('reservation', 'ReservationController@index')->name('reservation.index');
         Route::prefix('room/{room}')->middleware(CheckRoom::class)->group(function (){
             Route::get('table/qr/{qr}', 'TableController@showQr')->name('show.qr');

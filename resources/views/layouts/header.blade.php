@@ -1,5 +1,5 @@
 <!-- Page Header Start-->
-<div class="page-main-header">
+<div class="page-main-header" id="header">
     <div class="main-header-right row">
         <div class="main-header-left d-lg-none" style="background-color: white">
             <div class="logo-wrapper"><a href=""><img src="{{asset('icons/icono_app_con_texto.png')}}" alt=""></a></div>
@@ -13,47 +13,16 @@
             <ul class="nav-menus">
                 <li>
                     <div class="form-inline search-form" >
-                       <h4 id="hDate"></h4>
+                        <h4 id="hDate"></h4>
                         <img style="margin-left: 10px; max-height: 50px" src="{{ asset('icons/hora.png') }}" alt="">
                         <h1 class="ml-4" id="hTime"></h1>
                     </div>
                 </li>
-                <li class="onhover-dropdown">
-                    <img style="max-width: 40px" src="{{ asset('icons/mensajes.png') }}" alt="">
-                    <span style="color:white" class="dot"></span>
-                    <ul class="notification-dropdown onhover-show-div">
-                        <li>Mensajes <span class="badge badge-pill badge-primary pull-right">1</span></li>
-                        <li>
-                            <div class="media">
-                                <div class="media-body">
-                                    <h6 class="mt-0"><span><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-shopping-bag shopping-color"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg></span>Your order ready for Ship..!<small class="pull-right">9:00 AM</small></h6>
-                                    <p class="mb-0">Lorem ipsum dolor sit amet, consectetuer.</p>
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
-                </li>
-                <li class="onhover-dropdown">
-                    <img style="max-width: 40px" src="{{ asset('icons/notificacion_nueva.png') }}" alt="">
-                    <span style="color:white" class="dot"></span>
-                    <ul class="notification-dropdown onhover-show-div">
-                        <li>Notificaciones <span class="badge badge-pill badge-primary pull-right">1</span></li>
-                        <li>
-                            <div class="media">
-                                <div class="media-body">
-                                    <h6 class="mt-0">
-                                        <span>
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-shopping-bag shopping-color"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
-                                        </span>
-                                        Your order ready for Ship..!
-                                        <small class="pull-right">9:00 AM</small>
-                                    </h6>
-                                    <p class="mb-0">Lorem ipsum dolor sit amet, consectetuer.</p>
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
-                </li>
+
+                @if (!auth()->user()->isAdmin())
+                    <h1>Is Admin</h1>
+                @endif
+
                 <li class="onhover-dropdown">
                     <div class="media align-items-center">
                         <img class="align-self-center pull-right img-50 rounded-circle" src="{{asset('icons/mi_cuenta.png')}}" alt="header-user">
@@ -133,4 +102,6 @@
     getTime();
 
 </script>
+
+<script src="{{ mix('js/header.js') }}"></script>
 <!-- Page Header Ends  -->
