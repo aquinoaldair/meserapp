@@ -142,6 +142,10 @@ class ProductController extends BaseController
     }
 
 
+    public function searchByName($term){
+        return $this->product->searchByNameAndCommerceId($term, $this->user->commerce->id);
+    }
+
 
     private function getStations(){
         return $this->station->getByCommerceId($this->user->commerce->id);

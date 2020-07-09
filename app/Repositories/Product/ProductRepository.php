@@ -48,4 +48,9 @@ class ProductRepository implements ProductRepositoryInterface
             ->where('commerce_id', $id)
             ->get();
     }
+
+    public function searchByNameAndCommerceId($term, $id)
+    {
+        return $this->model->where('name', 'like', "%{$term}%")->where('commerce_id', $id)->get();
+    }
 }

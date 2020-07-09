@@ -43,7 +43,21 @@ class ApiController extends Controller
     }
 
     public function getCommerceInformationFromQr($qr){
+
+        $table = $this->table->findByKey($qr);
+
+        if ($table->status != StatusTable::STATUS_ENABLED){
+            return response()->json(['message' => "Mesa Ocupada"], 401);
+        }
+
         $this->table->updateStatusBykEY($qr, StatusTable::STATUS_OCCUPIED);
+
+        return response()->json(['message' => "Mesa Libre"], 200);
+
+    }
+
+
+    public function getCommerceDataFromQr($qr){
         return $this->table->getParentCommerce($qr);
     }
 
@@ -76,23 +90,23 @@ class ApiController extends Controller
 
     public function storeOrder(Request $request){
 
-        return DB::transaction(function () use($request) {
+        //get service
+        $service = $this->service->getServiceById($request->service_id);
+
+        DB::transaction(function () use($request, $service) {
+
+            //update status table
+            $this->table->updateStatusById($service->table_id, StatusTable::STATUS_ORDERED);
 
             //store the order
             $order = $this->service->storeOrder($request->all());
 
             //store details order
             $this->createDetails($request->products, $order);
-
-            //get service
-            $service = $this->service->getServiceById($request->service_id);
-
-            //update status table
-            $this->table->updateStatusById($service->table_id, StatusTable::STATUS_ORDERED);
-
-            //return service
-            return $this->service->getServiceById($order->service_id);
         });
+
+        //return service
+        return $this->service->getServiceById($service->id);
     }
 
 

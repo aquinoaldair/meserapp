@@ -11,6 +11,8 @@ use App\Repositories\Cost\CostRepository;
 use App\Repositories\Cost\CostRepositoryInterface;
 use App\Repositories\Customer\CustomerRepository;
 use App\Repositories\Customer\CustomerRepositoryInterface;
+use App\Repositories\Detail\DetailRepository;
+use App\Repositories\Detail\DetailRepositoryInterface;
 use App\Repositories\Image\ImageRepository;
 use App\Repositories\Image\ImageRepositoryInterface;
 use App\Repositories\Order\OrderRepository;
@@ -71,6 +73,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(PaymentRepositoryInterface::class, PaymentRepository::class);
         $this->app->bind(RatingRepositoryInterface::class, RatingRepository::class);
         $this->app->bind(OrderRepositoryInterface::class, OrderRepository::class);
+        $this->app->bind(DetailRepositoryInterface::class, DetailRepository::class);
     }
 
 

@@ -87,30 +87,41 @@
                         </div>
                         <template v-if="table.last_service !== null">
 
+                            <button v-if="!isMoving && table.status !== 'paying'" @click="createOrderToService" type="button" class="btn btn-sm btn-info btn-block mb-2">Agregar Producto</button>
+
                             <div  class="row"  v-for="(order, index) in table.last_service.orders">
-                                <h5>
-                                    <strong>Orden {{ index + 1 }}</strong> &nbsp;&nbsp;&nbsp;
-                                    <strong>
-                                        <a target="_blank" :href="'/order/print/'+order.id" ><i style="cursor:pointer" class="fa fa-print"/></a>
-                                    </strong>
-                                </h5>
-                                <table class="table" style="width: 100% !important">
-                                    <thead>
-                                    <tr>
-                                        <th scope="col">Producto</th>
-                                        <th scope="col">Precio</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr v-for="(detail) in order.details">
-                                        <td scope="row">{{ detail.quantity}} {{ detail.product.name}}</td>
-                                        <td scope="row">$ {{ detail.price }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="2" style="text-align: right; font-weight: bold">Total : ${{ order.total}}</td>
-                                    </tr>
-                                    </tbody>
-                                </table>
+                                <template v-if="order.details.length > 0">
+                                    <h5>
+                                        <strong>Orden {{ index + 1 }}</strong> &nbsp;&nbsp;&nbsp;
+                                        <strong>
+                                            <a target="_blank" :href="'/order/print/'+order.id" ><i style="cursor:pointer" class="fa fa-print"/></a>
+                                        </strong>
+                                    </h5>
+                                    <table class="table" style="width: 100% !important">
+                                        <thead>
+                                        <tr>
+                                            <th scope="col">Producto</th>
+                                            <th scope="col">Precio</th>
+                                            <th scope="col">&nbsp;</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr v-for="(detail) in order.details">
+                                            <td scope="row">{{ detail.quantity}} {{ detail.product.name}}</td>
+                                            <td scope="row">$ {{ detail.price }}</td>
+                                            <td scope="row">
+                                                <button @click="editProduct(detail)" class="btn btn-sm btn-primary" style="padding: 5px 10px !important">
+                                                    <i class="fa fa-edit"/></button>
+                                                <button @click="removeProduct(order.id, detail.id)" class="btn btn-sm btn-danger" style="padding: 5px 10px !important">
+                                                    <i class="fa fa-trash"/></button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3" style="text-align: right; font-weight: bold">Total : ${{ order.total}}</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </template>
                             </div>
 
 
@@ -119,6 +130,86 @@
                             </div>
                             <h3 style="text-align: center; font-weight: bold">Total ${{ table.last_service.total }}</h3>
                         </template>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal" tabindex="-1" role="dialog" id="modalProduct">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Editar Producto</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <template v-if="detail !== null">
+                            <div class="row">
+                                <div class="col-3">
+                                    <img :src="detail.product.full_image" style="max-width: 100%">
+                                </div>
+                                <div class="col-9">
+                                    <h5 class="text-center">{{ detail.product.name }}</h5>
+                                    <p>{{ detail.product.description }}</p>
+                                    <h6> ${{ detail.product.price }}</h6>
+                                    <div class="row justify-content-center align-items-center">
+                                        <div class="col-6">
+                                            <button @click="(detail.quantity <= 1) ? detail.quantity = 1  : detail.quantity-- " class="btn btn-pill btn-outline-warning" type="button" data-original-title="btn btn-pill btn-outline-warning" title="">
+                                                <i class="fa fa-minus"/>
+                                            </button>
+                                            <button @click="detail.quantity++" class="btn btn-pill btn-outline-success" type="button" data-original-title="btn btn-pill btn-outline-warning" title="">
+                                                <i class="fa fa-plus"/>
+                                            </button>
+                                        </div>
+                                        <div class="col-6">
+                                            <p class="text-center">Total</p>
+                                            <h2 class="text-center"> {{ detail.quantity }}</h2>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </template>
+                    </div>
+                    <div class="modal-footer">
+                        <button @click="updateProduct" type="button" class="btn btn-primary">Guardar</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal" tabindex="-1" role="dialog" id="modalAddProduct">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Agregar Productos</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <template>
+                            <input type="text" class="form-control" v-model="searchTerm" placeholder="Ingresa el producto a buscar">
+                        </template>
+                        <template>
+                            <div class="row">
+                                <div class="col-md-4" v-for="(product, index) in productsFromSearch">
+                                    <div @click="storeOrder(product)" class="card mt-2" style="cursor: pointer; border: 1px solid #6951FC">
+                                        <div class="card-body p-1">
+                                            <p class="text-center mb-0"><strong>{{ product.name }}</strong></p>
+                                            <p class="mb-0" style="font-size: 10px !important;">{{ product.description }}</p>
+                                            <h6> ${{ product.price }}</h6>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
                     </div>
                 </div>
             </div>
@@ -143,16 +234,107 @@
                 table : {},
                 isLoading: false,
                 fullPage: true,
-                isMoving : false
+                isMoving : false,
+                detail : null,
+                searchTerm : '',
+                productsFromSearch : []
             }
         },
-        created() {
-            this.getRoomsWithFullData();
-        },
-        mounted() {
-            setInterval(this.blinkTable, 3000);
+        watch : {
+            // cada vez que el termino de busca cambie, esta función será ejecutada
+            searchTerm : function (newValue, oldValue) {
+                this.debouncedGetSearch()
+            }
         },
         methods:{
+            async storeOrder(product){
+                var result = await this.$swal({
+                    title: 'Estas Seguro?',
+                    text: "este producto se agregará a una orden",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Si, Guardar!'
+                });
+
+                if(result.isConfirmed){
+                    try {
+                        var data = { "service_id" : this.table.last_service_id,
+                            "products" : [
+                                { "id" : product.id , "quantity" : 1},
+                            ]
+                        };
+                        $("#modalAddProduct").modal("hide");
+                        var response = await axios.post("api/order", data);
+                        this.$swal('Guardado', 'Se ha guardado correctamente', 'success');
+                        await this.getRoomsWithFullDataAsync();
+                        this.selectTable(this.tableIndex);
+                    }
+                    catch (e) {
+                        this.$swal({ icon: 'error', title: 'No se pudo eliminar', showConfirmButton: false, timer: 1500});
+                    }
+                }
+            },
+            async getSearch() {
+                this.productsFromSearch = [];
+                if (!this.isLoading){
+                    this.isLoading = true;
+                    try {
+                        var url = "/product/search/"+this.searchTerm;
+                        var response = await axios.get(url);
+                        this.productsFromSearch = response.data;
+                        this.isLoading = false;
+                    }catch (e) {
+                        this.isLoading = false;
+                    }
+                }
+            },
+            createOrderToService(){
+                $("#modalAddProduct").modal("show");
+            },
+            editProduct(detail){
+                console.log(detail);
+                this.detail = JSON.parse(JSON.stringify(detail));
+                $("#modalProduct").modal("show");
+            },
+            async updateProduct(){
+                var vm = this;
+                $("#modalProduct").modal("hide");
+                try {
+                    var response = await axios.post('/service/order/product/detail', {
+                        "detail_id" : this.detail.id ,
+                        "quantity" : this.detail.quantity
+                    });
+                    await this.getRoomsWithFullDataAsync();
+                    this.selectTable(this.tableIndex);
+                }catch (e) {}
+            },
+            async removeProduct(order_id, detail_id){
+                var vm = this;
+
+                var result = await this.$swal({
+                    title: 'Estas Seguro?',
+                    text: "No podras revertir esta acción",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Si, eliminar!'
+                });
+
+                if(result.isConfirmed){
+                    try {
+                        var response = await axios.post("/order/product/delete", { "order_id" : order_id , "detail_id" : detail_id });
+                        this.$swal('Eliminado', 'Se ha eliminado correctamente', 'success');
+                        await this.getRoomsWithFullDataAsync();
+                        this.selectTable(this.tableIndex);
+                    }
+                    catch (e) {
+                        this.$swal({ icon: 'error', title: 'No se pudo eliminar', showConfirmButton: false, timer: 1500});
+                    }
+                }
+            },
             blinkTable(){
                 this.rooms.forEach(function (room) {
                     room.tables.forEach(function (table) {
@@ -239,7 +421,27 @@
                     console.log(error);
                     vm.isLoading = false;
                 });
+            },
+            async getRoomsWithFullDataAsync(){
+                this.isLoading = true;
+                try {
+                    const response = await axios.get("/rooms/tables");
+                    this.isLoading = false;
+                    this.rooms = response.data;
+                    console.log("finish data async");
+                } catch (error) {
+                    console.error(error);
+                    this.isLoading = false;
+                }
+
             }
+        },
+        created() {
+            this.getRoomsWithFullData();
+            this.debouncedGetSearch = _.debounce(this.getSearch, 500);
+        },
+        mounted() {
+            setInterval(this.blinkTable, 3000);
         }
     }
 </script>
@@ -282,25 +484,25 @@
     }
 
     .enabled{
-        border: 1px solid gray !important;
+        border: 1px solid #64dd17 !important;
     }
     .disabled{
-        border: 2px solid #DFDFDF !important;
+        border: 2px solid #424242 !important;
         background-color: #d3d3d3;
     }
     .occupied{
-        border: 3px solid #64dd17 !important;
+        border: 3px solid #f44336 !important;
         /*background-color: rgba(201, 76, 76, 0.3) !important;*/
     }
     .ordered{
-        border: 3px solid #d500f9 !important;
+        border: 3px solid #7C45D8 !important;
     }
     .reserved{
-        border: 3px solid #f57f17 !important;
+        border: 3px solid #4e342e !important;
     }
 
-    .table-paying{
-        border: 3px solid #5F4DFC !important;
+    .paying{
+        border: 3px solid #fdd835!important;
     }
 
     .animated {
@@ -329,7 +531,4 @@
         -webkit-animation-name: flash;
         animation-name: flash;
     }
-
-
-
 </style>

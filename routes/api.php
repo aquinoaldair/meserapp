@@ -19,7 +19,9 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 
+Route::get('commerce/table/{qr}/data', 'ApiController@getCommerceDataFromQr');
 Route::get('commerce/table/{qr}/all', 'ApiController@getCommerceInformationFromQr')->name('table.qr');
+
 Route::get('commerces', 'ApiController@getCommerces');
 
 Route::post('reservation', 'ApiController@storeReservation');
@@ -33,5 +35,5 @@ Route::post('rating', 'ApiController@storeRating');
 
 
 Route::post("login", "Api\AuthController@login");
-Route::post("register", "Api\AuthController@register");
+Route::post("register", "Api\AuthController@register");;
 

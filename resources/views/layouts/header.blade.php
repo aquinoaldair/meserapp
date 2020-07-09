@@ -19,9 +19,7 @@
                     </div>
                 </li>
 
-                @if (!auth()->user()->isAdmin())
-                    <h1>Is Admin</h1>
-                @endif
+                <alert-table admin="{{ auth()->user()->isAdmin() ? 1 : 0 }}"></alert-table>
 
                 <li class="onhover-dropdown">
                     <div class="media align-items-center">

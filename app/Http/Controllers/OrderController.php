@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Repositories\Detail\DetailRepositoryInterface;
 use App\Repositories\Order\OrderRepositoryInterface;
 use App\Repositories\Printer\PrinterRepositoryInterface;
 use Illuminate\Http\Request;
@@ -10,12 +11,14 @@ class OrderController extends BaseController
 {
 
     private $order;
+    private $detail;
 
 
-    public function __construct(OrderRepositoryInterface $order)
+    public function __construct(OrderRepositoryInterface $order, DetailRepositoryInterface $detail)
     {
         parent::__construct();
         $this->order = $order;
+        $this->detail = $detail;
     }
 
     public function printSingle($id){
@@ -37,5 +40,14 @@ class OrderController extends BaseController
 
     private function getCustomPaper(){
         return array(0,0,340,440);
+    }
+
+    public function deleteProductFromOrder(Request $request){
+        $detail = $this->detail->find($request->detail_id);
+
+        $this->authorize('delete', $detail);
+
+        return $this->detail->delete($detail->id);
+
     }
 }

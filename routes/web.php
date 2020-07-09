@@ -21,7 +21,7 @@ $customer = User::CUSTOMER_ROLE;
 
 
 Route::get('test', function (){
-    $data =  $table = \App\Models\Table::withLastService()->where('id', 22)->first();
+    return $data =  $table = \App\Models\Table::withLastService()->where('id', 74)->first();
     return view('test.index', compact('data'));
 });
 
@@ -43,16 +43,17 @@ Route::middleware('auth')->group(function () use ($admin, $customer) {
 
         Route::get('profile', 'CommerceController@profile')->name('profile');
         Route::put('profile/update', 'CommerceController@updateProfile')->name('profile.update');
-
         Route::get('category/general', 'CategoryController@getGeneral');
         Route::post('category/customer/create', 'CategoryController@createCategoryFromGeneral');
         Route::get('images/search/{term}', 'ImageController@search');
         Route::resource('supplier', 'SupplierController');
+        Route::get('product/search/{term}', 'ProductController@searchByName');
         Route::resource('product', 'ProductController');
         Route::get('rooms', 'RoomController@getRooms');
         Route::get('rooms/tables', 'RoomController@getRoomsWithTables');
         Route::post('table/status', 'TableController@setStatusToTable');
         Route::get('order/print/{id}', 'OrderController@printSingle');
+        Route::post('order/product/delete', 'OrderController@deleteProductFromOrder');
         Route::resource('room', 'RoomController');
         Route::resource('sale', 'SaleController');
         Route::resource('cost', 'CostController');
@@ -62,6 +63,7 @@ Route::middleware('auth')->group(function () use ($admin, $customer) {
         Route::resource('waiter', 'WaiterController');
         Route::post('service/move/table', 'TableController@moveServiceToAnotherTable');
         Route::get('service/table/status/ordered', 'TableController@getByStatusOrdered');
+        Route::post('service/order/product/detail', 'DetailsController@updateProductInDetail');
         Route::get('reservation', 'ReservationController@index')->name('reservation.index');
         Route::prefix('room/{room}')->middleware(CheckRoom::class)->group(function (){
             Route::get('table/qr/{qr}', 'TableController@showQr')->name('show.qr');

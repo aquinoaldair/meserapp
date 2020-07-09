@@ -16,20 +16,31 @@
                </li>
            </ul>
        </template>
+        <template>
+            <audio id="myAudio">
+                <source src="/sounds/ordered.mp3" type="audio/mpeg">
+            </audio>
+        </template>
     </li>
 </template>
 
 <script>
+    import {Howl, Howler} from 'howler';
+
     export default {
         name: "AlertTable",
+        props: ['admin'],
         data(){
             return{
-                notifications : []
+                notifications : [],
+                counter : 0,
+                sound : ""
             }
         },
         mounted() {
-            console.log("Alert Table Mounted");
-            setInterval(this.getTabled, 10000);
+            if (this.admin == 0){
+                setInterval(this.getTabled, 15000);
+            }
         },
         computed: {
             total(){
@@ -39,15 +50,34 @@
         methods:{
             getTabled(){
                 var vm = this;
-
                 axios.get('/service/table/status/ordered')
                     .then(function (response) {
                         vm.notifications = response.data;
+                        if (vm.notifications.length > 0){
+                            vm.counter = 0;
+                            vm.playSound();
+                        }
                     })
                     .catch(function (error) {
-                        // handle error
                         console.log(error);
                     });
+            },
+            async playSound(){
+                var vm = this;
+                this.counter++;
+                if (this.counter <= 3 ){
+                    var sound = new Howl({
+                        src: '/sounds/ordered.mp3'
+                    });
+                    sound.play();
+                    await this.sleep(2000);
+                    this.playSound();
+                }else{
+                    this.counter = 0;
+                }
+            },
+            sleep(ms) {
+                return new Promise(resolve => setTimeout(resolve, ms));
             }
         }
     }

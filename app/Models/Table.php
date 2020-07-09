@@ -36,7 +36,7 @@ class Table extends Model
     }
 
     public function lastService(){
-        return $this->hasOne(Service::class)->latest()->take(1);
+        return $this->belongsTo(Service::class);
     }
 
     public function scopeWithLastService($query)

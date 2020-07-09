@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Models\Category;
 use App\Models\Cost;
+use App\Models\Details;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\Room;
@@ -14,6 +15,7 @@ use App\Models\Table;
 use App\Models\Waiter;
 use App\Policies\CategoryPolicy;
 use App\Policies\CostPolicy;
+use App\Policies\DetailPolicy;
 use App\Policies\OrderPolicy;
 use App\Policies\ProductPolicy;
 use App\Policies\RoomPolicy;
@@ -42,7 +44,8 @@ class AuthServiceProvider extends ServiceProvider
         Table::class => TablePolicy::class,
         Waiter::class => WaiterPolicy::class,
         Service::class => ServicePolicy::class,
-        Order::class => OrderPolicy::class
+        Order::class => OrderPolicy::class,
+        Details::class => DetailPolicy::class
     ];
 
     /**
