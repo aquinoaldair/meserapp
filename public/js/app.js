@@ -7670,6 +7670,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -7688,7 +7691,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       isMoving: false,
       detail: null,
       searchTerm: '',
-      productsFromSearch: []
+      productsFromSearch: [],
+      isProcessingRequest: false
     };
   },
   watch: {
@@ -7783,34 +7787,37 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 _this2.productsFromSearch = [];
 
                 if (_this2.isLoading) {
-                  _context2.next = 15;
+                  _context2.next = 18;
                   break;
                 }
 
                 _this2.isLoading = true;
-                _context2.prev = 3;
+                _this2.isProcessingRequest = true;
+                _context2.prev = 4;
                 url = "/product/search/" + _this2.searchTerm;
-                _context2.next = 7;
+                _context2.next = 8;
                 return axios.get(url);
 
-              case 7:
+              case 8:
                 response = _context2.sent;
                 _this2.productsFromSearch = response.data;
                 _this2.isLoading = false;
-                _context2.next = 15;
+                _this2.isProcessingRequest = false;
+                _context2.next = 18;
                 break;
 
-              case 12:
-                _context2.prev = 12;
-                _context2.t0 = _context2["catch"](3);
+              case 14:
+                _context2.prev = 14;
+                _context2.t0 = _context2["catch"](4);
                 _this2.isLoading = false;
+                _this2.isProcessingRequest = false;
 
-              case 15:
+              case 18:
               case "end":
                 return _context2.stop();
             }
           }
-        }, _callee2, null, [[3, 12]]);
+        }, _callee2, null, [[4, 14]]);
       }))();
     },
     createOrderToService: function createOrderToService() {
@@ -8012,12 +8019,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     getRoomsWithFullData: function getRoomsWithFullData() {
       var vm = this;
       vm.isLoading = true;
+      vm.isProcessingRequest = true;
       axios.get("/rooms/tables").then(function (response) {
         vm.isLoading = false;
+        vm.isProcessingRequest = false;
         console.log(response.data);
         vm.rooms = response.data;
       })["catch"](function (error) {
-        console.log(error);
+        vm.isProcessingRequest = false;
         vm.isLoading = false;
       });
     },
@@ -8031,30 +8040,78 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             switch (_context5.prev = _context5.next) {
               case 0:
                 _this5.isLoading = true;
-                _context5.prev = 1;
-                _context5.next = 4;
+                _this5.isProcessingRequest = true;
+                _context5.prev = 2;
+                _context5.next = 5;
                 return axios.get("/rooms/tables");
 
-              case 4:
+              case 5:
                 response = _context5.sent;
                 _this5.isLoading = false;
                 _this5.rooms = response.data;
-                console.log("finish data async");
-                _context5.next = 14;
+                _this5.isProcessingRequest = false;
+                _context5.next = 15;
                 break;
 
-              case 10:
-                _context5.prev = 10;
-                _context5.t0 = _context5["catch"](1);
-                console.error(_context5.t0);
+              case 11:
+                _context5.prev = 11;
+                _context5.t0 = _context5["catch"](2);
+                _this5.isProcessingRequest = false;
                 _this5.isLoading = false;
 
-              case 14:
+              case 15:
               case "end":
                 return _context5.stop();
             }
           }
-        }, _callee5, null, [[1, 10]]);
+        }, _callee5, null, [[2, 11]]);
+      }))();
+    },
+    getNewDataFromTables: function getNewDataFromTables() {
+      var _this6 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee6() {
+        var vm, response;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee6$(_context6) {
+          while (1) {
+            switch (_context6.prev = _context6.next) {
+              case 0:
+                _context6.prev = 0;
+
+                if (_this6.isProcessingRequest) {
+                  _context6.next = 7;
+                  break;
+                }
+
+                vm = _this6;
+                _context6.next = 5;
+                return axios.get("/rooms/tables");
+
+              case 5:
+                response = _context6.sent;
+                response.data.some(function (room) {
+                  room.tables.some(function (table) {
+                    if (table.status == "ordered") {
+                      vm.rooms = response.data;
+                      return table.status == "ordered";
+                    }
+                  });
+                });
+
+              case 7:
+                _context6.next = 11;
+                break;
+
+              case 9:
+                _context6.prev = 9;
+                _context6.t0 = _context6["catch"](0);
+
+              case 11:
+              case "end":
+                return _context6.stop();
+            }
+          }
+        }, _callee6, null, [[0, 9]]);
       }))();
     }
   },
@@ -8064,6 +8121,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   },
   mounted: function mounted() {
     setInterval(this.blinkTable, 3000);
+    setInterval(this.getNewDataFromTables, 10000);
   }
 });
 
@@ -8423,6 +8481,17 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "Table",
   props: ['roomStore', 'roomDelete', 'roomUpdate', 'tableStore', 'tableDelete', 'tableUpdate', 'tableQr'],
@@ -8433,6 +8502,7 @@ __webpack_require__.r(__webpack_exports__);
       isNewTable: false,
       isEditingRoom: false,
       isEditingTable: false,
+      isChangingRoom: false,
       room: {},
       table: {},
       roomIndex: 0,
@@ -8465,6 +8535,10 @@ __webpack_require__.r(__webpack_exports__);
     });
   },
   methods: {
+    changeTableToAnotherRoom: function changeTableToAnotherRoom() {
+      this.isChangingRoom = true;
+      this.$swal('Seleccione el nuevo salón');
+    },
     deleteTable: function deleteTable() {
       var table = this.table;
       var route = this.tableDelete.replace(":table", table.key);
@@ -8562,6 +8636,36 @@ __webpack_require__.r(__webpack_exports__);
     },
     setRoomIndex: function setRoomIndex(index) {
       this.roomIndex = index;
+
+      if (this.isChangingRoom) {
+        var room = this.rooms[index];
+        var table = this.table;
+        var route = this.tableUpdate.replace(":table", table.key);
+        route = route.replace(":room", this.rooms[this.roomIndex].key);
+        var vm = this;
+        axios.put(route, {
+          'room_id': room.id,
+          'name': table.name
+        }).then(function (response) {
+          vm.isChangingRoom = false;
+          vm.$swal({
+            icon: 'success',
+            title: 'Actualizado correctamente',
+            showConfirmButton: false,
+            timer: 1500
+          });
+          vm.rooms[vm.roomIndex].tables[vm.tableIndex].name = table.name;
+          vm.setDefaultAllValues();
+        })["catch"](function (error) {
+          vm.isChangingRoom = false;
+          vm.$swal({
+            icon: 'error',
+            title: 'No se ha podido actualizar',
+            showConfirmButton: false,
+            timer: 1500
+          });
+        });
+      }
     },
     newRoom: function newRoom() {
       this.isNewRoom = true;
@@ -8659,6 +8763,7 @@ __webpack_require__.r(__webpack_exports__);
       this.isNewTable = false;
       this.isEditingTable = false;
       this.table = {};
+      this.isChangingRoom = false;
     },
     setDefaultAllValues: function setDefaultAllValues() {
       this.setDefaultValuesRoom();
@@ -46944,6 +47049,26 @@ var render = function() {
                 ])
               : _vm._e(),
             _vm._v(" "),
+            _vm.table.status && _vm.table.status != "enabled"
+              ? _c("div", { staticClass: "row" }, [
+                  _c("div", { staticClass: "col-12 mb-2" }, [
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-sm btn-secondary btn-block",
+                        attrs: { type: "button" },
+                        on: {
+                          click: function($event) {
+                            return _vm.changeStatusTable("enabled")
+                          }
+                        }
+                      },
+                      [_vm._v("Habilitar    ")]
+                    )
+                  ])
+                ])
+              : _vm._e(),
+            _vm._v(" "),
             _vm.table.status == "enabled"
               ? _c("div", { staticClass: "row" }, [
                   _c("div", { staticClass: "col-12 mb-2" }, [
@@ -46983,26 +47108,6 @@ var render = function() {
                           "\n                            Cambiar a Fuera de Servicio"
                         )
                       ]
-                    )
-                  ])
-                ])
-              : _vm._e(),
-            _vm._v(" "),
-            _vm.table.status === "disabled" || _vm.table.status === "reserved"
-              ? _c("div", { staticClass: "row" }, [
-                  _c("div", { staticClass: "col-12 mb-2" }, [
-                    _c(
-                      "button",
-                      {
-                        staticClass: "btn btn-sm btn-warning btn-block",
-                        attrs: { type: "button" },
-                        on: {
-                          click: function($event) {
-                            return _vm.changeStatusTable("enabled")
-                          }
-                        }
-                      },
-                      [_vm._v("Habilitar    ")]
                     )
                   ])
                 ])
@@ -47142,7 +47247,26 @@ var render = function() {
                                                           " " +
                                                           _vm._s(
                                                             detail.product.name
+                                                          ) +
+                                                          "   "
+                                                      ),
+                                                      _c(
+                                                        "p",
+                                                        {
+                                                          staticClass:
+                                                            "text-muted",
+                                                          staticStyle: {
+                                                            "font-style":
+                                                              "italic"
+                                                          }
+                                                        },
+                                                        [
+                                                          _vm._v(
+                                                            _vm._s(
+                                                              detail.comment
+                                                            )
                                                           )
+                                                        ]
                                                       )
                                                     ]
                                                   ),
@@ -47152,7 +47276,7 @@ var render = function() {
                                                     { attrs: { scope: "row" } },
                                                     [
                                                       _vm._v(
-                                                        "$ " +
+                                                        "$" +
                                                           _vm._s(detail.price)
                                                       )
                                                     ]
@@ -47233,7 +47357,7 @@ var render = function() {
                                                   },
                                                   [
                                                     _vm._v(
-                                                      "Total : $" +
+                                                      "Total: $" +
                                                         _vm._s(order.total)
                                                     )
                                                   ]
@@ -47253,12 +47377,43 @@ var render = function() {
                           _vm._v(" "),
                           _vm.table.status === "paying"
                             ? _c("div", { staticClass: "row" }, [
-                                _c("h6", [
-                                  _vm._v(
-                                    "Propina: " +
-                                      _vm._s(_vm.table.last_service.payment.tip)
-                                  )
-                                ])
+                                _c(
+                                  "h6",
+                                  { staticStyle: { width: "100% !important" } },
+                                  [
+                                    _c("strong", [_vm._v("Propina:")]),
+                                    _vm._v(
+                                      " $" +
+                                        _vm._s(
+                                          _vm.table.last_service.payment.tip
+                                        )
+                                    )
+                                  ]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "h6",
+                                  { staticStyle: { width: "100% !important" } },
+                                  [
+                                    _c("strong", [_vm._v("Pago:")]),
+                                    _vm._v(
+                                      " " +
+                                        _vm._s(
+                                          _vm.table.last_service.payment.type
+                                        ) +
+                                        " " +
+                                        _vm._s(
+                                          _vm.table.last_service.payment.type ==
+                                            "Efectivo"
+                                            ? "$" +
+                                                _vm.table.last_service.payment
+                                                  .amount
+                                            : ""
+                                        ) +
+                                        " "
+                                    )
+                                  ]
+                                )
                               ])
                             : _vm._e(),
                           _vm._v(" "),
@@ -48218,58 +48373,106 @@ var render = function() {
                     })
                   ]),
                   _vm._v(" "),
-                  _c("div", { staticClass: "row" }, [
-                    _c("div", { staticClass: "col-10" }, [
-                      _c(
-                        "button",
-                        {
-                          staticClass: "btn btn-sm btn-success btn-padding",
-                          attrs: { type: "submit" }
-                        },
-                        [
-                          _c("i", { staticClass: "fa fa-check" }),
-                          _vm._v(
-                            " " +
-                              _vm._s(
-                                _vm.isEditingTable ? "Guardar" : "Guardar"
-                              ) +
-                              "\n                               "
-                          )
-                        ]
-                      ),
-                      _vm._v(" "),
-                      _vm.isEditingTable
-                        ? _c(
+                  !_vm.isChangingRoom
+                    ? _c("div", { staticClass: "row" }, [
+                        _c("div", { staticClass: "col-10" }, [
+                          _c(
                             "button",
                             {
-                              staticClass: "btn btn-sm btn-warning btn-padding",
-                              attrs: { type: "button" },
-                              on: { click: _vm.setDefaultAllValues }
+                              staticClass: "btn btn-sm btn-success btn-padding",
+                              attrs: { type: "submit" }
                             },
                             [
-                              _c("i", { staticClass: "fa fa-mail-reply" }),
+                              _c("i", { staticClass: "fa fa-check" }),
                               _vm._v(
-                                " Cancelar\n                               "
+                                " " +
+                                  _vm._s(
+                                    _vm.isEditingTable ? "Guardar" : "Guardar"
+                                  ) +
+                                  "\n                               "
                               )
                             ]
-                          )
-                        : _vm._e()
-                    ]),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "col-2" }, [
-                      _vm.isEditingTable
-                        ? _c(
-                            "button",
-                            {
-                              staticClass: "btn btn-sm btn-danger btn-padding",
-                              attrs: { type: "button" },
-                              on: { click: _vm.deleteTable }
-                            },
-                            [_c("i", { staticClass: "fa fa-trash" })]
-                          )
-                        : _vm._e()
-                    ])
-                  ]),
+                          ),
+                          _vm._v(" "),
+                          _vm.isEditingTable
+                            ? _c(
+                                "button",
+                                {
+                                  staticClass:
+                                    "btn btn-sm btn-warning btn-padding",
+                                  attrs: { type: "button" },
+                                  on: { click: _vm.setDefaultAllValues }
+                                },
+                                [
+                                  _c("i", { staticClass: "fa fa-mail-reply" }),
+                                  _vm._v(
+                                    " Cancelar\n                               "
+                                  )
+                                ]
+                              )
+                            : _vm._e()
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "col-2" }, [
+                          _vm.isEditingTable
+                            ? _c(
+                                "button",
+                                {
+                                  staticClass:
+                                    "btn btn-sm btn-danger btn-padding",
+                                  attrs: { type: "button" },
+                                  on: { click: _vm.deleteTable }
+                                },
+                                [_c("i", { staticClass: "fa fa-trash" })]
+                              )
+                            : _vm._e()
+                        ])
+                      ])
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _vm.isEditingTable
+                    ? _c("div", { staticClass: "row mt-2" }, [
+                        _c("div", { staticClass: "col-12 col-md-12" }, [
+                          !_vm.isChangingRoom
+                            ? _c(
+                                "button",
+                                {
+                                  staticClass: "btn btn-sm btn-info",
+                                  attrs: { type: "button" },
+                                  on: { click: _vm.changeTableToAnotherRoom }
+                                },
+                                [
+                                  _c("i", { staticClass: "fa fa-random" }),
+                                  _vm._v(
+                                    " Cambiar de Salón\n                               "
+                                  )
+                                ]
+                              )
+                            : _vm._e(),
+                          _vm._v(" "),
+                          _vm.isChangingRoom
+                            ? _c(
+                                "button",
+                                {
+                                  staticClass: "btn btn-sm btn-info",
+                                  attrs: { type: "button" },
+                                  on: {
+                                    click: function($event) {
+                                      _vm.isChangingRoom = false
+                                    }
+                                  }
+                                },
+                                [
+                                  _c("i", { staticClass: "fa fa-ban" }),
+                                  _vm._v(
+                                    " Cancelar Cambio\n                               "
+                                  )
+                                ]
+                              )
+                            : _vm._e()
+                        ])
+                      ])
+                    : _vm._e(),
                   _vm._v(" "),
                   _vm.isEditingTable
                     ? _c(

@@ -29,7 +29,7 @@ class TableRepository implements TableRepositoryInterface
 
     public function update(array $data, $id)
     {
-        return $this->find($id)->update($data);
+        return $this->model->where('id', $id)->update($data);
     }
 
     public function delete($id)
@@ -82,7 +82,7 @@ class TableRepository implements TableRepositoryInterface
 
     public function getByStatusByCommerceId($id, $status)
     {
-       return  $this->model->whereHas('room', function ($q) use ($id){
+       return $this->model->whereHas('room', function ($q) use ($id){
             $q->where('commerce_id', $id);
         })->where('status', $status)->get();
     }

@@ -39,7 +39,7 @@
         },
         mounted() {
             if (this.admin == 0){
-                setInterval(this.getTabled, 15000);
+                setInterval(this.getTabled, 10000);
             }
         },
         computed: {
@@ -69,6 +69,7 @@
                     var sound = new Howl({
                         src: '/sounds/ordered.mp3'
                     });
+                    console.log("reproduciendo sonido");
                     sound.play();
                     await this.sleep(2000);
                     this.playSound();

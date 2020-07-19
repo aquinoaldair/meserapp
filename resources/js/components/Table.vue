@@ -75,7 +75,7 @@
                                <label>Numero</label>
                                <input v-model="table.name" required type="number" name="name" class="form-control">
                            </div>
-                           <div class="row">
+                           <div class="row" v-if="!isChangingRoom">
                                <div class="col-10">
                                    <button class="btn btn-sm btn-success btn-padding" type="submit">
                                        <i class="fa fa-check"/>&nbsp;{{ isEditingTable ? "Guardar" : "Guardar" }}
@@ -87,6 +87,17 @@
                                <div class="col-2">
                                    <button @click="deleteTable" v-if="isEditingTable" class="btn btn-sm btn-danger btn-padding" type="button">
                                        <i class="fa fa-trash"/>
+                                   </button>
+                               </div>
+                           </div>
+                           <div v-if="isEditingTable" class="row mt-2">
+                               <div class="col-12 col-md-12">
+                                   <button v-if="!isChangingRoom" @click="changeTableToAnotherRoom" class="btn btn-sm btn-info" type="button">
+                                       <i class="fa fa-random"/>&nbsp;Cambiar de Salón
+                                   </button>
+
+                                   <button v-if="isChangingRoom" @click="isChangingRoom = false" class="btn btn-sm btn-info" type="button">
+                                       <i class="fa fa-ban"/>&nbsp;Cancelar Cambio
                                    </button>
                                </div>
                            </div>
@@ -113,6 +124,7 @@
                 isNewTable : false,
                 isEditingRoom : false,
                 isEditingTable : false,
+                isChangingRoom : false,
                 room : {},
                 table : {},
                 roomIndex : 0,
@@ -146,6 +158,10 @@
             });
         },
         methods:{
+            changeTableToAnotherRoom(){
+                this.isChangingRoom = true;
+                this.$swal('Seleccione el nuevo salón');
+            },
             deleteTable(){
                 var table = this.table;
                 var route = this.tableDelete.replace(":table", table.key);
@@ -212,7 +228,6 @@
                     vm.setDefaultAllValues();
 
                 }).catch(function (error) {
-
                     console.log(error);
                     vm.$swal({
                         icon: 'error',
@@ -262,6 +277,36 @@
             },
             setRoomIndex(index){
                 this.roomIndex = index;
+                if (this.isChangingRoom){
+                    var room = this.rooms[index];
+
+                    var table = this.table;
+                    var route = this.tableUpdate.replace(":table", table.key);
+                    route = route.replace(":room", this.rooms[this.roomIndex].key);
+                    var vm = this;
+                    axios.put(route, { 'room_id' : room.id, 'name' : table.name }).then(function (response) {
+                        vm.isChangingRoom = false;
+                        vm.$swal({
+                            icon: 'success',
+                            title: 'Actualizado correctamente',
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
+
+                        vm.rooms[vm.roomIndex].tables[vm.tableIndex].name = table.name;
+
+                        vm.setDefaultAllValues();
+                    }).catch(function (error) {
+                        vm.isChangingRoom = false;
+                        vm.$swal({
+                            icon: 'error',
+                            title: 'No se ha podido actualizar',
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
+                    });
+
+                }
             },
             newRoom(){
                 this.isNewRoom = true;
@@ -366,6 +411,7 @@
                 this.isNewTable= false;
                 this.isEditingTable = false;
                 this.table = {};
+                this.isChangingRoom = false;
             },
             setDefaultAllValues(){
                 this.setDefaultValuesRoom();

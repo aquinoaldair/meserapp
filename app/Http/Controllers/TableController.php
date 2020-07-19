@@ -71,9 +71,17 @@ class TableController extends Controller
 
         $this->authorize('update', $table);
 
-        return $this->table->update(
-            ['name' => $request->name], $table->id
-        );
+        $data = [];
+
+        if ($request->name){
+            $data["name"] =  $request->name;
+        }
+
+        if ($request->room_id){
+            $data["room_id"] =  $request->room_id;
+        }
+
+        return $this->table->update($data, $table->id);
     }
 
     public function destroy(Request $request)

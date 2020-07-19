@@ -1969,7 +1969,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   },
   mounted: function mounted() {
     if (this.admin == 0) {
-      setInterval(this.getTabled, 15000);
+      setInterval(this.getTabled, 10000);
     }
   },
   computed: {
@@ -2004,27 +2004,28 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 _this.counter++;
 
                 if (!(_this.counter <= 3)) {
-                  _context.next = 10;
+                  _context.next = 11;
                   break;
                 }
 
                 sound = new howler__WEBPACK_IMPORTED_MODULE_1__["Howl"]({
                   src: '/sounds/ordered.mp3'
                 });
+                console.log("reproduciendo sonido");
                 sound.play();
-                _context.next = 7;
+                _context.next = 8;
                 return _this.sleep(2000);
 
-              case 7:
+              case 8:
                 _this.playSound();
 
-                _context.next = 11;
+                _context.next = 12;
                 break;
 
-              case 10:
+              case 11:
                 _this.counter = 0;
 
-              case 11:
+              case 12:
               case "end":
                 return _context.stop();
             }

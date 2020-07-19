@@ -61,6 +61,14 @@
                 </div>
                 <div class="card-body">
                     <h4 v-if="table.name" class="text-center text-muted">Mesa {{ table.name }}</h4>
+
+
+                    <div class="row" v-if="table.status && table.status != 'enabled'">
+                        <div class="col-12 mb-2">
+                            <button @click="changeStatusTable('enabled')" type="button" class="btn btn-sm btn-secondary btn-block">Habilitar &nbsp;&nbsp;&nbsp;</button>
+                        </div>
+                    </div>
+
                     <div class="row" v-if="table.status == 'enabled'">
                         <div class="col-12 mb-2">
                             <button @click="changeStatusTable('reserved')" type="button" class="btn btn-sm btn-warning btn-block">
@@ -69,12 +77,6 @@
                         <div class="col-12 mb-2">
                             <button @click="changeStatusTable('disabled')" type="button" class="btn btn-sm btn-danger btn-block">
                                 Cambiar a Fuera de Servicio</button>
-                        </div>
-                    </div>
-
-                    <div class="row" v-if="table.status === 'disabled' || table.status === 'reserved'">
-                        <div class="col-12 mb-2">
-                            <button @click="changeStatusTable('enabled')" type="button" class="btn btn-sm btn-warning btn-block">Habilitar &nbsp;&nbsp;&nbsp;</button>
                         </div>
                     </div>
 
@@ -107,8 +109,8 @@
                                         </thead>
                                         <tbody>
                                         <tr v-for="(detail) in order.details">
-                                            <td scope="row">{{ detail.quantity}} {{ detail.product.name}}</td>
-                                            <td scope="row">$ {{ detail.price }}</td>
+                                            <td scope="row">{{ detail.quantity}} {{ detail.product.name }} &nbsp; <p class="text-muted" style="font-style: italic;">{{ detail.comment }}</p></td>
+                                            <td scope="row">${{ detail.price }}</td>
                                             <td scope="row">
                                                 <button @click="editProduct(detail)" class="btn btn-sm btn-primary" style="padding: 5px 10px !important">
                                                     <i class="fa fa-edit"/></button>
@@ -117,7 +119,7 @@
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td colspan="3" style="text-align: right; font-weight: bold">Total : ${{ order.total}}</td>
+                                            <td colspan="3" style="text-align: right; font-weight: bold">Total: ${{ order.total}}</td>
                                         </tr>
                                         </tbody>
                                     </table>
@@ -126,7 +128,8 @@
 
 
                             <div v-if="table.status === 'paying'" class="row">
-                                <h6>Propina: {{ table.last_service.payment.tip }}</h6>
+                                <h6 style="width: 100% !important"><strong>Propina:</strong> ${{ table.last_service.payment.tip }}</h6>
+                                <h6 style="width: 100% !important"><strong>Pago:</strong> {{ table.last_service.payment.type }} {{ (table.last_service.payment.type == "Efectivo") ? "$" + table.last_service.payment.amount : ''  }} </h6>
                             </div>
                             <h3 style="text-align: center; font-weight: bold">Total ${{ table.last_service.total }}</h3>
                         </template>
@@ -237,7 +240,8 @@
                 isMoving : false,
                 detail : null,
                 searchTerm : '',
-                productsFromSearch : []
+                productsFromSearch : [],
+                isProcessingRequest : false
             }
         },
         watch : {
@@ -280,13 +284,16 @@
                 this.productsFromSearch = [];
                 if (!this.isLoading){
                     this.isLoading = true;
+                    this.isProcessingRequest = true;
                     try {
                         var url = "/product/search/"+this.searchTerm;
                         var response = await axios.get(url);
                         this.productsFromSearch = response.data;
                         this.isLoading = false;
+                        this.isProcessingRequest = false;
                     }catch (e) {
                         this.isLoading = false;
+                        this.isProcessingRequest = false;
                     }
                 }
             },
@@ -413,27 +420,46 @@
             getRoomsWithFullData(){
                 var vm = this;
                 vm.isLoading = true;
+                vm.isProcessingRequest = true;
                 axios.get("/rooms/tables").then(function (response) {
                     vm.isLoading = false;
+                    vm.isProcessingRequest = false;
                     console.log(response.data);
                     vm.rooms = response.data;
                 }).catch(function (error) {
-                    console.log(error);
+                    vm.isProcessingRequest = false;
                     vm.isLoading = false;
                 });
             },
             async getRoomsWithFullDataAsync(){
                 this.isLoading = true;
+                this.isProcessingRequest = true;
                 try {
                     const response = await axios.get("/rooms/tables");
                     this.isLoading = false;
                     this.rooms = response.data;
-                    console.log("finish data async");
+                    this.isProcessingRequest = false;
                 } catch (error) {
-                    console.error(error);
+                    this.isProcessingRequest = false;
                     this.isLoading = false;
                 }
 
+            },
+            async getNewDataFromTables(){
+                try {
+                    if (!this.isProcessingRequest){
+                        var vm = this;
+                        const response = await axios.get("/rooms/tables");
+                        response.data.some(function (room) {
+                            room.tables.some(function (table) {
+                                if (table.status == "ordered"){
+                                    vm.rooms = response.data;
+                                    return table.status == "ordered";
+                                }
+                            });
+                        });
+                    }
+                }catch (e) {}
             }
         },
         created() {
@@ -442,6 +468,7 @@
         },
         mounted() {
             setInterval(this.blinkTable, 3000);
+            setInterval(this.getNewDataFromTables, 10000);
         }
     }
 </script>
