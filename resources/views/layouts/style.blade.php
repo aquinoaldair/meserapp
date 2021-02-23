@@ -22,8 +22,12 @@
 <link id="color" rel="stylesheet" href="{{asset('assets/css/light-1.css')}}" media="screen">
 <!-- Responsive css-->
 <link rel="stylesheet" type="text/css" href="{{asset('assets/css/responsive.css')}}">
-
+<link rel="stylesheet" type="text/css" href="{{asset('assets/css/toastr.css')}}">
 <style>
     .page-wrapper .page-body-wrapper .page-sidebar .sidebar-menu .sidebar-header svg{width: 18px;height: 18px;}
     .page-wrapper .page-body-wrapper .page-sidebar .sidebar-menu .sidebar-header{ font-size: 16px }
+    .page-main-header .main-header-right .nav-right ul li .dot {
+        width: 10px !important;
+        height: 10px !important;
+    }
 </style>

@@ -24,7 +24,9 @@ class OrderRepository implements OrderRepositoryInterface
     public function findWithServiceAndDetails($id)
     {
         return $this->model->with('service')
-            ->with('details')
+            ->with(['details.product' => function($query){
+                $query->withTrashed();
+            }])
             ->where('id', $id)
             ->first();
     }

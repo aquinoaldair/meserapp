@@ -15,7 +15,17 @@ class CreateSchedulesTable extends Migration
     {
         Schema::create('schedules', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('commerce_id')->constrained();
+            $table->string('monday', 50)->nullable();
+            $table->string('tuesday', 50)->nullable();
+            $table->string('wednesday', 50)->nullable();
+            $table->string('thursday', 50)->nullable();
+            $table->string('friday', 50)->nullable();
+            $table->string('saturday', 50)->nullable();
+            $table->string('sunday', 50)->nullable();
+            $table->boolean('is_starting')->default(1);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

@@ -19,7 +19,21 @@
                     </div>
                 </li>
 
-                <alert-table admin="{{ auth()->user()->isAdmin() ? 1 : 0 }}"></alert-table>
+                <li id="check-admin"
+                    data-commerce-id="{{ auth()->user()->commerce->id??null }}"
+                    data-is-admin="{{ auth()->user()->isAdmin() ? 1 : 0 }}"
+                    data-socket-server="{{ config('meserapp.socket_server') }}"
+                    data-current-route="{{ \Illuminate\Support\Facades\Route::currentRouteName() }}"
+                    data-socket-client="{{ config('meserapp.socket_client')  }}"
+                    class="onhover-dropdown">
+                    <img  src="/icons/notificacion_nueva.png" alt="" style="max-width: 40px;" data-original-title="" title="">
+                    <span id="dot-notify" class="dot" style="color: white;"></span>
+                    <ul  id="items-in-notifications" class="notification-dropdown onhover-show-div">
+                        <li>Mensajes <span id="count-notifications" class="badge badge-pill badge-primary pull-right">0</span></li>
+
+                    </ul>
+                    <audio  id="audio-notify"><source  src="/sounds/ordered.mp3" type="audio/mpeg"></audio>
+                </li>
 
                 <li class="onhover-dropdown">
                     <div class="media align-items-center">

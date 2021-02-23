@@ -43,12 +43,12 @@
                     <span>{{ \App\Models\Product::NAME }}</span>
                 </a>
             </li>
-            <li>
+            {{--<li>
                 <a class="sidebar-header" href="#">
                     <img class="img-logo" src="{{ asset('icons/clientes_y_resenas.png') }}" alt="">
                     <span>Clientes</span>
                 </a>
-            </li>
+            </li>--}}
             <li>
                 <a class="sidebar-header" href="#">
                     <img class="img-logo" src="{{ asset('icons/estadisticas.png') }}" alt="">

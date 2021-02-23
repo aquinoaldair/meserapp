@@ -7445,6 +7445,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue_loading_overlay__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(vue_loading_overlay__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var vue_loading_overlay_dist_vue_loading_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vue-loading-overlay/dist/vue-loading.css */ "./node_modules/vue-loading-overlay/dist/vue-loading.css");
 /* harmony import */ var vue_loading_overlay_dist_vue_loading_css__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(vue_loading_overlay_dist_vue_loading_css__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _event_bus_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../event-bus.js */ "./resources/js/event-bus.js");
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -7673,9 +7674,109 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
+  props: ["propsIdtablelink", "propsIdroomlink"],
   name: "DashboardClient",
   components: {
     Loading: vue_loading_overlay__WEBPACK_IMPORTED_MODULE_1___default.a
@@ -7690,9 +7791,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       fullPage: true,
       isMoving: false,
       detail: null,
-      searchTerm: '',
-      productsFromSearch: [],
-      isProcessingRequest: false
+      searchTerm: "",
+      productsFromSearch: []
     };
   },
   watch: {
@@ -7713,66 +7813,75 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               case 0:
                 _context.next = 2;
                 return _this.$swal({
-                  title: 'Estas Seguro?',
+                  title: "Estas Seguro?",
                   text: "este producto se agregará a una orden",
-                  icon: 'warning',
+                  icon: "warning",
                   showCancelButton: true,
-                  confirmButtonColor: '#3085d6',
-                  cancelButtonColor: '#d33',
-                  confirmButtonText: 'Si, Guardar!'
+                  confirmButtonColor: "#3085d6",
+                  cancelButtonColor: "#d33",
+                  confirmButtonText: "Si, Guardar!"
                 });
 
               case 2:
                 result = _context.sent;
+                console.log(result);
 
-                if (!result.isConfirmed) {
-                  _context.next = 19;
+                if (!(result.isConfirmed || result.value == true)) {
+                  _context.next = 23;
                   break;
                 }
 
-                _context.prev = 4;
+                console.log("entre a confirm");
+                _context.prev = 6;
                 data = {
-                  "service_id": _this.table.last_service_id,
-                  "products": [{
-                    "id": product.id,
-                    "quantity": 1
+                  service_id: _this.table.last_service_id,
+                  products: [{
+                    id: product.id,
+                    quantity: 1
                   }]
                 };
                 $("#modalAddProduct").modal("hide");
-                _context.next = 9;
+                _context.next = 11;
                 return axios.post("api/order", data);
 
-              case 9:
+              case 11:
                 response = _context.sent;
 
-                _this.$swal('Guardado', 'Se ha guardado correctamente', 'success');
+                _this.$swal("Guardado", "Se ha guardado correctamente", "success");
 
-                _context.next = 13;
+                _context.next = 15;
                 return _this.getRoomsWithFullDataAsync();
 
-              case 13:
+              case 15:
                 _this.selectTable(_this.tableIndex);
 
-                _context.next = 19;
+                _context.next = 21;
                 break;
 
-              case 16:
-                _context.prev = 16;
-                _context.t0 = _context["catch"](4);
+              case 18:
+                _context.prev = 18;
+                _context.t0 = _context["catch"](6);
 
                 _this.$swal({
-                  icon: 'error',
-                  title: 'No se pudo eliminar',
+                  icon: "error",
+                  title: "No se pudo eliminar",
                   showConfirmButton: false,
                   timer: 1500
                 });
 
-              case 19:
+              case 21:
+                _context.next = 24;
+                break;
+
+              case 23:
+                console.log("entre a no confirm");
+
+              case 24:
               case "end":
                 return _context.stop();
             }
           }
-        }, _callee, null, [[4, 16]]);
+        }, _callee, null, [[6, 18]]);
       }))();
     },
     getSearch: function getSearch() {
@@ -7787,37 +7896,34 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 _this2.productsFromSearch = [];
 
                 if (_this2.isLoading) {
-                  _context2.next = 18;
+                  _context2.next = 15;
                   break;
                 }
 
                 _this2.isLoading = true;
-                _this2.isProcessingRequest = true;
-                _context2.prev = 4;
+                _context2.prev = 3;
                 url = "/product/search/" + _this2.searchTerm;
-                _context2.next = 8;
+                _context2.next = 7;
                 return axios.get(url);
 
-              case 8:
+              case 7:
                 response = _context2.sent;
                 _this2.productsFromSearch = response.data;
                 _this2.isLoading = false;
-                _this2.isProcessingRequest = false;
-                _context2.next = 18;
+                _context2.next = 15;
                 break;
 
-              case 14:
-                _context2.prev = 14;
-                _context2.t0 = _context2["catch"](4);
+              case 12:
+                _context2.prev = 12;
+                _context2.t0 = _context2["catch"](3);
                 _this2.isLoading = false;
-                _this2.isProcessingRequest = false;
 
-              case 18:
+              case 15:
               case "end":
                 return _context2.stop();
             }
           }
-        }, _callee2, null, [[4, 14]]);
+        }, _callee2, null, [[3, 12]]);
       }))();
     },
     createOrderToService: function createOrderToService() {
@@ -7841,9 +7947,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 $("#modalProduct").modal("hide");
                 _context3.prev = 2;
                 _context3.next = 5;
-                return axios.post('/service/order/product/detail', {
-                  "detail_id": _this3.detail.id,
-                  "quantity": _this3.detail.quantity
+                return axios.post("/service/order/product/detail", {
+                  detail_id: _this3.detail.id,
+                  quantity: _this3.detail.quantity
                 });
 
               case 5:
@@ -7881,19 +7987,19 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 vm = _this4;
                 _context4.next = 3;
                 return _this4.$swal({
-                  title: 'Estas Seguro?',
+                  title: "Estas Seguro?",
                   text: "No podras revertir esta acción",
-                  icon: 'warning',
+                  icon: "warning",
                   showCancelButton: true,
-                  confirmButtonColor: '#3085d6',
-                  cancelButtonColor: '#d33',
-                  confirmButtonText: 'Si, eliminar!'
+                  confirmButtonColor: "#3085d6",
+                  cancelButtonColor: "#d33",
+                  confirmButtonText: "Si, eliminar!"
                 });
 
               case 3:
                 result = _context4.sent;
 
-                if (!result.isConfirmed) {
+                if (!(result.isConfirmed || result.value == true)) {
                   _context4.next = 18;
                   break;
                 }
@@ -7901,14 +8007,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 _context4.prev = 5;
                 _context4.next = 8;
                 return axios.post("/order/product/delete", {
-                  "order_id": order_id,
-                  "detail_id": detail_id
+                  order_id: order_id,
+                  detail_id: detail_id
                 });
 
               case 8:
                 response = _context4.sent;
 
-                _this4.$swal('Eliminado', 'Se ha eliminado correctamente', 'success');
+                _this4.$swal("Eliminado", "Se ha eliminado correctamente", "success");
 
                 _context4.next = 12;
                 return _this4.getRoomsWithFullDataAsync();
@@ -7924,8 +8030,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 _context4.t0 = _context4["catch"](5);
 
                 _this4.$swal({
-                  icon: 'error',
-                  title: 'No se pudo eliminar',
+                  icon: "error",
+                  title: "No se pudo eliminar",
                   showConfirmButton: false,
                   timer: 1500
                 });
@@ -7952,29 +8058,29 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       });
     },
     getClassTable: function getClassTable(item) {
-      return 'table-' + item.status;
+      return "table-" + item.status;
     },
     setRoomIndex: function setRoomIndex(index) {
       this.roomIndex = index;
     },
     moveToAnotherTable: function moveToAnotherTable() {
       this.isMoving = true;
-      this.$swal('Seleccione una mesa libre');
+      this.$swal("Seleccione una mesa libre");
     },
     selectTable: function selectTable(index) {
       if (this.isMoving) {
         var selected_table = this.rooms[this.roomIndex].tables[index];
 
-        if (selected_table.status !== 'enabled') {
-          this.$swal('Seleccione una mesa libre');
+        if (selected_table.status !== "enabled") {
+          this.$swal("Seleccione una mesa libre");
           return;
         }
 
         var vm = this;
         var data = {
-          'table_to_move': this.rooms[this.roomIndex].tables[index].id,
-          'table_id': this.table.id,
-          "service_id": this.table.last_service_id
+          table_to_move: this.rooms[this.roomIndex].tables[index].id,
+          table_id: this.table.id,
+          service_id: this.table.last_service_id
         };
         vm.isLoading = true;
         axios.post("/service/move/table", data).then(function (response) {
@@ -7987,7 +8093,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         })["catch"](function (error) {
           vm.isLoading = false;
           vm.isMoving = false;
-          vm.$swal('Error', 'No se pudo realizar el cambio de mesa', 'warning');
+          vm.$swal("Error", "No se pudo realizar el cambio de mesa", "warning");
         });
       } else {
         this.tableIndex = index;
@@ -7998,8 +8104,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           this.rooms[this.roomIndex].tables[index]["class"] = "occupied";
           this.table.status_trans = "Ocupada";
           axios.post("/table/status", {
-            'status': "occupied",
-            'id': this.table.id
+            status: "occupied",
+            id: this.table.id
           });
         }
       }
@@ -8007,8 +8113,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     changeStatusTable: function changeStatusTable(status) {
       var vm = this;
       axios.post("/table/status", {
-        'status': status,
-        'id': vm.table.id
+        status: status,
+        id: vm.table.id
       }).then(function (response) {
         vm.table = {};
         vm.getRoomsWithFullData();
@@ -8019,14 +8125,13 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     getRoomsWithFullData: function getRoomsWithFullData() {
       var vm = this;
       vm.isLoading = true;
-      vm.isProcessingRequest = true;
       axios.get("/rooms/tables").then(function (response) {
         vm.isLoading = false;
-        vm.isProcessingRequest = false;
         console.log(response.data);
         vm.rooms = response.data;
+        vm.checkSelectTable();
       })["catch"](function (error) {
-        vm.isProcessingRequest = false;
+        console.log(error);
         vm.isLoading = false;
       });
     },
@@ -8040,34 +8145,34 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             switch (_context5.prev = _context5.next) {
               case 0:
                 _this5.isLoading = true;
-                _this5.isProcessingRequest = true;
-                _context5.prev = 2;
-                _context5.next = 5;
+                _context5.prev = 1;
+                _context5.next = 4;
                 return axios.get("/rooms/tables");
 
-              case 5:
+              case 4:
                 response = _context5.sent;
                 _this5.isLoading = false;
                 _this5.rooms = response.data;
-                _this5.isProcessingRequest = false;
-                _context5.next = 15;
+                console.log("finish data async");
+                _context5.next = 14;
                 break;
 
-              case 11:
-                _context5.prev = 11;
-                _context5.t0 = _context5["catch"](2);
-                _this5.isProcessingRequest = false;
+              case 10:
+                _context5.prev = 10;
+                _context5.t0 = _context5["catch"](1);
+                console.error(_context5.t0);
                 _this5.isLoading = false;
 
-              case 15:
+              case 14:
               case "end":
                 return _context5.stop();
             }
           }
-        }, _callee5, null, [[2, 11]]);
+        }, _callee5, null, [[1, 10]]);
       }))();
     },
-    getNewDataFromTables: function getNewDataFromTables() {
+    checkSelectTable: function checkSelectTable() {},
+    getNotification: function getNotification(data) {
       var _this6 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee6() {
@@ -8076,52 +8181,91 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           while (1) {
             switch (_context6.prev = _context6.next) {
               case 0:
-                _context6.prev = 0;
-
-                if (_this6.isProcessingRequest) {
-                  _context6.next = 7;
-                  break;
-                }
-
                 vm = _this6;
-                _context6.next = 5;
-                return axios.get("/rooms/tables");
+                _context6.prev = 1;
+                _context6.next = 4;
+                return _this6.getRoomsWithFullDataAsync();
 
-              case 5:
+              case 4:
                 response = _context6.sent;
-                response.data.some(function (room) {
-                  room.tables.some(function (table) {
-                    if (table.status == "ordered") {
-                      vm.rooms = response.data;
-                      return table.status == "ordered";
-                    }
-                  });
+
+                _this6.rooms.forEach(function (room, index) {
+                  if (room.id == data.room_id) {
+                    vm.roomIndex = index;
+                    room.tables.forEach(function (table, index2) {
+                      if (table.id == data.table_id) {
+                        vm.tableIndex = index2;
+                        vm.table = vm.rooms[index].tables[index2];
+                        vm.selectTable(index2);
+                      }
+                    });
+                  }
                 });
 
-              case 7:
-                _context6.next = 11;
+                _context6.next = 10;
                 break;
 
-              case 9:
-                _context6.prev = 9;
-                _context6.t0 = _context6["catch"](0);
+              case 8:
+                _context6.prev = 8;
+                _context6.t0 = _context6["catch"](1);
 
-              case 11:
+              case 10:
               case "end":
                 return _context6.stop();
             }
           }
-        }, _callee6, null, [[0, 9]]);
+        }, _callee6, null, [[1, 8]]);
       }))();
     }
   },
   created: function created() {
-    this.getRoomsWithFullData();
-    this.debouncedGetSearch = _.debounce(this.getSearch, 500);
+    var _this7 = this;
+
+    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee7() {
+      var data;
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee7$(_context7) {
+        while (1) {
+          switch (_context7.prev = _context7.next) {
+            case 0:
+              //this.getRoomsWithFullData();
+              data = JSON.parse(localStorage.getItem('data'));
+
+              if (!(data != null)) {
+                _context7.next = 9;
+                break;
+              }
+
+              console.log("select table from toast");
+              console.log(data);
+              _context7.next = 6;
+              return _this7.getNotification(data);
+
+            case 6:
+              localStorage.setItem('data', null);
+              _context7.next = 11;
+              break;
+
+            case 9:
+              _context7.next = 11;
+              return _this7.getRoomsWithFullDataAsync();
+
+            case 11:
+              _this7.debouncedGetSearch = _.debounce(_this7.getSearch, 500);
+              _event_bus_js__WEBPACK_IMPORTED_MODULE_3__["EventBus"].$on('notification', function (data) {
+                _event_bus_js__WEBPACK_IMPORTED_MODULE_3__["EventBus"].$emit('stopSound');
+                this.getNotification(data);
+              }.bind(_this7));
+
+            case 13:
+            case "end":
+              return _context7.stop();
+          }
+        }
+      }, _callee7);
+    }))();
   },
   mounted: function mounted() {
     setInterval(this.blinkTable, 3000);
-    setInterval(this.getNewDataFromTables, 10000);
   }
 });
 
@@ -8635,6 +8779,7 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     setRoomIndex: function setRoomIndex(index) {
+      var previous_room = this.roomIndex;
       this.roomIndex = index;
 
       if (this.isChangingRoom) {
@@ -8642,6 +8787,7 @@ __webpack_require__.r(__webpack_exports__);
         var table = this.table;
         var route = this.tableUpdate.replace(":table", table.key);
         route = route.replace(":room", this.rooms[this.roomIndex].key);
+        console.log("route: " + route);
         var vm = this;
         axios.put(route, {
           'room_id': room.id,
@@ -8653,10 +8799,19 @@ __webpack_require__.r(__webpack_exports__);
             title: 'Actualizado correctamente',
             showConfirmButton: false,
             timer: 1500
-          });
-          vm.rooms[vm.roomIndex].tables[vm.tableIndex].name = table.name;
+          }); //obtenemos la tabla modificada
+
+          var modified_table = vm.rooms[previous_room].tables[vm.tableIndex]; //cambiamos su room_id
+
+          modified_table.room_id = room.id; //la agregamos al nuevo room
+
+          vm.rooms[vm.roomIndex].tables.push(modified_table); //eliminamos del room anterior
+
+          vm.rooms[previous_room].tables.splice(vm.tableIndex, 1); //asignamos valores por defecto
+
           vm.setDefaultAllValues();
         })["catch"](function (error) {
+          console.log(error);
           vm.isChangingRoom = false;
           vm.$swal({
             icon: 'error',
@@ -8762,8 +8917,8 @@ __webpack_require__.r(__webpack_exports__);
     setDefaultValuesTable: function setDefaultValuesTable() {
       this.isNewTable = false;
       this.isEditingTable = false;
-      this.table = {};
       this.isChangingRoom = false;
+      this.table = {};
     },
     setDefaultAllValues: function setDefaultAllValues() {
       this.setDefaultValuesRoom();
@@ -8900,7 +9055,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.nav-tabs .nav-link[data-v-64a1c064], .nav-tabs .nav-item .nav-link[data-v-64a1c064] {\n    font-size: 1.2em;\n    color: gray !important;\n}\n.nav-tabs .nav-link.active[data-v-64a1c064], .nav-tabs .nav-item.show .nav-link[data-v-64a1c064] {\n    color: black !important;\n    background-color: #fff;\n    border-color: #dee2e6 #dee2e6 #fff;\n}\n.card-absolute .card-header[data-v-64a1c064] {\n    position: absolute;\n    top: -20px;\n    margin-bottom: 30px;\n    left: 15px;\n    border-radius: 0.25rem;\n    padding: 5px 15px;\n}\n.card-absolute .card-body[data-v-64a1c064] {\n    margin-top: 0px;\n}\n.card-table[data-v-64a1c064]{\n    border-radius: 10px !important;\n    cursor: pointer;\n}\n.card .card-header[data-v-64a1c064] {\n    padding: 5px;\n}\n.card .card-body[data-v-64a1c064] {\n    padding: 10px 20px 5px;\n    background-color: rgba(0,0,0,0);\n}\n.enabled[data-v-64a1c064]{\n    border: 1px solid #64dd17 !important;\n}\n.disabled[data-v-64a1c064]{\n    border: 2px solid #424242 !important;\n    background-color: #d3d3d3;\n}\n.occupied[data-v-64a1c064]{\n    border: 3px solid #f44336 !important;\n    /*background-color: rgba(201, 76, 76, 0.3) !important;*/\n}\n.ordered[data-v-64a1c064]{\n    border: 3px solid #7C45D8 !important;\n}\n.reserved[data-v-64a1c064]{\n    border: 3px solid #4e342e !important;\n}\n.paying[data-v-64a1c064]{\n    border: 3px solid #fdd835!important;\n}\n.animated[data-v-64a1c064] {\n    -webkit-animation-duration: 3s;\n    animation-duration: 3s;\n    -webkit-animation-fill-mode: both;\n    animation-fill-mode: both;\n}\n@-webkit-keyframes flash-data-v-64a1c064 {\n0%, 50%, 100% {\n        opacity: 1;\n}\n25%, 75% {\n        opacity: 0;\n}\n}\n@keyframes flash-data-v-64a1c064 {\n0%, 50%, 100% {\n        opacity: 1;\n}\n25%, 75% {\n        opacity: 0;\n}\n}\n.flash[data-v-64a1c064] {\n    -webkit-animation-name: flash-data-v-64a1c064;\n    animation-name: flash-data-v-64a1c064;\n}\n", ""]);
+exports.push([module.i, "\n.nav-tabs .nav-link[data-v-64a1c064],\n.nav-tabs .nav-item .nav-link[data-v-64a1c064] {\n    font-size: 1.2em;\n    color: gray !important;\n}\n.nav-tabs .nav-link.active[data-v-64a1c064],\n.nav-tabs .nav-item.show .nav-link[data-v-64a1c064] {\n    color: black !important;\n    background-color: #fff;\n    border-color: #dee2e6 #dee2e6 #fff;\n}\n.card-absolute .card-header[data-v-64a1c064] {\n    position: absolute;\n    top: -20px;\n    margin-bottom: 30px;\n    left: 15px;\n    border-radius: 0.25rem;\n    padding: 5px 15px;\n}\n.card-absolute .card-body[data-v-64a1c064] {\n    margin-top: 0px;\n}\n.card-table[data-v-64a1c064] {\n    border-radius: 10px !important;\n    cursor: pointer;\n}\n.card .card-header[data-v-64a1c064] {\n    padding: 5px;\n}\n.card .card-body[data-v-64a1c064] {\n    padding: 10px 20px 5px;\n    background-color: rgba(0, 0, 0, 0);\n}\n.enabled[data-v-64a1c064] {\n    border: 1px solid #64dd17 !important;\n}\n.disabled[data-v-64a1c064] {\n    border: 2px solid #dfdfdf !important;\n    background-color: #d3d3d3;\n}\n.occupied[data-v-64a1c064] {\n    border: 3px solid #f44336 !important;\n    /*background-color: rgba(201, 76, 76, 0.3) !important;*/\n}\n.ordered[data-v-64a1c064] {\n    border: 3px solid #5f4dfc !important;\n}\n.paying[data-v-64a1c064] {\n    border: 3px solid #fdd835 !important;\n}\n.reserved[data-v-64a1c064] {\n    border: 3px solid #f57f17 !important;\n}\n.table-paying[data-v-64a1c064] {\n    border: 3px solid #5f4dfc !important;\n}\n.animated[data-v-64a1c064] {\n    -webkit-animation-duration: 3s;\n    animation-duration: 3s;\n    -webkit-animation-fill-mode: both;\n    animation-fill-mode: both;\n}\n@-webkit-keyframes flash-data-v-64a1c064 {\n0%,\n    50%,\n    100% {\n        opacity: 1;\n}\n25%,\n    75% {\n        opacity: 0;\n}\n}\n@keyframes flash-data-v-64a1c064 {\n0%,\n    50%,\n    100% {\n        opacity: 1;\n}\n25%,\n    75% {\n        opacity: 0;\n}\n}\n.flash[data-v-64a1c064] {\n    -webkit-animation-name: flash-data-v-64a1c064;\n    animation-name: flash-data-v-64a1c064;\n}\n", ""]);
 
 // exports
 
@@ -46857,7 +47012,7 @@ var render = function() {
                       staticClass: "nav-link",
                       class: { "active show": _vm.roomIndex === index },
                       attrs: {
-                        id: "home-tab",
+                        id: "tab-tables-index-" + item.id,
                         "data-toggle": "tab",
                         href: "#" + item.key,
                         role: "tab"
@@ -46868,13 +47023,7 @@ var render = function() {
                         }
                       }
                     },
-                    [
-                      _vm._v(
-                        "\n                            " +
-                          _vm._s(item.name) +
-                          "\n                        "
-                      )
-                    ]
+                    [_vm._v(_vm._s(item.name))]
                   )
                 ])
               }),
@@ -46908,6 +47057,7 @@ var render = function() {
                                 {
                                   staticClass: "card card-absolute card-table",
                                   class: table.class,
+                                  attrs: { id: "table-index-" + table.id },
                                   on: {
                                     click: function($event) {
                                       return _vm.selectTable(index)
@@ -46949,6 +47099,7 @@ var render = function() {
                                           ])
                                         ]
                                       ),
+                                      _vm._v(" "),
                                       _c("br")
                                     ]),
                                     _vm._v(" "),
@@ -47083,11 +47234,7 @@ var render = function() {
                           }
                         }
                       },
-                      [
-                        _vm._v(
-                          "\n                            Cambiar a Reservada    "
-                        )
-                      ]
+                      [_vm._v("Cambiar a Reservada    ")]
                     )
                   ]),
                   _vm._v(" "),
@@ -47103,11 +47250,7 @@ var render = function() {
                           }
                         }
                       },
-                      [
-                        _vm._v(
-                          "\n                            Cambiar a Fuera de Servicio"
-                        )
-                      ]
+                      [_vm._v("Cambiar a Fuera de Servicio")]
                     )
                   ])
                 ])
@@ -47192,7 +47335,12 @@ var render = function() {
                                   ? [
                                       _c("h5", [
                                         _c("strong", [
-                                          _vm._v("Orden " + _vm._s(index + 1))
+                                          _vm._v(
+                                            "Orden " +
+                                              _vm._s(index + 1) +
+                                              " " +
+                                              _vm._s(order.date)
+                                          )
                                         ]),
                                         _vm._v(
                                           "    \n                                    "
@@ -47276,7 +47424,7 @@ var render = function() {
                                                     { attrs: { scope: "row" } },
                                                     [
                                                       _vm._v(
-                                                        "$" +
+                                                        "$ " +
                                                           _vm._s(detail.price)
                                                       )
                                                     ]
@@ -47357,7 +47505,7 @@ var render = function() {
                                                   },
                                                   [
                                                     _vm._v(
-                                                      "Total: $" +
+                                                      "Total : $" +
                                                         _vm._s(order.total)
                                                     )
                                                   ]
@@ -47383,10 +47531,11 @@ var render = function() {
                                   [
                                     _c("strong", [_vm._v("Propina:")]),
                                     _vm._v(
-                                      " $" +
+                                      "\n                                $" +
                                         _vm._s(
                                           _vm.table.last_service.payment.tip
-                                        )
+                                        ) +
+                                        "\n                            "
                                     )
                                   ]
                                 ),
@@ -47395,22 +47544,28 @@ var render = function() {
                                   "h6",
                                   { staticStyle: { width: "100% !important" } },
                                   [
-                                    _c("strong", [_vm._v("Pago:")]),
+                                    _c("strong", [_vm._v("Pago Con:")]),
                                     _vm._v(
-                                      " " +
+                                      "\n                                $" +
+                                        _vm._s(
+                                          _vm.table.last_service.payment.amount
+                                        ) +
+                                        "\n                            "
+                                    )
+                                  ]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "h6",
+                                  { staticStyle: { width: "100% !important" } },
+                                  [
+                                    _c("strong", [_vm._v("Método de pago:")]),
+                                    _vm._v(
+                                      "\n                                " +
                                         _vm._s(
                                           _vm.table.last_service.payment.type
                                         ) +
-                                        " " +
-                                        _vm._s(
-                                          _vm.table.last_service.payment.type ==
-                                            "Efectivo"
-                                            ? "$" +
-                                                _vm.table.last_service.payment
-                                                  .amount
-                                            : ""
-                                        ) +
-                                        " "
+                                        "\n                            "
                                     )
                                   ]
                                 )
@@ -47418,7 +47573,7 @@ var render = function() {
                             : _vm._e(),
                           _vm._v(" "),
                           _c(
-                            "h3",
+                            "h5",
                             {
                               staticStyle: {
                                 "text-align": "center",
@@ -47427,10 +47582,53 @@ var render = function() {
                             },
                             [
                               _vm._v(
-                                "Total $" + _vm._s(_vm.table.last_service.total)
+                                "Total productos: $" +
+                                  _vm._s(_vm.table.last_service.total)
                               )
                             ]
-                          )
+                          ),
+                          _vm._v(" "),
+                          _vm.table.status === "paying"
+                            ? _c(
+                                "h5",
+                                {
+                                  staticStyle: {
+                                    "text-align": "center",
+                                    "font-weight": "bold"
+                                  }
+                                },
+                                [
+                                  _vm._v(
+                                    "Total con propina: $" +
+                                      _vm._s(
+                                        _vm.table.last_service.total +
+                                          _vm.table.last_service.payment.tip
+                                      )
+                                  )
+                                ]
+                              )
+                            : _vm._e(),
+                          _vm._v(" "),
+                          _c("h3", [
+                            _c(
+                              "a",
+                              {
+                                staticClass: "btn btn-warning btn-lg",
+                                attrs: {
+                                  target: "_blank",
+                                  href:
+                                    "/service/print/" +
+                                    _vm.table.last_service.id
+                                }
+                              },
+                              [
+                                _c("i", {
+                                  staticClass: "fa fa-print",
+                                  staticStyle: { cursor: "pointer" }
+                                })
+                              ]
+                            )
+                          ])
                         ]
                       : _vm._e()
                   ],
@@ -47479,7 +47677,7 @@ var render = function() {
                               ]),
                               _vm._v(" "),
                               _c("h6", [
-                                _vm._v(" $" + _vm._s(_vm.detail.product.price))
+                                _vm._v("$" + _vm._s(_vm.detail.product.price))
                               ]),
                               _vm._v(" "),
                               _c(
@@ -47539,7 +47737,7 @@ var render = function() {
                                     ]),
                                     _vm._v(" "),
                                     _c("h2", { staticClass: "text-center" }, [
-                                      _vm._v(" " + _vm._s(_vm.detail.quantity))
+                                      _vm._v(_vm._s(_vm.detail.quantity))
                                     ])
                                   ])
                                 ]
@@ -47664,7 +47862,7 @@ var render = function() {
                                   ),
                                   _vm._v(" "),
                                   _c("h6", [
-                                    _vm._v(" $" + _vm._s(product.price))
+                                    _vm._v("$" + _vm._s(product.price))
                                   ])
                                 ])
                               ]
@@ -48159,9 +48357,9 @@ var render = function() {
                     },
                     [
                       _vm._v(
-                        "\n                              " +
+                        "\n                                " +
                           _vm._s(item.name) +
-                          "\n                          "
+                          "\n                            "
                       )
                     ]
                   )
@@ -48211,9 +48409,9 @@ var render = function() {
                                   },
                                   [
                                     _vm._v(
-                                      "\n                                          " +
+                                      "\n                                            " +
                                         _vm._s(child.name) +
-                                        "\n                                      "
+                                        "\n                                        "
                                     )
                                   ]
                                 )
@@ -48315,7 +48513,7 @@ var render = function() {
                           _vm._v(
                             " " +
                               _vm._s(_vm.isNewRoom ? "Guardar" : "Guardar") +
-                              "\n                               "
+                              "\n                                "
                           )
                         ]
                       )
@@ -48331,7 +48529,7 @@ var render = function() {
                         },
                         [
                           _c("i", { staticClass: "fa fa-mail-reply" }),
-                          _vm._v(" Cancelar\n                               ")
+                          _vm._v(" Cancelar\n                                ")
                         ]
                       )
                     ])
@@ -48389,7 +48587,7 @@ var render = function() {
                                   _vm._s(
                                     _vm.isEditingTable ? "Guardar" : "Guardar"
                                   ) +
-                                  "\n                               "
+                                  "\n                                "
                               )
                             ]
                           ),
@@ -48406,7 +48604,7 @@ var render = function() {
                                 [
                                   _c("i", { staticClass: "fa fa-mail-reply" }),
                                   _vm._v(
-                                    " Cancelar\n                               "
+                                    " Cancelar\n                                "
                                   )
                                 ]
                               )
@@ -48444,7 +48642,7 @@ var render = function() {
                                 [
                                   _c("i", { staticClass: "fa fa-random" }),
                                   _vm._v(
-                                    " Cambiar de Salón\n                               "
+                                    " Cambiar de Salón\n                                "
                                   )
                                 ]
                               )
@@ -48465,7 +48663,7 @@ var render = function() {
                                 [
                                   _c("i", { staticClass: "fa fa-ban" }),
                                   _vm._v(
-                                    " Cancelar Cambio\n                               "
+                                    " Cancelar Cambio\n                                "
                                   )
                                 ]
                               )
@@ -63970,6 +64168,23 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Table_vue_vue_type_template_id_5bd01d73_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
+
+/***/ }),
+
+/***/ "./resources/js/event-bus.js":
+/*!***********************************!*\
+  !*** ./resources/js/event-bus.js ***!
+  \***********************************/
+/*! exports provided: EventBus */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EventBus", function() { return EventBus; });
+/* harmony import */ var vue_dist_vue_min_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue/dist/vue.min.js */ "./node_modules/vue/dist/vue.min.js");
+/* harmony import */ var vue_dist_vue_min_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue_dist_vue_min_js__WEBPACK_IMPORTED_MODULE_0__);
+
+var EventBus = new vue_dist_vue_min_js__WEBPACK_IMPORTED_MODULE_0___default.a();
 
 /***/ }),
 

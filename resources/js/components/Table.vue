@@ -1,115 +1,115 @@
 <template>
     <div>
-       <div class="row">
-           <div class="col-md-8">
-              <div class="card" id="rooms">
-                  <div class="card-header">
-                      <button class="btn btn-secondary" @click="newRoom"><i class="fa fa-plus"></i> Nueva Sala</button>
-                  </div>
-                  <div class="card-body">
-                      <ul class="nav nav-tabs" role="tablist">
-                          <li class="nav-item" v-for="(item, index) in rooms" :key="index">
-                              <a @click="setRoomIndex(index)" class="nav-link" :class="{ 'active show' : roomIndex === index }" id="home-tab" data-toggle="tab" :href="'#'+item.key" role="tab">
-                                  {{ item.name }}
-                              </a>
-                          </li>
-                      </ul>
-                      <div class="tab-content">
-                          <h5 v-if="showTextTable" class="text-center text-muted mt-3">Seleccione una mesa para editar</h5>
-                          <div v-for="(item, index) in rooms" :key="index" class="tab-pane fade" :class="{ 'active show' : roomIndex === index }" :id="item.key" role="tabpanel" >
-                              <div class="container p-4">
-                                  <div class="row">
-                                      <div class="col-3 col-md-2 mb-2" v-for="(child, index) in item.tables">
-                                          <button @click="setTableIndex(child,index)" class="btn btn-lg btn-success">
-                                              {{ child.name }}
-                                          </button>
-                                      </div>
-                                  </div>
-                              </div>
-                          </div>
-                      </div>
-                  </div>
-              </div>
-           </div>
-           <div class="col-md-4">
-               <div class="card" id="card_details">
-                   <div class="card-header">
-                       <div class="row align-content-center" v-if="actualRoom && !isNewRoom" >
-                           <div class="col-8">
-                               <h4 class="pl-2">{{ actualRoom.name }}</h4>
-                           </div>
-                           <div class="col-4">
-                               <button @click="editRoom" type="button" class="btnIconEdit">
-                                   <i class="fa fa-edit"/>
-                               </button>
-                               <button @click="removeRoom" type="button" class="btnIconDelete">
-                                   <i class="fa fa-trash"/>
-                               </button>
-                           </div>
-                       </div>
-                   </div>
-                   <div class="card-body">
-                       <form @submit="storeRoom" v-if="showFormRoom">
-                           <h5 class="text-center">{{ (isNewRoom) ? "Nueva Sala" : "Editar Sala"}}</h5>
-                           <div class="form-group">
-                               <label>Nombre</label>
-                               <input v-model="room.name" required type="text" name="name" class="form-control">
-                           </div>
-                           <div class="row">
-                               <div class="col-10 col-md-6">
-                                   <button class="btn btn-sm btn-success" type="submit">
-                                       <i class="fa fa-check"/>&nbsp;{{ (isNewRoom) ? "Guardar" : "Guardar"}}
-                                   </button>
-                               </div>
-                               <div class="col-6 col-md-6">
-                                   <button @click="setDefaultAllValues" class="btn btn-sm btn-warning" type="button">
-                                       <i class="fa fa-mail-reply"/>&nbsp;Cancelar
-                                   </button>
-                               </div>
-                           </div>
-                       </form>
+        <div class="row">
+            <div class="col-md-8">
+                <div class="card" id="rooms">
+                    <div class="card-header">
+                        <button class="btn btn-secondary" @click="newRoom"><i class="fa fa-plus"></i> Nueva Sala</button>
+                    </div>
+                    <div class="card-body">
+                        <ul class="nav nav-tabs" role="tablist">
+                            <li class="nav-item" v-for="(item, index) in rooms" :key="index">
+                                <a @click="setRoomIndex(index)" class="nav-link" :class="{ 'active show' : roomIndex === index }" id="home-tab" data-toggle="tab" :href="'#'+item.key" role="tab">
+                                    {{ item.name }}
+                                </a>
+                            </li>
+                        </ul>
+                        <div class="tab-content">
+                            <h5 v-if="showTextTable" class="text-center text-muted mt-3">Seleccione una mesa para editar</h5>
+                            <div v-for="(item, index) in rooms" :key="index" class="tab-pane fade" :class="{ 'active show' : roomIndex === index }" :id="item.key" role="tabpanel" >
+                                <div class="container p-4">
+                                    <div class="row">
+                                        <div class="col-3 col-md-2 mb-2" v-for="(child, index) in item.tables">
+                                            <button @click="setTableIndex(child,index)" class="btn btn-lg btn-success">
+                                                {{ child.name }}
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card" id="card_details">
+                    <div class="card-header">
+                        <div class="row align-content-center" v-if="actualRoom && !isNewRoom" >
+                            <div class="col-8">
+                                <h4 class="pl-2">{{ actualRoom.name }}</h4>
+                            </div>
+                            <div class="col-4">
+                                <button @click="editRoom" type="button" class="btnIconEdit">
+                                    <i class="fa fa-edit"/>
+                                </button>
+                                <button @click="removeRoom" type="button" class="btnIconDelete">
+                                    <i class="fa fa-trash"/>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <form @submit="storeRoom" v-if="showFormRoom">
+                            <h5 class="text-center">{{ (isNewRoom) ? "Nueva Sala" : "Editar Sala"}}</h5>
+                            <div class="form-group">
+                                <label>Nombre</label>
+                                <input v-model="room.name" required type="text" name="name" class="form-control">
+                            </div>
+                            <div class="row">
+                                <div class="col-10 col-md-6">
+                                    <button class="btn btn-sm btn-success" type="submit">
+                                        <i class="fa fa-check"/>&nbsp;{{ (isNewRoom) ? "Guardar" : "Guardar"}}
+                                    </button>
+                                </div>
+                                <div class="col-6 col-md-6">
+                                    <button @click="setDefaultAllValues" class="btn btn-sm btn-warning" type="button">
+                                        <i class="fa fa-mail-reply"/>&nbsp;Cancelar
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
 
-                       <form @submit="storeTable" v-if="showFormTable">
-                           <h5 class="text-center">{{ isEditingTable ? "Editar" : "Nueva" }} Mesa</h5>
-                           <div class="form-group">
-                               <label>Numero</label>
-                               <input v-model="table.name" required type="number" name="name" class="form-control">
-                           </div>
-                           <div class="row" v-if="!isChangingRoom">
-                               <div class="col-10">
-                                   <button class="btn btn-sm btn-success btn-padding" type="submit">
-                                       <i class="fa fa-check"/>&nbsp;{{ isEditingTable ? "Guardar" : "Guardar" }}
-                                   </button>
-                                   <button  class="btn btn-sm btn-warning btn-padding" v-if="isEditingTable" @click="setDefaultAllValues" type="button">
-                                       <i class="fa fa-mail-reply"/>&nbsp;Cancelar
-                                   </button>
-                               </div>
-                               <div class="col-2">
-                                   <button @click="deleteTable" v-if="isEditingTable" class="btn btn-sm btn-danger btn-padding" type="button">
-                                       <i class="fa fa-trash"/>
-                                   </button>
-                               </div>
-                           </div>
-                           <div v-if="isEditingTable" class="row mt-2">
-                               <div class="col-12 col-md-12">
-                                   <button v-if="!isChangingRoom" @click="changeTableToAnotherRoom" class="btn btn-sm btn-info" type="button">
-                                       <i class="fa fa-random"/>&nbsp;Cambiar de Salón
-                                   </button>
+                        <form @submit="storeTable" v-if="showFormTable">
+                            <h5 class="text-center">{{ isEditingTable ? "Editar" : "Nueva" }} Mesa</h5>
+                            <div class="form-group">
+                                <label>Numero</label>
+                                <input v-model="table.name" required type="number" name="name" class="form-control">
+                            </div>
+                            <div class="row" v-if="!isChangingRoom">
+                                <div class="col-10">
+                                    <button class="btn btn-sm btn-success btn-padding" type="submit">
+                                        <i class="fa fa-check"/>&nbsp;{{ isEditingTable ? "Guardar" : "Guardar" }}
+                                    </button>
+                                    <button  class="btn btn-sm btn-warning btn-padding" v-if="isEditingTable" @click="setDefaultAllValues" type="button">
+                                        <i class="fa fa-mail-reply"/>&nbsp;Cancelar
+                                    </button>
+                                </div>
+                                <div class="col-2">
+                                    <button @click="deleteTable" v-if="isEditingTable" class="btn btn-sm btn-danger btn-padding" type="button">
+                                        <i class="fa fa-trash"/>
+                                    </button>
+                                </div>
+                            </div>
+                            <div v-if="isEditingTable" class="row mt-2">
+                                <div class="col-12 col-md-12">
+                                    <button v-if="!isChangingRoom" @click="changeTableToAnotherRoom" class="btn btn-sm btn-info" type="button">
+                                        <i class="fa fa-random"/>&nbsp;Cambiar de Salón
+                                    </button>
 
-                                   <button v-if="isChangingRoom" @click="isChangingRoom = false" class="btn btn-sm btn-info" type="button">
-                                       <i class="fa fa-ban"/>&nbsp;Cancelar Cambio
-                                   </button>
-                               </div>
-                           </div>
-                           <div  v-if="isEditingTable" class="form-group" style="text-align: center; margin-top: 10px">
-                               <qrcode :value="qr" :options="{ width: 200 }"/>
-                               <h4 class="text-center">{{ table.key }}</h4>
-                           </div>
-                       </form>
-                   </div>
-               </div>
-           </div>
-       </div>
+                                    <button v-if="isChangingRoom" @click="isChangingRoom = false" class="btn btn-sm btn-info" type="button">
+                                        <i class="fa fa-ban"/>&nbsp;Cancelar Cambio
+                                    </button>
+                                </div>
+                            </div>
+                            <div  v-if="isEditingTable" class="form-group" style="text-align: center; margin-top: 10px">
+                                <qrcode :value="qr" :options="{ width: 200 }"/>
+                                <h4 class="text-center">{{ table.key }}</h4>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -228,6 +228,7 @@
                     vm.setDefaultAllValues();
 
                 }).catch(function (error) {
+
                     console.log(error);
                     vm.$swal({
                         icon: 'error',
@@ -276,13 +277,18 @@
                 }
             },
             setRoomIndex(index){
+                var previous_room = this.roomIndex;
                 this.roomIndex = index;
+
                 if (this.isChangingRoom){
                     var room = this.rooms[index];
 
                     var table = this.table;
                     var route = this.tableUpdate.replace(":table", table.key);
                     route = route.replace(":room", this.rooms[this.roomIndex].key);
+
+                    console.log("route: "+route);
+
                     var vm = this;
                     axios.put(route, { 'room_id' : room.id, 'name' : table.name }).then(function (response) {
                         vm.isChangingRoom = false;
@@ -293,10 +299,22 @@
                             timer: 1500
                         });
 
-                        vm.rooms[vm.roomIndex].tables[vm.tableIndex].name = table.name;
+                        //obtenemos la tabla modificada
+                        var modified_table = vm.rooms[previous_room].tables[vm.tableIndex];
 
+                        //cambiamos su room_id
+                        modified_table.room_id = room.id;
+
+                        //la agregamos al nuevo room
+                        vm.rooms[vm.roomIndex].tables.push(modified_table);
+
+                        //eliminamos del room anterior
+                        vm.rooms[previous_room].tables.splice(vm.tableIndex, 1);
+
+                        //asignamos valores por defecto
                         vm.setDefaultAllValues();
                     }).catch(function (error) {
+                        console.log(error);
                         vm.isChangingRoom = false;
                         vm.$swal({
                             icon: 'error',
@@ -410,8 +428,8 @@
             setDefaultValuesTable(){
                 this.isNewTable= false;
                 this.isEditingTable = false;
-                this.table = {};
                 this.isChangingRoom = false;
+                this.table = {};
             },
             setDefaultAllValues(){
                 this.setDefaultValuesRoom();

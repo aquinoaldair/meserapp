@@ -59,7 +59,12 @@ class CategoryController extends BaseController
 
         $this->category->create($data);
 
-        return redirect()->route('product.index')->with('success', __('El registro se ha guardado correctamente'));
+        if ($this->user->isAdmin()){
+            return redirect()->route('category.index')->with('success', __('El registro se ha guardado correctamente'));
+        }
+
+        return redirect()->route('product.index')
+            ->with('success', __('El registro se ha guardado correctamente'));
     }
 
     public function edit($id)

@@ -1,6 +1,7 @@
 <!-- latest jquery-->
 <script src="{{asset('assets/js/jquery-3.2.1.min.js')}}"></script>
 <!-- Bootstrap js-->
+<script src="{{asset("assets/js/socket.io.js")}}"></script>
 <script src="{{asset('assets/js/bootstrap/popper.min.js')}}"></script>
 <script src="{{asset('assets/js/bootstrap/bootstrap.js')}}"></script>
 <!-- feather icon js-->
@@ -16,4 +17,9 @@
 <!-- Theme js-->
 <script src="{{asset('assets/js/script.js')}}"></script>
 <!-- Plugin used-->
+<!-- Notifications -->
+<script src={{asset('assets/js/toastr.js')}}></script>
+<script src={{asset('assets/js/notify/bootstrap-notify.min.js')}}></script>
+
+<!-- Notifications Ends-->
 

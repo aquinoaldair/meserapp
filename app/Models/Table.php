@@ -45,7 +45,9 @@ class Table extends Model
             ->whereColumn('table_id', 'tables.id')
             ->orderBy('id', 'desc')
             ->take(1)
-        ])->with('lastService.orders.details.product')->with('lastService.payment');
+        ])->with(['lastService.orders.details.product' => function($query){
+            $query->withTrashed();
+        }])->with('lastService.payment');
     }
 
     public function getStatusTransAttribute(){

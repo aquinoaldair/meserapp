@@ -6,32 +6,57 @@
                 <div class="card-body">
                     <ul class="nav nav-tabs" role="tablist">
                         <li class="nav-item" v-for="(item, index) in rooms" :key="index">
-                            <a @click="setRoomIndex(index)" class="nav-link" :class="{ 'active show' : roomIndex === index }" id="home-tab" data-toggle="tab" :href="'#'+item.key" role="tab">
-                                {{ item.name }}
-                            </a>
+                            <a
+                                @click="setRoomIndex(index)"
+                                v-bind:id="`tab-tables-index-${item.id}`"
+                                class="nav-link"
+                                :class="{ 'active show' : roomIndex === index }"
+                                data-toggle="tab"
+                                :href="'#'+item.key"
+                                role="tab"
+                            >{{ item.name }}</a>
                         </li>
                     </ul>
                     <div class="tab-content">
-                        <div v-for="(item, index) in rooms" :key="index" class="tab-pane fade" :class="{ 'active show' : roomIndex === index }" :id="item.key" role="tabpanel" >
+                        <div
+                            v-for="(item, index) in rooms"
+                            :key="index"
+                            class="tab-pane fade"
+                            :class="{ 'active show' : roomIndex === index }"
+                            :id="item.key"
+                            role="tabpanel"
+                        >
                             <div class="container p-4">
                                 <div class="row">
                                     <div class="col-12 col-md-3 col-sm-3 mb-2" v-for="(table, index) in item.tables">
-                                        <div @click="selectTable(index)" class="card card-absolute card-table" :class="table.class">
+                                        <div
+                                            @click="selectTable(index)"
+                                            v-bind:id="`table-index-${table.id}`"
+                                            class="card card-absolute card-table"
+                                            :class="table.class"
+                                        >
                                             <div class="card-body">
                                                 <div class="row justify-content-end">
-                                                    <h5 class="text-right"><strong>Mesa {{ table.name }}</strong></h5>
+                                                    <h5 class="text-right">
+                                                        <strong>Mesa {{ table.name }}</strong>
+                                                    </h5>
                                                 </div>
                                                 <div class="row mt-2">
-                                                    <h6 class="text-left" style="width: 100%"><strong>{{ table.status_trans }}</strong></h6><br>
+                                                    <h6 class="text-left" style="width: 100%">
+                                                        <strong>{{ table.status_trans }}</strong>
+                                                    </h6>
+                                                    <br />
                                                 </div>
                                                 <div v-if="table.status === 'occupied' || table.status === 'ordered'">
-                                                    <div  class="row">
+                                                    <div class="row">
                                                         <small v-if="table.last_service">{{ table.last_service.date }}</small>
                                                         <small v-if="!table.last_service">&nbsp;</small>
                                                     </div>
                                                     <div class="row justify-content-end mt-3">
-                                                        <h6  v-if="table.last_service"  class="text-right"><strong>$ {{ table.last_service.total }}</strong></h6>
-                                                        <h6  v-if="!table.last_service"  class="text-right">&nbsp;</h6>
+                                                        <h6 v-if="table.last_service" class="text-right">
+                                                            <strong>$ {{ table.last_service.total }}</strong>
+                                                        </h6>
+                                                        <h6 v-if="!table.last_service" class="text-right">&nbsp;</h6>
                                                     </div>
                                                 </div>
                                                 <div v-if="table.status !== 'occupied' && table.status !== 'ordered'">
@@ -39,7 +64,9 @@
                                                         <small>&nbsp;</small>
                                                     </div>
                                                     <div class="row justify-content-end mt-3">
-                                                        <h6 class="text-right"><strong>&nbsp;</strong></h6>
+                                                        <h6 class="text-right">
+                                                            <strong>&nbsp;</strong>
+                                                        </h6>
                                                     </div>
                                                 </div>
                                             </div>
@@ -62,41 +89,73 @@
                 <div class="card-body">
                     <h4 v-if="table.name" class="text-center text-muted">Mesa {{ table.name }}</h4>
 
-
                     <div class="row" v-if="table.status && table.status != 'enabled'">
                         <div class="col-12 mb-2">
-                            <button @click="changeStatusTable('enabled')" type="button" class="btn btn-sm btn-secondary btn-block">Habilitar &nbsp;&nbsp;&nbsp;</button>
+                            <button
+                                @click="changeStatusTable('enabled')"
+                                type="button"
+                                class="btn btn-sm btn-secondary btn-block"
+                            >Habilitar &nbsp;&nbsp;&nbsp;</button>
                         </div>
                     </div>
 
                     <div class="row" v-if="table.status == 'enabled'">
                         <div class="col-12 mb-2">
-                            <button @click="changeStatusTable('reserved')" type="button" class="btn btn-sm btn-warning btn-block">
-                                Cambiar a Reservada &nbsp;&nbsp;&nbsp;</button>
+                            <button
+                                @click="changeStatusTable('reserved')"
+                                type="button"
+                                class="btn btn-sm btn-warning btn-block"
+                            >Cambiar a Reservada &nbsp;&nbsp;&nbsp;</button>
                         </div>
                         <div class="col-12 mb-2">
-                            <button @click="changeStatusTable('disabled')" type="button" class="btn btn-sm btn-danger btn-block">
-                                Cambiar a Fuera de Servicio</button>
+                            <button
+                                @click="changeStatusTable('disabled')"
+                                type="button"
+                                class="btn btn-sm btn-danger btn-block"
+                            >Cambiar a Fuera de Servicio</button>
                         </div>
                     </div>
 
-                    <div v-if="table.status === 'occupied' || table.status === 'ordered' || table.status === 'paying'">
-
+                    <div
+                        v-if="table.status === 'occupied' || table.status === 'ordered' || table.status === 'paying'"
+                    >
                         <div class="row mb-3 pl-3 pr-3">
-                            <button v-if="!isMoving && table.status !== 'paying'" @click="moveToAnotherTable" type="button" class="btn btn-sm btn-success btn-block">Cambiar de Mesa &nbsp;&nbsp;&nbsp;</button>
-                            <button v-if="isMoving" @click="isMoving=false" type="button" class="btn btn-sm btn-warning btn-block">Cancelar Cambio &nbsp;&nbsp;&nbsp;</button>
-                            <button v-if="table.status === 'paying'" @click="changeStatusTable('enabled')" type="button" class="btn btn-sm btn-warning btn-block">Finalizar Mesa &nbsp;&nbsp;&nbsp;</button>
+                            <button
+                                v-if="!isMoving && table.status !== 'paying'"
+                                @click="moveToAnotherTable"
+                                type="button"
+                                class="btn btn-sm btn-success btn-block"
+                            >Cambiar de Mesa &nbsp;&nbsp;&nbsp;</button>
+                            <button
+                                v-if="isMoving"
+                                @click="isMoving=false"
+                                type="button"
+                                class="btn btn-sm btn-warning btn-block"
+                            >Cancelar Cambio &nbsp;&nbsp;&nbsp;</button>
+                            <button
+                                v-if="table.status === 'paying'"
+                                @click="changeStatusTable('enabled')"
+                                type="button"
+                                class="btn btn-sm btn-warning btn-block"
+                            >Finalizar Mesa &nbsp;&nbsp;&nbsp;</button>
                         </div>
                         <template v-if="table.last_service !== null">
+                            <button
+                                v-if="!isMoving && table.status !== 'paying'"
+                                @click="createOrderToService"
+                                type="button"
+                                class="btn btn-sm btn-info btn-block mb-2"
+                            >Agregar Producto</button>
+                            <!-- nueva linea -->
 
-                            <button v-if="!isMoving && table.status !== 'paying'" @click="createOrderToService" type="button" class="btn btn-sm btn-info btn-block mb-2">Agregar Producto</button>
-
-                            <div  class="row"  v-for="(order, index) in table.last_service.orders">
+                            <div class="row" v-for="(order, index) in table.last_service.orders">
                                 <template v-if="order.details.length > 0">
                                     <h5>
-                                        <strong>Orden {{ index + 1 }}</strong> &nbsp;&nbsp;&nbsp;
+                                        <strong>Orden {{ index + 1 }} {{ order.date }}</strong> &nbsp;&nbsp;&nbsp;
                                         <strong>
-                                            <a target="_blank" :href="'/order/print/'+order.id" ><i style="cursor:pointer" class="fa fa-print"/></a>
+                                            <a target="_blank" :href="'/order/print/'+order.id">
+                                                <i style="cursor:pointer" class="fa fa-print" />
+                                            </a>
                                         </strong>
                                     </h5>
                                     <table class="table" style="width: 100% !important">
@@ -110,34 +169,51 @@
                                         <tbody>
                                         <tr v-for="(detail) in order.details">
                                             <td scope="row">{{ detail.quantity}} {{ detail.product.name }} &nbsp; <p class="text-muted" style="font-style: italic;">{{ detail.comment }}</p></td>
-                                            <td scope="row">${{ detail.price }}</td>
+                                            <td scope="row">$ {{ detail.price }}</td>
+                                            <!-- nueva linea start -->
                                             <td scope="row">
                                                 <button @click="editProduct(detail)" class="btn btn-sm btn-primary" style="padding: 5px 10px !important">
-                                                    <i class="fa fa-edit"/></button>
+                                                    <i class="fa fa-edit" />
+                                                </button>
                                                 <button @click="removeProduct(order.id, detail.id)" class="btn btn-sm btn-danger" style="padding: 5px 10px !important">
-                                                    <i class="fa fa-trash"/></button>
+                                                    <i class="fa fa-trash" />
+                                                </button>
                                             </td>
+                                            <!-- nueva linea end -->
                                         </tr>
                                         <tr>
-                                            <td colspan="3" style="text-align: right; font-weight: bold">Total: ${{ order.total}}</td>
+                                            <td colspan="3" style="text-align: right; font-weight: bold">Total : ${{ order.total}}</td>
                                         </tr>
                                         </tbody>
                                     </table>
                                 </template>
                             </div>
 
-
                             <div v-if="table.status === 'paying'" class="row">
-                                <h6 style="width: 100% !important"><strong>Propina:</strong> ${{ table.last_service.payment.tip }}</h6>
-                                <h6 style="width: 100% !important"><strong>Pago:</strong> {{ table.last_service.payment.type }} {{ (table.last_service.payment.type == "Efectivo") ? "$" + table.last_service.payment.amount : ''  }} </h6>
+                                <h6 style="width: 100% !important">
+                                    <strong>Propina:</strong>
+                                    ${{ table.last_service.payment.tip }}
+                                </h6>
+                                <h6 style="width: 100% !important">
+                                    <strong>Pago Con:</strong>
+                                    ${{ table.last_service.payment.amount }}
+                                </h6>
+                                <h6 style="width: 100% !important">
+                                    <strong>Método de pago:</strong>
+                                    {{ table.last_service.payment.type }}
+                                </h6>
                             </div>
-                            <h3 style="text-align: center; font-weight: bold">Total ${{ table.last_service.total }}</h3>
+                            <h5 style="text-align: center; font-weight: bold">Total productos: ${{ table.last_service.total }}</h5>
+                            <h5 v-if="table.status === 'paying'" style="text-align: center; font-weight: bold">Total con propina: ${{ (table.last_service.total + table.last_service.payment.tip)  }}</h5>
+
+                            <h3 ><a  target="_blank" :href="'/service/print/'+table.last_service.id" class="btn btn-warning btn-lg"><i  class="fa fa-print" style="cursor: pointer;"></i></a></h3>
                         </template>
                     </div>
                 </div>
             </div>
         </div>
 
+        <!-- nueva linea start -->
         <div class="modal" tabindex="-1" role="dialog" id="modalProduct">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
@@ -151,29 +227,40 @@
                         <template v-if="detail !== null">
                             <div class="row">
                                 <div class="col-3">
-                                    <img :src="detail.product.full_image" style="max-width: 100%">
+                                    <img :src="detail.product.full_image" style="max-width: 100%" />
                                 </div>
                                 <div class="col-9">
                                     <h5 class="text-center">{{ detail.product.name }}</h5>
                                     <p>{{ detail.product.description }}</p>
-                                    <h6> ${{ detail.product.price }}</h6>
+                                    <h6>${{ detail.product.price }}</h6>
                                     <div class="row justify-content-center align-items-center">
                                         <div class="col-6">
-                                            <button @click="(detail.quantity <= 1) ? detail.quantity = 1  : detail.quantity-- " class="btn btn-pill btn-outline-warning" type="button" data-original-title="btn btn-pill btn-outline-warning" title="">
-                                                <i class="fa fa-minus"/>
+                                            <button
+                                                @click="(detail.quantity <= 1) ? detail.quantity = 1  : detail.quantity-- "
+                                                class="btn btn-pill btn-outline-warning"
+                                                type="button"
+                                                data-original-title="btn btn-pill btn-outline-warning"
+                                                title
+                                            >
+                                                <i class="fa fa-minus" />
                                             </button>
-                                            <button @click="detail.quantity++" class="btn btn-pill btn-outline-success" type="button" data-original-title="btn btn-pill btn-outline-warning" title="">
-                                                <i class="fa fa-plus"/>
+                                            <button
+                                                @click="detail.quantity++"
+                                                class="btn btn-pill btn-outline-success"
+                                                type="button"
+                                                data-original-title="btn btn-pill btn-outline-warning"
+                                                title
+                                            >
+                                                <i class="fa fa-plus" />
                                             </button>
                                         </div>
                                         <div class="col-6">
                                             <p class="text-center">Total</p>
-                                            <h2 class="text-center"> {{ detail.quantity }}</h2>
+                                            <h2 class="text-center">{{ detail.quantity }}</h2>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-
                         </template>
                     </div>
                     <div class="modal-footer">
@@ -195,16 +282,27 @@
                     </div>
                     <div class="modal-body">
                         <template>
-                            <input type="text" class="form-control" v-model="searchTerm" placeholder="Ingresa el producto a buscar">
+                            <input
+                                type="text"
+                                class="form-control"
+                                v-model="searchTerm"
+                                placeholder="Ingresa el producto a buscar"
+                            />
                         </template>
                         <template>
                             <div class="row">
                                 <div class="col-md-4" v-for="(product, index) in productsFromSearch">
-                                    <div @click="storeOrder(product)" class="card mt-2" style="cursor: pointer; border: 1px solid #6951FC">
+                                    <div
+                                        @click="storeOrder(product)"
+                                        class="card mt-2"
+                                        style="cursor: pointer; border: 1px solid #6951FC"
+                                    >
                                         <div class="card-body p-1">
-                                            <p class="text-center mb-0"><strong>{{ product.name }}</strong></p>
+                                            <p class="text-center mb-0">
+                                                <strong>{{ product.name }}</strong>
+                                            </p>
                                             <p class="mb-0" style="font-size: 10px !important;">{{ product.description }}</p>
-                                            <h6> ${{ product.price }}</h6>
+                                            <h6>${{ product.price }}</h6>
                                         </div>
                                     </div>
                                 </div>
@@ -218,267 +316,311 @@
             </div>
         </div>
     </div>
+    <!-- nueva linea end -->
 </template>
-
 <script>
-    import Loading from 'vue-loading-overlay';
-    import 'vue-loading-overlay/dist/vue-loading.css';
+    import Loading from "vue-loading-overlay";
+    import "vue-loading-overlay/dist/vue-loading.css";
+    import { EventBus } from "../event-bus.js";
 
     export default {
+        props: ["propsIdtablelink", "propsIdroomlink"],
         name: "DashboardClient",
         components: {
             Loading
         },
-        data(){
+        data() {
             return {
-                rooms : [],
-                roomIndex : 0,
-                tableIndex : null,
-                table : {},
+                rooms: [],
+                roomIndex: 0,
+                tableIndex: null,
+                table: {},
                 isLoading: false,
                 fullPage: true,
-                isMoving : false,
-                detail : null,
-                searchTerm : '',
-                productsFromSearch : [],
-                isProcessingRequest : false
-            }
+                isMoving: false,
+                detail: null,
+                searchTerm: "",
+                productsFromSearch: []
+            };
         },
-        watch : {
+        watch: {
             // cada vez que el termino de busca cambie, esta función será ejecutada
-            searchTerm : function (newValue, oldValue) {
-                this.debouncedGetSearch()
+            searchTerm: function(newValue, oldValue) {
+                this.debouncedGetSearch();
             }
         },
-        methods:{
-            async storeOrder(product){
-                var result = await this.$swal({
-                    title: 'Estas Seguro?',
-                    text: "este producto se agregará a una orden",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Si, Guardar!'
-                });
 
-                if(result.isConfirmed){
+        methods: {
+            async storeOrder(product) {
+                var result = await this.$swal({
+                    title: "Estas Seguro?",
+                    text: "este producto se agregará a una orden",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Si, Guardar!"
+                });
+                console.log(result);
+                if (result.isConfirmed || result.value==true) {
+                    console.log("entre a confirm");
                     try {
-                        var data = { "service_id" : this.table.last_service_id,
-                            "products" : [
-                                { "id" : product.id , "quantity" : 1},
-                            ]
+                        var data = {
+                            service_id: this.table.last_service_id,
+                            products: [{ id: product.id, quantity: 1 }]
                         };
                         $("#modalAddProduct").modal("hide");
                         var response = await axios.post("api/order", data);
-                        this.$swal('Guardado', 'Se ha guardado correctamente', 'success');
+                        this.$swal("Guardado", "Se ha guardado correctamente", "success");
                         await this.getRoomsWithFullDataAsync();
                         this.selectTable(this.tableIndex);
+                    } catch (e) {
+                        this.$swal({
+                            icon: "error",
+                            title: "No se pudo eliminar",
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
                     }
-                    catch (e) {
-                        this.$swal({ icon: 'error', title: 'No se pudo eliminar', showConfirmButton: false, timer: 1500});
-                    }
+                }else{
+                    console.log("entre a no confirm");
                 }
             },
             async getSearch() {
                 this.productsFromSearch = [];
-                if (!this.isLoading){
+                if (!this.isLoading) {
                     this.isLoading = true;
-                    this.isProcessingRequest = true;
                     try {
-                        var url = "/product/search/"+this.searchTerm;
+                        var url = "/product/search/" + this.searchTerm;
                         var response = await axios.get(url);
                         this.productsFromSearch = response.data;
                         this.isLoading = false;
-                        this.isProcessingRequest = false;
-                    }catch (e) {
+                    } catch (e) {
                         this.isLoading = false;
-                        this.isProcessingRequest = false;
                     }
                 }
             },
-            createOrderToService(){
+            createOrderToService() {
                 $("#modalAddProduct").modal("show");
             },
-            editProduct(detail){
+            editProduct(detail) {
                 console.log(detail);
                 this.detail = JSON.parse(JSON.stringify(detail));
                 $("#modalProduct").modal("show");
             },
-            async updateProduct(){
+            async updateProduct() {
                 var vm = this;
                 $("#modalProduct").modal("hide");
                 try {
-                    var response = await axios.post('/service/order/product/detail', {
-                        "detail_id" : this.detail.id ,
-                        "quantity" : this.detail.quantity
+                    var response = await axios.post("/service/order/product/detail", {
+                        detail_id: this.detail.id,
+                        quantity: this.detail.quantity
                     });
                     await this.getRoomsWithFullDataAsync();
                     this.selectTable(this.tableIndex);
-                }catch (e) {}
+                } catch (e) {}
             },
-            async removeProduct(order_id, detail_id){
+            async removeProduct(order_id, detail_id) {
                 var vm = this;
 
                 var result = await this.$swal({
-                    title: 'Estas Seguro?',
+                    title: "Estas Seguro?",
                     text: "No podras revertir esta acción",
-                    icon: 'warning',
+                    icon: "warning",
                     showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Si, eliminar!'
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Si, eliminar!"
                 });
 
-                if(result.isConfirmed){
+                if (result.isConfirmed || result.value==true) {
                     try {
-                        var response = await axios.post("/order/product/delete", { "order_id" : order_id , "detail_id" : detail_id });
-                        this.$swal('Eliminado', 'Se ha eliminado correctamente', 'success');
+                        var response = await axios.post("/order/product/delete", {
+                            order_id: order_id,
+                            detail_id: detail_id
+                        });
+                        this.$swal("Eliminado", "Se ha eliminado correctamente", "success");
                         await this.getRoomsWithFullDataAsync();
                         this.selectTable(this.tableIndex);
-                    }
-                    catch (e) {
-                        this.$swal({ icon: 'error', title: 'No se pudo eliminar', showConfirmButton: false, timer: 1500});
+                    } catch (e) {
+                        this.$swal({
+                            icon: "error",
+                            title: "No se pudo eliminar",
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
                     }
                 }
             },
-            blinkTable(){
-                this.rooms.forEach(function (room) {
-                    room.tables.forEach(function (table) {
-                        if (table.status == "ordered"){
-                            if (table.class == "ordered"){
-                                table.class = "ordered animated flash"
-                            }else{
-                                table.class = "ordered"
+            blinkTable() {
+                this.rooms.forEach(function(room) {
+                    room.tables.forEach(function(table) {
+                        if (table.status == "ordered") {
+                            if (table.class == "ordered") {
+                                table.class = "ordered animated flash";
+                            } else {
+                                table.class = "ordered";
                             }
                         }
                     });
                 });
             },
-            getClassTable(item){
-                return 'table-'+item.status;
+            getClassTable(item) {
+                return "table-" + item.status;
             },
-            setRoomIndex(index){
+            setRoomIndex(index) {
                 this.roomIndex = index;
             },
-            moveToAnotherTable(){
+            moveToAnotherTable() {
                 this.isMoving = true;
-                this.$swal('Seleccione una mesa libre');
+                this.$swal("Seleccione una mesa libre");
             },
-            selectTable(index){
-                if (this.isMoving){
+            selectTable(index) {
+                if (this.isMoving) {
                     var selected_table = this.rooms[this.roomIndex].tables[index];
 
-                    if (selected_table.status !== 'enabled'){
-                        this.$swal('Seleccione una mesa libre');
+                    if (selected_table.status !== "enabled") {
+                        this.$swal("Seleccione una mesa libre");
                         return;
                     }
 
                     var vm = this;
                     var data = {
-                        'table_to_move' : this.rooms[this.roomIndex].tables[index].id,
-                        'table_id' : this.table.id,
-                        "service_id" : this.table.last_service_id
+                        table_to_move: this.rooms[this.roomIndex].tables[index].id,
+                        table_id: this.table.id,
+                        service_id: this.table.last_service_id
                     };
                     vm.isLoading = true;
-                    axios.post("/service/move/table", data).then(function (response) {
-                        console.log(response);
-                        vm.isMoving = false;
-                        vm.isLoading = false;
-                        vm.tableIndex = null;
-                        vm.table = {};
-                        vm.getRoomsWithFullData();
-                    }).catch(function (error) {
-                        vm.isLoading = false;
-                        vm.isMoving = false;
-                        vm.$swal('Error', 'No se pudo realizar el cambio de mesa', 'warning');
-                    });
-                }else{
+                    axios
+                        .post("/service/move/table", data)
+                        .then(function(response) {
+                            console.log(response);
+                            vm.isMoving = false;
+                            vm.isLoading = false;
+                            vm.tableIndex = null;
+                            vm.table = {};
+                            vm.getRoomsWithFullData();
+                        })
+                        .catch(function(error) {
+                            vm.isLoading = false;
+                            vm.isMoving = false;
+                            vm.$swal(
+                                "Error",
+                                "No se pudo realizar el cambio de mesa",
+                                "warning"
+                            );
+                        });
+                } else {
                     this.tableIndex = index;
                     this.table = this.rooms[this.roomIndex].tables[this.tableIndex];
-                    if (this.table.status == "ordered"){
-                        this.table.status  = "occupied";
+                    if (this.table.status == "ordered") {
+                        this.table.status = "occupied";
                         this.rooms[this.roomIndex].tables[index].class = "occupied";
                         this.table.status_trans = "Ocupada";
-                        axios.post("/table/status", {'status' : "occupied", 'id' : this.table.id});
+                        axios.post("/table/status", {
+                            status: "occupied",
+                            id: this.table.id
+                        });
                     }
                 }
-
             },
-            changeStatusTable(status){
+            changeStatusTable(status) {
                 var vm = this;
-                axios.post("/table/status", {
-                    'status' : status,
-                    'id'     : vm.table.id
-                }).then(function (response) {
-                    vm.table = {};
-                    vm.getRoomsWithFullData();
-                }).catch(function (error) {
-                    console.log(error);
-                });
+                axios
+                    .post("/table/status", {
+                        status: status,
+                        id: vm.table.id
+                    })
+                    .then(function(response) {
+                        vm.table = {};
+                        vm.getRoomsWithFullData();
+                    })
+                    .catch(function(error) {
+                        console.log(error);
+                    });
             },
-            getRoomsWithFullData(){
+            getRoomsWithFullData() {
                 var vm = this;
                 vm.isLoading = true;
-                vm.isProcessingRequest = true;
-                axios.get("/rooms/tables").then(function (response) {
-                    vm.isLoading = false;
-                    vm.isProcessingRequest = false;
-                    console.log(response.data);
-                    vm.rooms = response.data;
-                }).catch(function (error) {
-                    vm.isProcessingRequest = false;
-                    vm.isLoading = false;
-                });
+                axios
+                    .get("/rooms/tables")
+                    .then(function(response) {
+                        vm.isLoading = false;
+                        console.log(response.data);
+                        vm.rooms = response.data;
+                        vm.checkSelectTable();
+                    })
+                    .catch(function(error) {
+                        console.log(error);
+                        vm.isLoading = false;
+                    });
             },
-            async getRoomsWithFullDataAsync(){
+            async getRoomsWithFullDataAsync() {
                 this.isLoading = true;
-                this.isProcessingRequest = true;
                 try {
                     const response = await axios.get("/rooms/tables");
                     this.isLoading = false;
                     this.rooms = response.data;
-                    this.isProcessingRequest = false;
+                    console.log("finish data async");
                 } catch (error) {
-                    this.isProcessingRequest = false;
+                    console.error(error);
                     this.isLoading = false;
                 }
-
             },
-            async getNewDataFromTables(){
+            checkSelectTable() {},
+
+            async getNotification(data){
+                var vm = this;
                 try {
-                    if (!this.isProcessingRequest){
-                        var vm = this;
-                        const response = await axios.get("/rooms/tables");
-                        response.data.some(function (room) {
-                            room.tables.some(function (table) {
-                                if (table.status == "ordered"){
-                                    vm.rooms = response.data;
-                                    return table.status == "ordered";
+                    const response = await  this.getRoomsWithFullDataAsync();
+                    this.rooms.forEach(function (room, index) {
+                        if (room.id == data.room_id){
+                            vm.roomIndex = index;
+                            room.tables.forEach(function (table, index2) {
+                                if (table.id == data.table_id){
+                                    vm.tableIndex = index2;
+                                    vm.table = vm.rooms[index].tables[index2];
+                                    vm.selectTable(index2);
                                 }
                             });
-                        });
-                    }
+                        }
+                    });
                 }catch (e) {}
             }
+
         },
-        created() {
-            this.getRoomsWithFullData();
+        async created() {
+            //this.getRoomsWithFullData();
+            var data = JSON.parse(localStorage.getItem('data'));
+            if (data != null){
+                console.log("select table from toast");
+                console.log(data);
+                await this.getNotification(data);
+                localStorage.setItem('data', null);
+            }else{
+                await this.getRoomsWithFullDataAsync();
+            }
             this.debouncedGetSearch = _.debounce(this.getSearch, 500);
+            EventBus.$on('notification', function (data) {
+                EventBus.$emit('stopSound');
+                this.getNotification(data);
+
+            }.bind(this));
         },
         mounted() {
             setInterval(this.blinkTable, 3000);
-            setInterval(this.getNewDataFromTables, 10000);
         }
-    }
+    };
 </script>
 
 <style scoped>
-    .nav-tabs .nav-link, .nav-tabs .nav-item .nav-link {
+    .nav-tabs .nav-link,
+    .nav-tabs .nav-item .nav-link {
         font-size: 1.2em;
         color: gray !important;
     }
-    .nav-tabs .nav-link.active, .nav-tabs .nav-item.show .nav-link {
+    .nav-tabs .nav-link.active,
+    .nav-tabs .nav-item.show .nav-link {
         color: black !important;
         background-color: #fff;
         border-color: #dee2e6 #dee2e6 #fff;
@@ -496,7 +638,7 @@
     .card-absolute .card-body {
         margin-top: 0px;
     }
-    .card-table{
+    .card-table {
         border-radius: 10px !important;
         cursor: pointer;
     }
@@ -507,29 +649,32 @@
 
     .card .card-body {
         padding: 10px 20px 5px;
-        background-color: rgba(0,0,0,0);
+        background-color: rgba(0, 0, 0, 0);
     }
 
-    .enabled{
+    .enabled {
         border: 1px solid #64dd17 !important;
     }
-    .disabled{
-        border: 2px solid #424242 !important;
+    .disabled {
+        border: 2px solid #dfdfdf !important;
         background-color: #d3d3d3;
     }
-    .occupied{
+    .occupied {
         border: 3px solid #f44336 !important;
         /*background-color: rgba(201, 76, 76, 0.3) !important;*/
     }
-    .ordered{
-        border: 3px solid #7C45D8 !important;
+    .ordered {
+        border: 3px solid #5f4dfc !important;
     }
-    .reserved{
-        border: 3px solid #4e342e !important;
+    .paying {
+        border: 3px solid #fdd835 !important;
+    }
+    .reserved {
+        border: 3px solid #f57f17 !important;
     }
 
-    .paying{
-        border: 3px solid #fdd835!important;
+    .table-paying {
+        border: 3px solid #5f4dfc !important;
     }
 
     .animated {
@@ -539,18 +684,24 @@
         animation-fill-mode: both;
     }
     @-webkit-keyframes flash {
-        0%, 50%, 100% {
+        0%,
+        50%,
+        100% {
             opacity: 1;
         }
-        25%, 75% {
+        25%,
+        75% {
             opacity: 0;
         }
     }
     @keyframes flash {
-        0%, 50%, 100% {
+        0%,
+        50%,
+        100% {
             opacity: 1;
         }
-        25%, 75% {
+        25%,
+        75% {
             opacity: 0;
         }
     }

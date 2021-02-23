@@ -53,12 +53,18 @@ class CostRepository implements CostRepositoryInterface
 
     public function getInRangeDateByCommerceIdWithSupplier($id, $start_date, $end_date, $supplier_id)
     {
-        return $this->model->with('supplier')
+        $query = $this->model->newQuery();
+
+        $query = $query->with('supplier')
             ->with('supplier')
             ->where('commerce_id', $id)
             ->whereDate('created_at', ">=", $start_date)
-            ->whereDate('created_at', "<=", $end_date)
-            ->where('supplier_id', $supplier_id)
-            ->get();
+            ->whereDate('created_at', "<=", $end_date);
+
+        if ($supplier_id){
+            $query = $query->where('supplier_id', $supplier_id);
+        }
+
+        return $query->get();
     }
 }
